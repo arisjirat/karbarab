@@ -1,0 +1,39 @@
+name: karbarab
+description: Belajar Kartu Bahasa Arab
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_auth: ^0.15.4
+  google_sign_in: ^4.1.4
+  cupertino_icons: ^0.1.3
+  flutter_flip_view: ^1.0.3
+  confetti: ^0.3.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter:
+  uses-material-design: true
+  assets:
+    - character.png
+    - card-logo.png
+    - google_logo.png
+    - neutral-triangle-right.png
+    - congratulation.png
+    - table.png
+  fonts:
+    - family: Proxima
+      fonts:
+        - asset: fonts/proxima-nova-regular.otf
+    - family: FTF-Ahlan
+      fonts:
+        - asset: fonts/ftf-ahlan-ve-arabez.ttf
+    - family: Geeza
+      fonts:
+        - asset: fonts/geeza-pro.ttc

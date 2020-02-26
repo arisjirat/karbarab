@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>388585124745-hdalu3l81qmgirgs6ai7slqqs49ed3kp.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.388585124745-hdalu3l81qmgirgs6ai7slqqs49ed3kp</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>388585124745-m2goecse9dg3ndvjb66v0c7hsfd0g669.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAd2Prowc6JTKpEIhBKlDJgjWJRVmXzdi8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>388585124745</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.pasdigital.karbarab</string>
+	<key>PROJECT_ID</key>
+	<string>karbarab-8d39f</string>
+	<key>STORAGE_BUCKET</key>
+	<string>karbarab-8d39f.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:388585124745:ios:2bd5dd08828bab4027e758</string>
+	<key>DATABASE_URL</key>
+	<string>https://karbarab-8d39f.firebaseio.com</string>
+</dict>
+</plist>

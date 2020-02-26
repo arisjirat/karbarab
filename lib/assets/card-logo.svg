@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="259px" height="144px" viewBox="0 0 259 144" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>CardLogo</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="110" height="73.5483871" rx="8"></rect>
+        <filter x="-31.8%" y="-34.0%" width="163.6%" height="195.2%" filterUnits="objectBoundingBox" id="filter-3">
+            <feOffset dx="0" dy="10" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="10" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.266666667   0 0 0 0 0.411764706   0 0 0 0 0.529411765  0 0 0 0.15 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <rect id="path-4" x="0" y="0" width="110" height="73.5483871" rx="8"></rect>
+        <filter x="-31.8%" y="-34.0%" width="163.6%" height="195.2%" filterUnits="objectBoundingBox" id="filter-6">
+            <feOffset dx="0" dy="10" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="10" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.968627451   0 0 0 0 0.709803922   0 0 0 0 0  0 0 0 0.1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <rect id="path-7" x="1" y="1" width="110" height="74" rx="8"></rect>
+        <rect id="path-9" x="0.223542865" y="0.102222521" width="110" height="74" rx="8"></rect>
+        <filter x="-31.8%" y="-33.8%" width="163.6%" height="194.6%" filterUnits="objectBoundingBox" id="filter-11">
+            <feOffset dx="0" dy="10" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="10" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.956862745   0 0 0 0 0.141176471   0 0 0 0 0.250980392  0 0 0 0.15 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <rect id="path-12" x="42" y="0" width="110" height="73.5483871" rx="8"></rect>
+        <rect id="path-14" x="42" y="2.4516129" width="110" height="73.5483871" rx="8"></rect>
+        <filter x="-31.8%" y="-34.0%" width="163.6%" height="195.2%" filterUnits="objectBoundingBox" id="filter-16">
+            <feOffset dx="0" dy="10" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="10" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0.0666666667   0 0 0 0 0.352941176   0 0 0 0 0.925490196  0 0 0 0.15 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Home-Login" transform="translate(-50.000000, -79.000000)">
+            <g id="CardLogo" transform="translate(64.000000, 86.000000)">
+                <g id="character-3" transform="translate(167.000000, 57.000000) rotate(19.000000) translate(-167.000000, -57.000000) translate(112.000000, 19.000000)">
+                    <mask id="mask-2" fill="white">
+                        <use xlink:href="#path-1"></use>
+                    </mask>
+                    <g id="Mask">
+                        <use fill="black" fill-opacity="1" filter="url(#filter-3)" xlink:href="#path-1"></use>
+                        <use fill="#DDA200" fill-rule="evenodd" xlink:href="#path-1"></use>
+                    </g>
+                    <g id="Bitmap" transform="translate(0.000000, 2.451613)">
+                        <mask id="mask-5" fill="white">
+                            <use xlink:href="#path-4"></use>
+                        </mask>
+                        <g id="Mask">
+                            <use fill="black" fill-opacity="1" filter="url(#filter-6)" xlink:href="#path-4"></use>
+                            <use fill="#F7B500" fill-rule="evenodd" xlink:href="#path-4"></use>
+                        </g>
+                    </g>
+                </g>
+                <g id="character-2" transform="translate(63.500000, 54.500000) scale(-1, 1) rotate(15.000000) translate(-63.500000, -54.500000) translate(8.000000, 17.000000)">
+                    <mask id="mask-8" fill="white">
+                        <use xlink:href="#path-7"></use>
+                    </mask>
+                    <use id="Mask" fill="#FF6A58" xlink:href="#path-7"></use>
+                    <g id="Bitmap" transform="translate(-0.000000, -0.000000)">
+                        <mask id="mask-10" fill="white">
+                            <use xlink:href="#path-9"></use>
+                        </mask>
+                        <g id="Mask">
+                            <use fill="black" fill-opacity="1" filter="url(#filter-11)" xlink:href="#path-9"></use>
+                            <use fill="#ED464A" fill-rule="evenodd" xlink:href="#path-9"></use>
+                        </g>
+                    </g>
+                </g>
+                <g id="character-1" transform="translate(22.000000, 0.000000)">
+                    <g id="Bitmap">
+                        <text id="كيف-حالك-copy-2" transform="translate(42.000000, 55.500000) rotate(-19.000000) translate(-42.000000, -55.500000) " font-family="GeezaPro-Bold, Geeza Pro" font-size="20" font-weight="bold" fill="#FFFFFF">
+                            <tspan x="46.7131284" y="61">كيف</tspan>
+                            <tspan x="41.1278119" y="66.7259448" font-family="ProximaNova-Bold, Proxima Nova"> </tspan>
+                            <tspan x="2" y="61">حالك</tspan>
+                        </text>
+                        <text id="كيف-حالك" transform="translate(140.000000, 52.500000) rotate(23.000000) translate(-140.000000, -52.500000) " font-family="GeezaPro-Bold, Geeza Pro" font-size="20" font-weight="bold" fill="#FFFFFF">
+                            <tspan x="144.713128" y="58">كيف</tspan>
+                            <tspan x="139.127812" y="63.7259448" font-family="ProximaNova-Bold, Proxima Nova"> </tspan>
+                            <tspan x="100" y="58">حالك</tspan>
+                        </text>
+                        <mask id="mask-13" fill="white">
+                            <use xlink:href="#path-12"></use>
+                        </mask>
+                        <use id="Mask" fill="#5B79FF" xlink:href="#path-12"></use>
+                        <mask id="mask-15" fill="white">
+                            <use xlink:href="#path-14"></use>
+                        </mask>
+                        <g id="Mask">
+                            <use fill="black" fill-opacity="1" filter="url(#filter-16)" xlink:href="#path-14"></use>
+                            <use fill="#4565F6" fill-rule="evenodd" xlink:href="#path-14"></use>
+                        </g>
+                    </g>
+                </g>
+                <text id="كيف-حالك" font-family="GeezaPro-Bold, Geeza Pro" font-size="20" font-weight="bold" fill="#FFFFFF">
+                    <tspan x="121.713128" y="43">كيف</tspan>
+                    <tspan x="116.127812" y="48.7259448" font-family="ProximaNova-Bold, Proxima Nova"> </tspan>
+                    <tspan x="77" y="43">حالك</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>
