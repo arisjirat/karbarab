@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:karbarab/config/colors.dart';
 import 'package:karbarab/widgets/typography.dart';
 
 class Button extends StatelessWidget {
   final String text;
   final Function onTap;
+  final bool disabled;
 
   Button({
     @required this.text,
     @required this.onTap,
+    this.disabled = false,
   });
 
   @override
@@ -22,7 +25,7 @@ class Button extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-            color: Theme.of(context).primaryColor,
+            color: disabled ? greyColor : Theme.of(context).primaryColor,
           ),
           width: MediaQuery.of(context).size.width,
           height: 60.0,

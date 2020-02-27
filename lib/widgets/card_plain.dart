@@ -3,6 +3,10 @@ import 'package:karbarab/config/colors.dart';
 import 'package:karbarab/screens/home_screen.dart';
 
 class CardPlain extends StatelessWidget {
+  final double height;
+  final Color color;
+  final Color secondaryColor;
+  CardPlain({ this.height = 200, this.color = greyColor, this.secondaryColor = softGreyColor });
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -12,13 +16,13 @@ class CardPlain extends StatelessWidget {
           height: 50.0,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-            color: greyColor,
+            color: secondaryColor,
           ),
         ),
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-            color: softGreyColor,
+            color: color,
           ),
           width: MediaQuery.of(context).size.width,
           margin: const EdgeInsets.only(top: 5.0),
@@ -26,18 +30,18 @@ class CardPlain extends StatelessWidget {
             children: <Widget>[
               Positioned(
                 top: 10.0,
-                right: 10.0,
+                left: 10.0,
                 child: GestureDetector(
                   onTap: () {
                     Navigator.of(context).pushNamed(HomeScreen.routeName);
                   },
-                  child: Icon(Icons.keyboard_backspace, size: 30.0, color: Colors.white),
+                  child: Padding(padding: const EdgeInsets.all(5.0),child: Icon(Icons.keyboard_backspace, size: 30.0, color: Colors.white),),
                 ),
               ),
               Container(
                 padding: const EdgeInsets.all(30.0),
                 width: MediaQuery.of(context).size.width,
-                height: 250.00,
+                height: height,
               )
             ],
           ),

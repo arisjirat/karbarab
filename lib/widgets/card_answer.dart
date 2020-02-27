@@ -9,6 +9,7 @@ class CardAnswer extends StatelessWidget {
   final String answerId;
   final bool currentAnswer;
   final CardAnswerMode answerMode;
+  final bool disabled;
   final Function selectAnswer;
 
   CardAnswer({
@@ -17,6 +18,7 @@ class CardAnswer extends StatelessWidget {
     @required this.answerMode,
     @required this.currentAnswer,
     @required this.selectAnswer,
+    @required this.disabled = false,
   });
 
   @override
@@ -24,6 +26,7 @@ class CardAnswer extends StatelessWidget {
     final arabMode = answerMode == CardAnswerMode.Arab;
     return GestureDetector(
       onTap: () {
+        if (disabled) return;
         this.selectAnswer(answerId);
       },
       child: Container(
@@ -36,18 +39,18 @@ class CardAnswer extends StatelessWidget {
                 : greyColorLight,
             boxShadow: [
               BoxShadow(
-                color: textColor.withOpacity(0.2),
-                blurRadius: 20.0, // has the effect of softening the shadow
-                spreadRadius: 0.0, // has the effect of extending the shadow
+                color: textColor.withOpacity(disabled ? 0.0 : 0.2),
+                blurRadius: 20.0,
+                spreadRadius: 0.0,
                 offset: Offset(
-                  2.0, // horizontal, move right 5
-                  10.0, // vertical, move down 10
+                  2.0,
+                  10.0,
                 ),
               )
             ],
           ),
           width: MediaQuery.of(context).size.width,
-          height: 60.0,
+          height: 50.0,
           padding: const EdgeInsets.symmetric(
             horizontal: 20.0,
           ),

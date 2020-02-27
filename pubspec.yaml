@@ -16,8 +16,18 @@ dependencies:
   confetti: ^0.3.0
 
 dev_dependencies:
+  flutter_launcher_icons: "^0.7.0"
   flutter_test:
     sdk: flutter
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "lib/assets/launcher/icon---.png"
+  image_path_android: "lib/assets/launcher/icon---.png"
+  adaptive_icon_background: "lib/assets/launcher/background--.png"
+  adaptive_icon_foreground: "lib/assets/launcher/foreground---.png"
+
 flutter:
   uses-material-design: true
   assets:
@@ -27,6 +37,8 @@ flutter:
     - neutral-triangle-right.png
     - congratulation.png
     - table.png
+    - character-.png
+    - congrat-character.png
   fonts:
     - family: Proxima
       fonts:

@@ -17,6 +17,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      // showPerformanceOverlay: true,
       title: 'Karbarab',
       theme: ThemeData(
         // primarySwatch: primaryColor,
@@ -25,7 +26,7 @@ class _MyAppState extends State<MyApp> {
         // secondaryColor: secondaryColor,
         fontFamily: 'Proxima',
       ),
-      home: GameStartScreen(),
+      home: LoginScreen(),
       // initialRoute: LoginScreen.routeName,
       routes: {
         LoginScreen.routeName: (_) => LoginScreen(),
