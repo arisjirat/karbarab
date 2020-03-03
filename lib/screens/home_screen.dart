@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
 import 'package:karbarab/config/colors.dart';
+import 'package:karbarab/helper/greetings.dart';
 import 'package:karbarab/screens/profile_screen.dart';
 import 'package:karbarab/widgets/card_play.dart';
 import 'package:karbarab/config/game_mode.dart';
@@ -9,7 +11,6 @@ import 'package:karbarab/helper/scale_calculator.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String routeName = '/home';
-
   @override
   Widget build(BuildContext context) {
     final double padding = MediaQuery.of(context).padding.top + MediaQuery.of(context).padding.bottom;
@@ -104,7 +105,7 @@ class SplashScreen extends StatelessWidget {
                       height: deviceHeight / 10,
                     ),
                     LogoText(text: 'Karbarab', dark: true),
-                    RegularText(text: 'Hai, Selamat Siang', dark: true),
+                    RegularText(text: 'Hai, Selamat ${greeting()}', dark: true),
                     ArabicText(text: 'مرحبا مساء الخير', dark: true),
                   ],
                 ),

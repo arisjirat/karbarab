@@ -15,7 +15,6 @@ class Button extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final arabMode = answerMode == ButtonMode.Arab;
     return GestureDetector(
       onTap: () {
         this.onTap();
@@ -25,7 +24,7 @@ class Button extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-            color: disabled ? greyColor : Theme.of(context).primaryColor,
+            color: disabled ? greenColor.withOpacity(0.5) : Theme.of(context).primaryColor,
           ),
           width: MediaQuery.of(context).size.width,
           height: 60.0,

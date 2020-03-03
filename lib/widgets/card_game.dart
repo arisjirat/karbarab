@@ -6,7 +6,7 @@ import 'package:flutter_flip_view/flutter_flip_view.dart';
 
 class CardGame extends StatefulWidget {
   final bool correct;
-  final double point;
+  final int point;
   final double height;
   final bool loading;
   final QuizModel quiz;

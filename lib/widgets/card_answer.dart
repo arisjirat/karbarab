@@ -10,6 +10,7 @@ class CardAnswer extends StatelessWidget {
   final bool currentAnswer;
   final CardAnswerMode answerMode;
   final bool disabled;
+  final bool loading;
   final Function selectAnswer;
 
   CardAnswer({
@@ -18,6 +19,7 @@ class CardAnswer extends StatelessWidget {
     @required this.answerMode,
     @required this.currentAnswer,
     @required this.selectAnswer,
+    @required this.loading,
     this.disabled = false,
   });
 
@@ -78,7 +80,7 @@ class CardAnswer extends StatelessWidget {
                   ],
                 ),
               ),
-              BoldRegularText(text: answer, dark: true),
+              BoldRegularText(text: loading ? '...' : answer, dark: true),
             ],
           ),
         ),
