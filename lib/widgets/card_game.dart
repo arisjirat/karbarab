@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:karbarab/config/colors.dart';
 import 'package:karbarab/helper/model_quiz.dart';
+import 'package:karbarab/widgets/card_arab.dart';
+import 'package:karbarab/widgets/card_image.dart';
 import 'package:karbarab/widgets/typography.dart';
 import 'package:flutter_flip_view/flutter_flip_view.dart';
 
@@ -60,129 +62,23 @@ class _CardGameState extends State<CardGame>
     } else {
       _animationController.reverse();
     }
-    return Container(
-      margin: const EdgeInsets.only(
-        top: 10.0,
-        bottom: 20.0,
-        left: 30,
-        right: 30,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: textColor.withOpacity(0.2),
-            blurRadius: 20.0,
-            spreadRadius: 0.0,
-            offset: Offset(
-              2.0,
-              10.0,
-            ),
-          )
-        ],
-      ),
-      width: MediaQuery.of(context).size.width,
-      child: Stack(
-        children: [
-          Container(
-            height: widget.height - 40,
-            padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 20),
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                widget.loading || widget.quiz == null
-                    ? RegularText(text: 'Loading', dark: true)
-                    : Image.network(
-                        widget.quiz.image,
-                        height: 150,
-                        fit:BoxFit.fill
-                      )
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: 20.0,
-            right: 20.0,
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 3.0),
-              decoration: BoxDecoration(
-                color: redColor,
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              ),
-              child: SmallerText(
-                text: widget.point.toString(),
-                dark: false,
-              ),
-            ),
-          ),
-        ],
+    return CardContainer(
+      child: CardImage(
+        loading: widget.loading,
+        quiz: widget.quiz,
+        height: widget.height,
+        point: widget.point,
       ),
     );
   }
 
   Widget _buildBack(context) {
-    return Container(
-      margin: const EdgeInsets.only(
-        top: 10.0,
-        bottom: 20.0,
-        left: 30,
-        right: 30,
-      ),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: textColor.withOpacity(0.2),
-            blurRadius: 20.0,
-            spreadRadius: 0.0,
-            offset: Offset(
-              2.0,
-              10.0,
-            ),
-          )
-        ],
-      ),
-      width: MediaQuery.of(context).size.width,
-      child: Stack(
-        children: [
-          Container(
-            height: widget.height - 40,
-            padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 20),
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                widget.loading
-                    ? RegularText(text: 'Loading', dark: true)
-                    : BiggerArabicText(
-                        text: widget.quiz.arab,
-                        dark: true,
-                        bold: true,
-                      )
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: 20.0,
-            right: 20.0,
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 3.0),
-              decoration: BoxDecoration(
-                color: redColor,
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              ),
-              child: SmallerText(
-                text: widget.point.toString(),
-                dark: false,
-              ),
-            ),
-          ),
-        ],
+    return CardContainer(
+      child: CardArab(
+        loading: widget.loading,
+        quiz: widget.quiz,
+        height: widget.height,
+        point: widget.point,
       ),
     );
   }
@@ -212,3 +108,41 @@ class _CardGameState extends State<CardGame>
     );
   }
 }
+
+class CardContainer extends StatelessWidget {
+  final Widget child;
+
+  CardContainer({
+    @required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(
+        top: 10.0,
+        bottom: 20.0,
+        left: 30,
+        right: 30,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(10)),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: textColor.withOpacity(0.2),
+            blurRadius: 20.0,
+            spreadRadius: 0.0,
+            offset: Offset(
+              2.0,
+              10.0,
+            ),
+          )
+        ],
+      ),
+      width: MediaQuery.of(context).size.width,
+      child: child,
+    );
+  }
+}
+
