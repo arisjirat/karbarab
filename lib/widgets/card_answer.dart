@@ -18,7 +18,7 @@ class CardAnswer extends StatelessWidget {
     @required this.answerMode,
     @required this.currentAnswer,
     @required this.selectAnswer,
-    @required this.disabled = false,
+    this.disabled = false,
   });
 
   @override

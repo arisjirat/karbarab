@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:karbarab/config/colors.dart';
+import 'package:karbarab/helper/model_quiz.dart';
 import 'package:karbarab/widgets/typography.dart';
 import 'package:flutter_flip_view/flutter_flip_view.dart';
 
@@ -7,10 +8,14 @@ class CardGame extends StatefulWidget {
   final bool correct;
   final double point;
   final double height;
+  final bool loading;
+  final QuizModel quiz;
   CardGame({
     this.correct,
     this.point,
     this.height = 200,
+    this.loading = false,
+    @required this.quiz,
   });
 
   @override
@@ -87,10 +92,13 @@ class _CardGameState extends State<CardGame>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image(
-                  image: AssetImage('table.png'),
-                  height: 0.5 * widget.height,
-                ),
+                widget.loading || widget.quiz == null
+                    ? RegularText(text: 'Loading', dark: true)
+                    : Image.network(
+                        widget.quiz.image,
+                        height: 150,
+                        fit:BoxFit.fill
+                      )
               ],
             ),
           ),
@@ -148,7 +156,13 @@ class _CardGameState extends State<CardGame>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                BiggerArabicText(text: 'كتاكتاكتاب', dark: true, bold: true),
+                widget.loading
+                    ? RegularText(text: 'Loading', dark: true)
+                    : BiggerArabicText(
+                        text: widget.quiz.arab,
+                        dark: true,
+                        bold: true,
+                      )
               ],
             ),
           ),

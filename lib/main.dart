@@ -27,6 +27,7 @@ class _MyAppState extends State<MyApp> {
         fontFamily: 'Proxima',
       ),
       home: LoginScreen(),
+      // home: HomeScreen(),
       // initialRoute: LoginScreen.routeName,
       routes: {
         LoginScreen.routeName: (_) => LoginScreen(),

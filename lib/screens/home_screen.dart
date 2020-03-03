@@ -12,8 +12,10 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double _deviceHeight = MediaQuery.of(context).size.height - MediaQuery.of(context).padding.top;
+    final double padding = MediaQuery.of(context).padding.top + MediaQuery.of(context).padding.bottom;
+    final double _deviceHeight = MediaQuery.of(context).size.height - padding;
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -84,7 +86,7 @@ class SplashScreen extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.all(Radius.circular(10)),
-            color: textColor,
+            color: Colors.white,
           ),
           width: MediaQuery.of(context).size.width,
           margin: const EdgeInsets.only(top: 5.0),
@@ -101,9 +103,9 @@ class SplashScreen extends StatelessWidget {
                       image: AssetImage('card-logo.png'),
                       height: deviceHeight / 10,
                     ),
-                    LogoText(text: 'Karbarab', dark: false),
-                    RegularText(text: 'Hai, Selamat Siang', dark: false),
-                    ArabicText(text: 'مرحبا مساء الخير', dark: false),
+                    LogoText(text: 'Karbarab', dark: true),
+                    RegularText(text: 'Hai, Selamat Siang', dark: true),
+                    ArabicText(text: 'مرحبا مساء الخير', dark: true),
                   ],
                 ),
               ),
@@ -122,8 +124,11 @@ class SplashScreen extends StatelessWidget {
                   onTap: () {
                     Navigator.of(context).pushNamed(ProfileScreen.routeName);
                   },
-                  child: Icon(Icons.person_outline,
-                      color: greyColorLight, size: 40.0),
+                  child: Icon(
+                    Icons.person_outline,
+                    color: greyColorLight,
+                    size: 40.0,
+                  ),
                 ),
               ),
             ],
