@@ -63,6 +63,14 @@ class _CardGameState extends State<CardGame>
       _animationController.reverse();
     }
     return CardContainer(
+      child: CardArab(
+        loading: widget.loading,
+        quiz: widget.quiz,
+        height: widget.height,
+        point: widget.point,
+      ),
+    );
+    return CardContainer(
       child: CardImage(
         loading: widget.loading,
         quiz: widget.quiz,

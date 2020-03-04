@@ -25,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    Image(image: AssetImage('card-logo.png')),
+                    Image(image: AssetImage('lib/assets/images/card_logo.png')),
                     ArabicText(
                       text: 'مرحبا مساء الخير',
                       dark: false,
@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       text: 'Karbarab',
                       dark: false,
                     ),
-                    Image(image: AssetImage('character.png')),
+                    Image(image: AssetImage('lib/assets/images/character.png')),
                     _signInButton(),
                   ],
                 )
@@ -76,7 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image(image: AssetImage("google_logo.png"), height: 35.0),
+            Image(image: AssetImage("lib/assets/images/google_logo.png"), height: 35.0),
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: Text(

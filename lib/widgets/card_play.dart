@@ -70,7 +70,7 @@ class CardPlay extends StatelessWidget {
                     ),
                   ),
                   Image(
-                      image: AssetImage("neutral-triangle-right.png"),
+                      image: AssetImage("lib/assets/images/neutral_triangle_right.png"),
                       height: 35.0),
                 ],
               ),

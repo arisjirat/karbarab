@@ -19,38 +19,41 @@ class CardImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(
-        children: [
-          Container(
-            height: height - 40,
-            padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 20),
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                loading || quiz == null
-                    ? RegularText(text: 'Loading', dark: true)
-                    : Image.network(quiz.image,
-                        height: 150, fit: BoxFit.fill)
-              ],
+      children: [
+        Container(
+          height: height - 40,
+          padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 20),
+          width: MediaQuery.of(context).size.width,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              loading || quiz == null
+                  ? RegularText(text: 'Loading', dark: true)
+                  : Image.network(
+                      quiz.image,
+                      height: 150,
+                      fit: BoxFit.fill,
+                    )
+            ],
+          ),
+        ),
+        Positioned(
+          bottom: 20.0,
+          right: 20.0,
+          child: Container(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 3.0),
+            decoration: BoxDecoration(
+              color: redColor,
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            ),
+            child: SmallerText(
+              text: point.toString(),
+              dark: false,
             ),
           ),
-          Positioned(
-            bottom: 20.0,
-            right: 20.0,
-            child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20.0, vertical: 3.0),
-              decoration: BoxDecoration(
-                color: redColor,
-                borderRadius: BorderRadius.all(Radius.circular(5.0)),
-              ),
-              child: SmallerText(
-                text: point.toString(),
-                dark: false,
-              ),
-            ),
-          ),
-        ],
-      );
+        ),
+      ],
+    );
   }
 }

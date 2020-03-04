@@ -101,7 +101,7 @@ class SplashScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image(
-                      image: AssetImage('card-logo.png'),
+                      image: AssetImage('lib/assets/images/card_logo.png'),
                       height: deviceHeight / 10,
                     ),
                     LogoText(text: 'Karbarab', dark: true),
@@ -114,7 +114,7 @@ class SplashScreen extends StatelessWidget {
                 bottom: 0.0,
                 left: 10.0,
                 child: Image(
-                  image: AssetImage('character-.png'),
+                  image: AssetImage('lib/assets/images/character.png'),
                   height: deviceHeight / 8,
                 ),
               ),

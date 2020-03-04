@@ -25,7 +25,7 @@ class Congratulation extends StatelessWidget {
       height: 0.5 * _deviceHeight,
       child: Column(
         children: [
-          Image(image: AssetImage('congrat-character.png'), height: 200),
+          Image(image: AssetImage('lib/assets/images/congratulation_character.png'), height: 200),
           Congrats(play: isCorrect),
           Container(height: scaleCalculator(20.0, context)),
           BoldRegularText(
