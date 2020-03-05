@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:karbarab/config/game_mode.dart';
 import 'package:karbarab/screens/game_start_screen.dart';
 import 'package:karbarab/screens/login_screen.dart';
 import 'package:karbarab/screens/home_screen.dart';
@@ -12,28 +13,22 @@ class MyApp extends StatefulWidget {
   _MyAppState createState() => _MyAppState();
 }
 
-
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // showPerformanceOverlay: true,
       title: 'Karbarab',
       theme: ThemeData(
-        // primarySwatch: primaryColor,
         primaryColor: primaryColor,
         secondaryHeaderColor: secondaryColor,
-        // secondaryColor: secondaryColor,
         fontFamily: 'Proxima',
       ),
-      // home: LoginScreen(),
-      home: HomeScreen(),
-      // initialRoute: LoginScreen.routeName,
+      home: LoginScreen(),
       routes: {
         LoginScreen.routeName: (_) => LoginScreen(),
         HomeScreen.routeName: (_) => HomeScreen(),
         ProfileScreen.routeName: (_) => ProfileScreen(),
-        GameStartScreen.routeName: (_) => GameStartScreen()
+        GameStartScreen.routeName: (_) => GameStartScreen(mode: GameMode.GambarArab)
       }
     );
   }
