@@ -1,16 +1,17 @@
-# karbarab
+# Karbarab
 
-A new Flutter project.
+is a arab card game for indonesian people.
 
-## Getting Started
+Existing feature:
+- Google Signin
+- Choose card game
+- Answer, there is 4 options and 1 is right answer. for initial you have 300 points, and decrease when you choose the wrong answer. then if you get right answer you will get that points.
 
-This project is a starting point for a Flutter application.
+Todo:
+- Signin then save account with UUID
+- Save score on account
+- Send card to they friend, and answer the question, if they friend get wrong answer, you will have points.
 
-A few resources to get you started if this is your first Flutter project:
+## About
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This project is a starting with Flutter.

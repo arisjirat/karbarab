@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:karbarab/config/colors.dart';
 import 'package:karbarab/helper/greetings.dart';
 import 'package:karbarab/screens/profile_screen.dart';
-import 'package:karbarab/widgets/card_play.dart';
+import 'package:karbarab/widgets/cards/card_play.dart';
 import 'package:karbarab/config/game_mode.dart';
 import 'package:karbarab/widgets/typography.dart';
 import 'package:karbarab/helper/scale_calculator.dart';

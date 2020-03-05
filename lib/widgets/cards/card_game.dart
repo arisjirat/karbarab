@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:karbarab/config/colors.dart';
 import 'package:karbarab/config/game_mode.dart';
 import 'package:karbarab/helper/model_quiz.dart';
-import 'package:karbarab/widgets/card_image.dart';
-import 'package:karbarab/widgets/card_text.dart';
+import 'package:karbarab/widgets/cards/card_image.dart';
+import 'package:karbarab/widgets/cards/card_text.dart';
 import 'package:karbarab/widgets/typography.dart';
 import 'package:flutter_flip_view/flutter_flip_view.dart';
 
