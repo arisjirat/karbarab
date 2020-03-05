@@ -42,6 +42,7 @@ class CardQuiz extends StatelessWidget {
                 height: _cardGameHeight,
                 loading: loading,
                 quiz: quiz,
+                mode: mode,
               ),
             ],
           ),

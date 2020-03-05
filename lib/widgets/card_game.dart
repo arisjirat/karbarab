@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:karbarab/config/colors.dart';
+import 'package:karbarab/config/game_mode.dart';
 import 'package:karbarab/helper/model_quiz.dart';
-import 'package:karbarab/widgets/card_arab.dart';
 import 'package:karbarab/widgets/card_image.dart';
+import 'package:karbarab/widgets/card_text.dart';
 import 'package:karbarab/widgets/typography.dart';
 import 'package:flutter_flip_view/flutter_flip_view.dart';
 
@@ -12,12 +13,14 @@ class CardGame extends StatefulWidget {
   final double height;
   final bool loading;
   final QuizModel quiz;
+  final GameMode mode;
   CardGame({
     this.correct,
     this.point,
     this.height = 200,
     this.loading = false,
     @required this.quiz,
+    @required this.mode,
   });
 
   @override
@@ -56,6 +59,80 @@ class _CardGameState extends State<CardGame>
     super.dispose();
   }
 
+  Widget _cardModeFront(context) {
+    switch (widget.mode) {
+      case GameMode.GambarArab:
+        return CardImage(
+        loading: widget.loading,
+        quiz: widget.quiz,
+        height: widget.height,
+        point: widget.point,
+      );
+      case GameMode.ArabGambar:
+        return CardText(
+        loading: widget.loading,
+        text: widget.quiz.arab,
+        height: widget.height,
+        point: widget.point,
+        answerMode: _getMode(widget.mode),
+      );
+      case GameMode.ArabKata:
+        return CardText(
+        loading: widget.loading,
+        text: widget.quiz.arab,
+        height: widget.height,
+        point: widget.point,
+        answerMode: _getMode(widget.mode),
+      );
+      case GameMode.KataArab:
+        return CardText(
+        loading: widget.loading,
+        text: widget.quiz.bahasa,
+        height: widget.height,
+        point: widget.point,
+        answerMode: _getMode(widget.mode),
+      );
+    }
+    return Text('warn front');
+  }
+
+  Widget _cardModeBack(context) {
+    switch (widget.mode) {
+      case GameMode.GambarArab:
+        return CardText(
+        loading: widget.loading,
+        text: widget.quiz.arab,
+        height: widget.height,
+        point: widget.point,
+        answerMode: _getMode(widget.mode, flip: true),
+      );
+      case GameMode.ArabGambar:
+        return CardImage(
+        loading: widget.loading,
+        quiz: widget.quiz,
+        height: widget.height,
+        point: widget.point,
+      );
+      case GameMode.ArabKata:
+        return CardText(
+        loading: widget.loading,
+        text: widget.quiz.bahasa,
+        height: widget.height,
+        point: widget.point,
+        answerMode: _getMode(widget.mode, flip: true),
+      );
+      case GameMode.KataArab:
+        return CardText(
+        loading: widget.loading,
+        text: widget.quiz.arab,
+        height: widget.height,
+        point: widget.point,
+        answerMode: _getMode(widget.mode, flip: true),
+      );
+    }
+    return Text('warn back');
+  }
+
   Widget _buildFront(context) {
     if (widget.correct) {
       _animationController.forward();
@@ -63,31 +140,13 @@ class _CardGameState extends State<CardGame>
       _animationController.reverse();
     }
     return CardContainer(
-      child: CardArab(
-        loading: widget.loading,
-        quiz: widget.quiz,
-        height: widget.height,
-        point: widget.point,
-      ),
-    );
-    return CardContainer(
-      child: CardImage(
-        loading: widget.loading,
-        quiz: widget.quiz,
-        height: widget.height,
-        point: widget.point,
-      ),
+      child: _cardModeFront(context),
     );
   }
 
   Widget _buildBack(context) {
     return CardContainer(
-      child: CardArab(
-        loading: widget.loading,
-        quiz: widget.quiz,
-        height: widget.height,
-        point: widget.point,
-      ),
+      child: _cardModeBack(context),
     );
   }
 
@@ -96,6 +155,20 @@ class _CardGameState extends State<CardGame>
       return BiggerText(text: 'Yeay kamu hebat!', dark: false);
     }
     return BiggerText(text: 'Jawab soal ini dengan benar', dark: false);
+  }
+
+  CardAnswerMode _getMode(GameMode mode, { bool flip = false }) {
+    switch(mode) {
+      case GameMode.ArabGambar:
+        return flip ? CardAnswerMode.Latin : CardAnswerMode.Arab;
+      case GameMode.ArabKata:
+        return flip ? CardAnswerMode.Latin : CardAnswerMode.Arab;
+      case GameMode.GambarArab:
+        return flip ? CardAnswerMode.Arab : CardAnswerMode.Latin;
+      case GameMode.KataArab:
+        return flip ? CardAnswerMode.Arab : CardAnswerMode.Latin;
+    }
+    return CardAnswerMode.Latin;
   }
 
   Widget build(BuildContext context) {

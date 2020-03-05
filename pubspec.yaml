@@ -9,11 +9,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_auth: ^0.15.4
-  google_sign_in: ^4.1.4
   cupertino_icons: ^0.1.3
-  flutter_flip_view: ^1.0.3
   confetti: ^0.3.0
+  firebase_auth: ^0.15.4
+  flutter_flip_view: ^1.0.3
+  flutter_audio_player: ^0.1.2
+  google_sign_in: ^4.1.4
 
 dev_dependencies:
   flutter_launcher_icons: "^0.7.0"
@@ -34,6 +35,7 @@ flutter:
     - lib/assets/images/character.png
     - lib/assets/images/card_logo.png
     - lib/assets/images/google_logo.png
+    - lib/assets/images/congratulation_character.png
     - lib/assets/images/neutral_triangle_right.png
     - lib/assets/voices/
   fonts:
