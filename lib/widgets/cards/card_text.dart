@@ -7,6 +7,7 @@ import 'package:flutter_audio_player/flutter_audio_player.dart';
 class CardText extends StatefulWidget {
   final int point;
   final String text;
+  final String voice;
   final double height;
   final bool loading;
   final CardAnswerMode answerMode;
@@ -17,6 +18,7 @@ class CardText extends StatefulWidget {
     @required this.height,
     @required this.loading,
     @required this.answerMode,
+    this.voice = '',
   });
 
   @override
@@ -32,7 +34,7 @@ class _CardTextState extends State<CardText> {
 
   void _play() {
     if (!widget.loading) {
-      SoundPlayerUtil.addSoundName(widget.text);
+      SoundPlayerUtil.addSoundName(widget.voice);
     }
   }
 

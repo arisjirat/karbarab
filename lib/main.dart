@@ -23,7 +23,7 @@ class _MyAppState extends State<MyApp> {
         secondaryHeaderColor: secondaryColor,
         fontFamily: 'Proxima',
       ),
-      home: LoginScreen(),
+      home: HomeScreen(),
       routes: {
         LoginScreen.routeName: (_) => LoginScreen(),
         HomeScreen.routeName: (_) => HomeScreen(),
