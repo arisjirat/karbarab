@@ -85,22 +85,42 @@ class _GameStartScreenState extends State<GameStartScreen> {
     }
   }
 
-  List<Widget> buildWidgets(List<QuizModel> list) {
+  List<Widget> buildOptions(List<QuizModel> list) {
     return list
-      .asMap()
-      .map((i, w) => MapEntry(
-          i,
-          CardAnswer(
-            loading: _loading,
-            item: w,
-            answerId: _getAnswerIndex(i),
-            answerMode: widget.mode,
-            currentAnswer: _currentAnswer == _getAnswerIndex(i),
-            selectAnswer: _selectAnswer,
-            disabled: _inCorrectAnswer(_getAnswerIndex(i)),
-          )))
-      .values
-      .toList();
+        .asMap()
+        .map(
+          (i, w) => MapEntry(
+            i,
+            CardAnswer(
+              loading: _loading,
+              item: w,
+              answerId: _getAnswerIndex(i),
+              answerMode: widget.mode,
+              currentAnswer: _currentAnswer == _getAnswerIndex(i),
+              selectAnswer: _selectAnswer,
+              disabled: _inCorrectAnswer(_getAnswerIndex(i)),
+            ),
+          ),
+        )
+        .values
+        .toList();
+  }
+
+  Widget _buildLayoutAnswer(List<Widget> child) {
+    if (widget.mode == GameMode.ArabGambar) {
+      return Container(
+        child: Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          direction: Axis.horizontal,
+          children: child,
+        ),
+      );
+    }
+    return Container(
+      child: Column(
+        children: child,
+      ),
+    );
   }
 
   Widget buildQuiz(_deviceHeight) {
@@ -109,11 +129,7 @@ class _GameStartScreenState extends State<GameStartScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            child: Column(
-              children: buildWidgets(_listQuiz),
-            ),
-          ),
+          _buildLayoutAnswer(buildOptions(_listQuiz)),
           Padding(
             padding: EdgeInsets.only(
               bottom: 20.0,
@@ -148,12 +164,12 @@ class _GameStartScreenState extends State<GameStartScreen> {
               mode: widget.mode,
             ),
             _isCorrect
-              ? Congratulation(
-                  isCorrect: _isCorrect,
-                  onNewGame: _getQuiz,
-                  point: _currentPoint.round(),
-                )
-              : buildQuiz(_deviceHeight)
+                ? Congratulation(
+                    isCorrect: _isCorrect,
+                    onNewGame: _getQuiz,
+                    point: _currentPoint.round(),
+                  )
+                : buildQuiz(_deviceHeight)
           ],
         ),
       ),
