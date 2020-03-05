@@ -56,7 +56,7 @@ class _CardTextState extends State<CardText> {
     return Stack(
       children: [
         Container(
-          height: widget.height - 40,
+          height: widget.height - 80,
           padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 20),
           width: MediaQuery.of(context).size.width,
           child: Column(

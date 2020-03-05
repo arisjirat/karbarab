@@ -156,9 +156,9 @@ class _CardGameState extends State<CardGame>
 
   Widget _buildMessage(BuildContext context) {
     if (widget.correct) {
-      return BiggerText(text: 'Yeay kamu hebat!', dark: false);
+      return RegularText(text: 'Yeay kamu hebat!', dark: false);
     }
-    return BiggerText(text: 'Jawab soal ini dengan benar', dark: false);
+    return RegularText(text: 'Jawab soal ini dengan benar', dark: false);
   }
 
   CardAnswerMode _getMode(GameMode mode, { bool flip = false }) {
@@ -179,7 +179,7 @@ class _CardGameState extends State<CardGame>
     return Column(
       children: [
         Container(
-          margin: const EdgeInsets.only(top: 40.0),
+          margin: const EdgeInsets.only(top: 25.0),
           child: Center(
             child: _buildMessage(context),
           ),
@@ -206,7 +206,7 @@ class CardContainer extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(
         top: 10.0,
-        bottom: 20.0,
+        // bottom: 20.0,
         left: 30,
         right: 30,
       ),

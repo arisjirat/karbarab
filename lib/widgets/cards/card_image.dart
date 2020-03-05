@@ -21,8 +21,8 @@ class CardImage extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          height: height - 40,
-          padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 20),
+          height: height - 80,
+          padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 0),
           width: MediaQuery.of(context).size.width,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -31,7 +31,7 @@ class CardImage extends StatelessWidget {
                   ? RegularText(text: 'Loading', dark: true)
                   : Image.network(
                       quiz.image,
-                      height: 150,
+                      height: height - 120,
                       fit: BoxFit.fill,
                     )
             ],

@@ -24,9 +24,9 @@ class CardQuiz extends StatelessWidget {
 
   Widget build(BuildContext context) {
     final double _cardPlainHeight = 0.3 * deviceHeight;
-    final double _cardGameHeight = 0.3 * deviceHeight;
+    final double _cardGameHeight = 0.4 * deviceHeight;
     return Container(
-      height: 0.4 * deviceHeight,
+      height: _cardGameHeight,
       child: Column(
         children: [
           Stack(

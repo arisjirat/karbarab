@@ -54,7 +54,7 @@ class CardAnswer extends StatelessWidget {
     if (mode == GameMode.ArabGambar) {
       return (MediaQuery.of(context).size.width / 2) - 50;
     }
-    return MediaQuery.of(context).size.width;
+    return MediaQuery.of(context).size.width - 50;
   }
 
   double getHeightMode(BuildContext context, GameMode mode) {
