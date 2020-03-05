@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:karbarab/helper/model_quiz.dart';
+import 'package:karbarab/config/game_mode.dart';
 import 'package:karbarab/widgets/typography.dart';
 import 'package:karbarab/config/colors.dart';
+import 'package:flutter_audio_player/flutter_audio_player.dart';
 
-class CardArab extends StatefulWidget {
+class CardText extends StatefulWidget {
   final int point;
-  final QuizModel quiz;
+  final String text;
   final double height;
   final bool loading;
+  final CardAnswerMode answerMode;
 
-  CardArab({
+  CardText({
     @required this.point,
-    @required this.quiz,
+    @required this.text,
     @required this.height,
     @required this.loading,
+    @required this.answerMode,
   });
 
   @override
-  _CardArabState createState() => _CardArabState();
+  _CardTextState createState() => _CardTextState();
 }
 
-class _CardArabState extends State<CardArab> {
+class _CardTextState extends State<CardText> {
 
   @override
   void initState() {
@@ -28,7 +31,22 @@ class _CardArabState extends State<CardArab> {
   }
 
   void _play() {
-    // assetsAudioPlayer.play();
+    if (!widget.loading) {
+      SoundPlayerUtil.addSoundName(widget.text);
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    SoundPlayerUtil.removeAllSound();
+  }
+
+  Widget _buildText() {
+    if (widget.answerMode == CardAnswerMode.Arab) {
+      return BiggerArabicText(text: widget.text ,dark: true,);
+    }
+    return LargerText(text: widget.text, dark: true, bold: true, );
   }
 
   @override
@@ -44,11 +62,7 @@ class _CardArabState extends State<CardArab> {
             children: [
               widget.loading
                   ? RegularText(text: 'Loading', dark: true)
-                  : BiggerArabicText(
-                      text: widget.quiz.arab,
-                      dark: true,
-                      bold: true,
-                    )
+                  : _buildText()
             ],
           ),
         ),
@@ -71,16 +85,28 @@ class _CardArabState extends State<CardArab> {
         Positioned(
           top: 20.0,
           right: 20.0,
-          child: GestureDetector(
+          child: widget.answerMode == CardAnswerMode.Arab ? GestureDetector(
             onTap: _play,
             child: Icon(
               Icons.volume_up,
-              color: greyColorLight,
+              color: greyColor,
               size: 40.0,
             ),
-          ),
-        ),
+          ) : Text(''),
+        )
       ],
     );
+  }
+}
+
+class SoundPlayerUtil {
+  static void addSoundName(String name, {int count = 1}) {
+    for (var i = 0; i < count; i++) {
+      AudioPlayer.addSound('lib/assets/voices/' + name);
+    }
+  }
+
+  static void removeAllSound() {
+    AudioPlayer.removeAllSound();
   }
 }

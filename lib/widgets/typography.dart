@@ -106,7 +106,25 @@ class BoldRegularText extends RegularText {
         color: dark ? textColor : whiteColor,
         fontWeight: FontWeight.bold,
         fontSize: scaleCalculator(20, context),
-        // fontSize: 20.0,
+      ),
+    );
+  }
+}
+
+
+class LargerText extends StatelessWidget {
+  final String text;
+  final bool dark;
+  final bool bold;
+  LargerText({@required this.text, this.dark, this.bold = false});
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(
+        color: dark ? textColor : whiteColor,
+        fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+        fontSize: scaleCalculator(35, context),
       ),
     );
   }
@@ -115,14 +133,15 @@ class BoldRegularText extends RegularText {
 class BiggerText extends StatelessWidget {
   final String text;
   final bool dark;
-  BiggerText({@required this.text, this.dark});
+  final bool bold;
+  BiggerText({@required this.text, this.dark, this.bold = false});
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
       style: TextStyle(
         color: dark ? textColor : whiteColor,
-        // fontSize: 25.0,
+        fontWeight: bold ? FontWeight.bold : FontWeight.normal,
         fontSize: scaleCalculator(25, context),
       ),
     );

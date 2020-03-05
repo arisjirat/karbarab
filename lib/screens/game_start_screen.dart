@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:karbarab/config/game_mode.dart';
@@ -48,19 +47,15 @@ class _GameStartScreenState extends State<GameStartScreen> {
       _recentAnswers = [];
     });
 
-    Timer(Duration(seconds: 1), () {
-      var listQuiz = getQuizData();
-      listQuiz.shuffle();
-      listQuiz = listQuiz.sublist(0, 4);
-      final random = 0 + new Random().nextInt(listQuiz.length - 0);
-      setState(() {
-        _loading = false;
-        _listQuiz = listQuiz.sublist(0, 4);
-        _currentQuiz = _listQuiz[random];
-        _rightAnswer = _getAnswerIndex(random);
-      });
-
-      // print(_listQuiz.length);
+    List<QuizModel> listQuiz = getQuizData();
+    listQuiz.shuffle();
+    listQuiz = listQuiz.sublist(0, 4);
+    final random = 0 + new Random().nextInt(listQuiz.length - 0);
+    setState(() {
+      _loading = false;
+      _listQuiz = listQuiz.sublist(0, 4);
+      _currentQuiz = _listQuiz[random];
+      _rightAnswer = _getAnswerIndex(random);
     });
   }
 
@@ -97,9 +92,9 @@ class _GameStartScreenState extends State<GameStartScreen> {
           i,
           CardAnswer(
             loading: _loading,
-            answer: w.arab,
+            item: w,
             answerId: _getAnswerIndex(i),
-            answerMode: CardAnswerMode.Arab,
+            answerMode: widget.mode,
             currentAnswer: _currentAnswer == _getAnswerIndex(i),
             selectAnswer: _selectAnswer,
             disabled: _inCorrectAnswer(_getAnswerIndex(i)),
