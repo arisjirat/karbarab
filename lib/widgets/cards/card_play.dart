@@ -16,7 +16,6 @@ class CardPlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.of(context).pushNamed(GameStartScreen.routeName);
         Navigator.push(
           context,
           MaterialPageRoute(
