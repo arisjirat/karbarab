@@ -2,7 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:karbarab/config/game_mode.dart';
 import 'package:karbarab/widgets/typography.dart';
 import 'package:karbarab/config/colors.dart';
-import 'package:flutter_audio_player/flutter_audio_player.dart';
+
+import 'dart:async';
+
+import 'package:flutter/services.dart';
+
+class AudioPlayer {
+  static const MethodChannel _channel = const MethodChannel('audio_player');
+
+  static Future addSound(String path) async {
+    return await _channel.invokeMethod('addSound', path);
+  }
+
+  static Future removeAllSound() async {
+    return await _channel.invokeMethod('removeAllSound');
+  }
+}
+
 
 class CardText extends StatefulWidget {
   final int point;

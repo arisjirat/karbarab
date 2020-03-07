@@ -13,8 +13,10 @@ dependencies:
   confetti: ^0.3.0
   firebase_auth: ^0.15.4
   flutter_flip_view: ^1.0.3
-  flutter_audio_player: ^0.1.2
   google_sign_in: ^4.1.4
+
+dependency_overrides:
+  firebase_core: 0.4.4
 
 dev_dependencies:
   flutter_launcher_icons: "^0.7.0"
