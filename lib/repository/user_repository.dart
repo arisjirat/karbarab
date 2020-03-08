@@ -56,4 +56,8 @@ class UserRepository {
     }
     return displayName;
   }
+
+  Future<String> getAvatar() async {
+    return (await _firebaseAuth.currentUser()).photoUrl;
+  }
 }

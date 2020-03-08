@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:karbarab/bloc/auth/auth_bloc.dart';
 
 import 'package:karbarab/config/colors.dart';
 import 'package:karbarab/helper/greetings.dart';
@@ -61,6 +63,28 @@ class HomeScreen extends StatelessWidget {
                     title: 'Bahasa Arab dalam kata',
                     score: 2,
                     mode: GameMode.ArabKata,
+                  ),
+                  RaisedButton(
+                    onPressed: () {
+                      BlocProvider.of<AuthBloc>(context).add(
+                        LoggedOut(),
+                      );
+                      // Navigator.of(context).pushAndRemoveUntil(
+                      //     MaterialPageRoute(builder: (context) {
+                      //   return LoginScreen(userRepository: userRepository);
+                      // }), ModalRoute.withName('/'));
+                    },
+                    color: textColor,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Sign Out',
+                        style: TextStyle(fontSize: 25, color: Colors.white),
+                      ),
+                    ),
+                    elevation: 5,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(5.0)),
                   ),
                 ],
               ),

@@ -11,14 +11,15 @@ class Uninitialized extends AuthState {}
 
 class Authenticated extends AuthState {
   final String displayName;
+  final String avatar;
 
-  const Authenticated(this.displayName);
-
-  @override
-  List<Object> get props => [displayName];
+  const Authenticated({@required this.displayName, @required this.avatar});
 
   @override
-  String toString() => 'Authenticated { displayName: $displayName }';
+  List<Object> get props => [displayName, avatar];
+
+  @override
+  String toString() => 'Authenticated { displayName: $displayName, avatar: $avatar }';
 }
 
 class Unauthenticated extends AuthState {}

@@ -4,6 +4,7 @@ import 'package:karbarab/bloc/auth/auth_bloc.dart';
 import 'package:karbarab/config/colors.dart';
 import 'package:karbarab/bloc/login/bloc.dart';
 import 'package:karbarab/repository/user_repository.dart';
+import 'package:karbarab/screens/home_screen.dart';
 import 'package:karbarab/widgets/typography.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -27,41 +28,14 @@ class LoginScreen extends StatelessWidget {
 
 class Login extends StatelessWidget {
   final UserRepository userRepository;
-  Login({this.userRepository });
+  Login({ this.userRepository });
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
-        if (state.isFailure) {
-          Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Text('Login Failure'), Icon(Icons.error)],
-                ),
-                backgroundColor: Colors.red,
-              ),
-            );
-        }
-        if (state.isSubmitting) {
-          Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Logging In...'),
-                    CircularProgressIndicator(),
-                  ],
-                ),
-              ),
-            );
-        }
         if (state.isSuccess) {
           BlocProvider.of<AuthBloc>(context).add(LoggedIn());
+          Navigator.of(context).pushNamed(HomeScreen.routeName);
         }
       },
       child: Scaffold(
