@@ -61,7 +61,7 @@ class CardPlay extends StatelessWidget {
                           decoration: BoxDecoration(color: secondaryColor, borderRadius: BorderRadius.all(Radius.circular(5.0))),
                           child: SmallerText(
                             text: score > 0
-                                ? 'Nilai kamu ${score}/10'
+                                ? 'Nilai kamu $score/10'
                                 : 'Kamu belum main',
                             dark: false),
                         )
