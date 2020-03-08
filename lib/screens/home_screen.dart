@@ -10,6 +10,10 @@ import 'package:karbarab/widgets/typography.dart';
 import 'package:karbarab/helper/scale_calculator.dart';
 
 class HomeScreen extends StatelessWidget {
+  final String displayName;
+
+  HomeScreen({ this.displayName = 'Guest' });
+
   static const String routeName = '/home';
   @override
   Widget build(BuildContext context) {
@@ -21,7 +25,7 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            SplashScreen(deviceHeight: _deviceHeight),
+            SplashScreen(deviceHeight: _deviceHeight, displayName: displayName,),
             Container(
               height: 0.7 * _deviceHeight,
               child: Column(
@@ -70,8 +74,9 @@ class HomeScreen extends StatelessWidget {
 
 class SplashScreen extends StatelessWidget {
   final double deviceHeight;
+  final String displayName;
 
-  SplashScreen({this.deviceHeight});
+  SplashScreen({this.deviceHeight, @required this.displayName});
 
   Widget build(BuildContext context) {
     return Stack(
@@ -105,7 +110,7 @@ class SplashScreen extends StatelessWidget {
                       height: deviceHeight / 10,
                     ),
                     LogoText(text: 'Karbarab', dark: true),
-                    RegularText(text: 'Hai, Selamat ${greeting()}', dark: true),
+                    RegularText(text: 'Hai, Selamat ${greeting()} $displayName', dark: true),
                     ArabicText(text: 'مرحبا مساء الخير', dark: true),
                   ],
                 ),

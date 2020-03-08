@@ -1,75 +1,119 @@
 import 'package:flutter/material.dart';
-import 'package:karbarab/helper/sign_in.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:karbarab/bloc/auth/auth_bloc.dart';
 import 'package:karbarab/config/colors.dart';
-import 'package:karbarab/screens/home_screen.dart';
-
+import 'package:karbarab/bloc/login/bloc.dart';
+import 'package:karbarab/repository/user_repository.dart';
 import 'package:karbarab/widgets/typography.dart';
 
-class LoginScreen extends StatefulWidget {
-  static const String routeName = '/login';
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
+class LoginScreen extends StatelessWidget {
+  final UserRepository userRepository;
 
-class _LoginScreenState extends State<LoginScreen> {
+  LoginScreen({Key key, @required UserRepository userRepository})
+      : assert(userRepository != null),
+        userRepository = userRepository,
+        super(key: key);
+
+  static const String routeName = '/login';
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: greenColor,
-      body: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Image(image: AssetImage('lib/assets/images/card_logo.png')),
-                  ArabicText(
-                    text: 'مرحبا مساء الخير',
-                    dark: false,
-                  ),
-                  BiggerText(
-                    text: 'Hai, Selamat Siang',
-                    dark: false,
-                  ),
-                  LogoText(
-                    text: 'Karbarab',
-                    dark: false,
-                  ),
-                  Image(
-                    image: AssetImage('lib/assets/images/character.png'),
-                    height: 120,
-                  ),
-                  _signInButton(),
-                ],
-              )
-            ],
-          )
-        ],
+    return BlocProvider<LoginBloc>(
+      create: (context) => LoginBloc(userRepository: userRepository),
+      child: Login(userRepository: userRepository),
+    );
+  }
+}
+
+class Login extends StatelessWidget {
+  final UserRepository userRepository;
+  Login({this.userRepository });
+  @override
+  Widget build(BuildContext context) {
+    return BlocListener<LoginBloc, LoginState>(
+      listener: (context, state) {
+        if (state.isFailure) {
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [Text('Login Failure'), Icon(Icons.error)],
+                ),
+                backgroundColor: Colors.red,
+              ),
+            );
+        }
+        if (state.isSubmitting) {
+          Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Logging In...'),
+                    CircularProgressIndicator(),
+                  ],
+                ),
+              ),
+            );
+        }
+        if (state.isSuccess) {
+          BlocProvider.of<AuthBloc>(context).add(LoggedIn());
+        }
+      },
+      child: Scaffold(
+        backgroundColor: greenColor,
+        body: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Image(image: AssetImage('lib/assets/images/card_logo.png')),
+                    ArabicText(
+                      text: 'مرحبا مساء الخير',
+                      dark: false,
+                    ),
+                    BiggerText(
+                      text: 'Hai, Selamat Siang',
+                      dark: false,
+                    ),
+                    LogoText(
+                      text: 'Karbarab',
+                      dark: false,
+                    ),
+                    Image(
+                      image: AssetImage('lib/assets/images/character.png'),
+                      height: 120,
+                    ),
+                    GoogleSignInButton(),
+                  ],
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
+}
 
-  Widget _signInButton() {
+class GoogleSignInButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    //ignore: close_sinks
+    final LoginBloc _loginBloc = BlocProvider.of<LoginBloc>(context);
+
     return RaisedButton(
       color: Colors.white,
       onPressed: () {
-        signInWithGoogle().catchError((err) {
-          print(err);
-        }).then((value) {
-          // todo loading
-          if (value != null) {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) {
-                  return HomeScreen();
-                },
-              ),
-            );
-          }
-        });
+        _loginBloc.add(LoginWithGooglePressed());
       },
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(

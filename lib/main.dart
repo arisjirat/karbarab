@@ -6,14 +6,31 @@ import 'package:karbarab/screens/home_screen.dart';
 import 'package:karbarab/config/colors.dart';
 import 'package:karbarab/screens/profile_screen.dart';
 
-void main() => runApp(MyApp());
+import 'package:karbarab/helper/bloc_delegate.dart';
+import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:karbarab/bloc/auth/auth_bloc.dart';
+import 'package:karbarab/repository/user_repository.dart';
+import 'package:karbarab/screens/splash_screen.dart';
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  BlocSupervisor.delegate = SimpleBlocDelegate();
+  final UserRepository userRepository = UserRepository();
+  runApp(
+    BlocProvider(
+      create: (context) => AuthBloc(userRepository: userRepository)
+        ..add(AppStarted()),
+      child: App(userRepository: userRepository),
+    ),
+  );
 }
 
-class _MyAppState extends State<MyApp> {
+class App extends StatelessWidget {
+  final UserRepository userRepository;
+
+  App({@required this.userRepository});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -23,13 +40,24 @@ class _MyAppState extends State<MyApp> {
         secondaryHeaderColor: secondaryColor,
         fontFamily: 'Proxima',
       ),
-      home: LoginScreen(),
+      home: BlocBuilder<AuthBloc, AuthState>(
+        builder: (context, state) {
+          if (state is Uninitialized || state is Unauthenticated) {
+            return LoginScreen(userRepository: userRepository);
+          }
+          if (state is Authenticated) {
+            return HomeScreen(displayName: state.displayName);
+          }
+          return SplashLoginScreen();
+        },
+      ),
       routes: {
-        LoginScreen.routeName: (_) => LoginScreen(),
+        LoginScreen.routeName: (_) => LoginScreen(userRepository: userRepository),
         HomeScreen.routeName: (_) => HomeScreen(),
         ProfileScreen.routeName: (_) => ProfileScreen(),
-        GameStartScreen.routeName: (_) => GameStartScreen(mode: GameMode.GambarArab)
-      }
+        GameStartScreen.routeName: (_) =>
+            GameStartScreen(mode: GameMode.GambarArab)
+      },
     );
   }
 }
