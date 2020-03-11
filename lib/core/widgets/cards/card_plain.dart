@@ -15,13 +15,13 @@ class CardPlain extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           height: 50.0,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
             color: secondaryColor,
           ),
         ),
         Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
             color: color,
           ),
           width: MediaQuery.of(context).size.width,
