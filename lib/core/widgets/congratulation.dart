@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:karbarab/helper/scale_calculator.dart';
-import 'package:karbarab/widgets/congrats.dart';
-import 'package:karbarab/widgets/typography.dart';
-import 'package:karbarab/widgets/button.dart';
+import 'package:karbarab/core/helper/scale_calculator.dart';
+import 'package:karbarab/core/widgets/congrats.dart';
+import 'package:karbarab/core/widgets/typography.dart';
+import 'package:karbarab/core/widgets/button.dart';
 
 class Congratulation extends StatelessWidget {
   final bool isCorrect;
@@ -25,7 +25,7 @@ class Congratulation extends StatelessWidget {
       height: 0.5 * _deviceHeight,
       child: Column(
         children: [
-          Image(image: AssetImage('lib/assets/images/congratulation_character.png'), height: 200),
+          Image(image: AssetImage('assets/images/congratulation_character.png'), height: 200),
           Congrats(play: isCorrect),
           Container(height: scaleCalculator(20.0, context)),
           BoldRegularText(

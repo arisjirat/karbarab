@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
-import 'package:karbarab/config/colors.dart';
+import 'package:karbarab/core/config/colors.dart';
 
 class Congrats extends StatefulWidget {
   final bool play;

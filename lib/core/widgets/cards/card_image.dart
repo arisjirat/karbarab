@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:karbarab/helper/model_quiz.dart';
-import 'package:karbarab/widgets/typography.dart';
-import 'package:karbarab/config/colors.dart';
+import 'package:karbarab/core/helper/model_quiz.dart';
+import 'package:karbarab/core/widgets/typography.dart';
+import 'package:karbarab/core/config/colors.dart';
 
 class CardImage extends StatelessWidget {
   final int point;

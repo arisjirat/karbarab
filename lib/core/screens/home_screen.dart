@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:karbarab/bloc/auth/auth_bloc.dart';
+import 'package:karbarab/core/bloc/auth/auth_bloc.dart';
 
-import 'package:karbarab/config/colors.dart';
-import 'package:karbarab/helper/greetings.dart';
-import 'package:karbarab/screens/profile_screen.dart';
-import 'package:karbarab/widgets/cards/card_play.dart';
-import 'package:karbarab/config/game_mode.dart';
-import 'package:karbarab/widgets/typography.dart';
-import 'package:karbarab/helper/scale_calculator.dart';
+import 'package:karbarab/core/config/colors.dart';
+import 'package:karbarab/core/helper/greetings.dart';
+import 'package:karbarab/core/screens/profile_screen.dart';
+import 'package:karbarab/core/widgets/cards/card_play.dart';
+import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/core/widgets/typography.dart';
+import 'package:karbarab/core/helper/scale_calculator.dart';
 
 class HomeScreen extends StatelessWidget {
   final String displayName;
@@ -130,7 +130,7 @@ class SplashScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image(
-                      image: AssetImage('lib/assets/images/card_logo.png'),
+                      image: AssetImage('assets/images/card_logo.png'),
                       height: deviceHeight / 10,
                     ),
                     LogoText(text: 'Karbarab', dark: true),
@@ -143,7 +143,7 @@ class SplashScreen extends StatelessWidget {
                 bottom: 0.0,
                 left: 10.0,
                 child: Image(
-                  image: AssetImage('lib/assets/images/character.png'),
+                  image: AssetImage('assets/images/character.png'),
                   height: deviceHeight / 8,
                 ),
               ),

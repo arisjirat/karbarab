@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:karbarab/config/colors.dart';
-import 'package:karbarab/config/game_mode.dart';
-import 'package:karbarab/helper/model_quiz.dart';
-import 'package:karbarab/widgets/cards/card_game.dart';
-import 'package:karbarab/widgets/cards/card_plain.dart';
+import 'package:karbarab/core/config/colors.dart';
+import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/core/helper/model_quiz.dart';
+import 'package:karbarab/core/widgets/cards/card_game.dart';
+import 'package:karbarab/core/widgets/cards/card_plain.dart';
 
 class CardQuiz extends StatelessWidget {
   final bool isCorrect;

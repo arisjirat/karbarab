@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:karbarab/bloc/auth/auth_bloc.dart';
-import 'package:karbarab/config/colors.dart';
-import 'package:karbarab/bloc/login/bloc.dart';
-import 'package:karbarab/repository/user_repository.dart';
-import 'package:karbarab/screens/home_screen.dart';
-import 'package:karbarab/widgets/typography.dart';
+import 'package:karbarab/core/bloc/auth/auth_bloc.dart';
+import 'package:karbarab/core/config/colors.dart';
+import 'package:karbarab/core/bloc/login/bloc.dart';
+import 'package:karbarab/core/repository/user_repository.dart';
+import 'package:karbarab/core/screens/home_screen.dart';
+import 'package:karbarab/core/widgets/typography.dart';
 
 class LoginScreen extends StatelessWidget {
   final UserRepository userRepository;
@@ -49,7 +49,7 @@ class Login extends StatelessWidget {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    Image(image: AssetImage('lib/assets/images/card_logo.png')),
+                    Image(image: AssetImage('assets/images/card_logo.png')),
                     ArabicText(
                       text: 'مرحبا مساء الخير',
                       dark: false,
@@ -63,7 +63,7 @@ class Login extends StatelessWidget {
                       dark: false,
                     ),
                     Image(
-                      image: AssetImage('lib/assets/images/character.png'),
+                      image: AssetImage('assets/images/character.png'),
                       height: 120,
                     ),
                     GoogleSignInButton(),
@@ -101,7 +101,7 @@ class GoogleSignInButton extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Image(
-              image: AssetImage("lib/assets/images/google_logo.png"),
+              image: AssetImage("assets/images/google_logo.png"),
               height: 35.0,
             ),
             Padding(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:karbarab/screens/game_start_screen.dart';
-import 'package:karbarab/widgets/typography.dart';
-import 'package:karbarab/config/game_mode.dart';
+import 'package:karbarab/core/screens/game_start_screen.dart';
+import 'package:karbarab/core/widgets/typography.dart';
+import 'package:karbarab/core/config/game_mode.dart';
 
 class CardPlay extends StatelessWidget {
   final Color color;
@@ -69,7 +69,7 @@ class CardPlay extends StatelessWidget {
                     ),
                   ),
                   Image(
-                      image: AssetImage("lib/assets/images/neutral_triangle_right.png"),
+                      image: AssetImage("assets/images/neutral_triangle_right.png"),
                       height: 35.0),
                 ],
               ),

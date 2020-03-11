@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:karbarab/config/game_mode.dart';
-import 'package:karbarab/widgets/typography.dart';
-import 'package:karbarab/config/colors.dart';
-
+import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/core/widgets/typography.dart';
+import 'package:karbarab/core/config/colors.dart';
 import 'dart:async';
 
 import 'package:flutter/services.dart';
@@ -120,7 +119,7 @@ class _CardTextState extends State<CardText> {
 class SoundPlayerUtil {
   static void addSoundName(String name, {int count = 1}) {
     for (var i = 0; i < count; i++) {
-      AudioPlayer.addSound('lib/assets/voices/' + name);
+      AudioPlayer.addSound('assets/voices/' + name);
     }
   }
 

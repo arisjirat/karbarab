@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:karbarab/bloc/auth/auth_bloc.dart';
-import 'package:karbarab/config/colors.dart';
-import 'package:karbarab/repository/user_repository.dart';
-import 'package:karbarab/screens/home_screen.dart';
-import 'package:karbarab/screens/login_screen.dart';
+import 'package:karbarab/core/bloc/auth/auth_bloc.dart';
+import 'package:karbarab/core/config/colors.dart';
+import 'package:karbarab/core/repository/user_repository.dart';
+import 'package:karbarab/core/screens/home_screen.dart';
+import 'package:karbarab/core/screens/login_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   static const String routeName = '/profile';
@@ -37,28 +37,6 @@ class ProfileScreen extends StatelessWidget {
                       color: Colors.black54,
                     ),
                   ),
-                  // Text(
-                  //   name,
-                  //   style: TextStyle(
-                  //       fontSize: 25,
-                  //       color: textColor,
-                  //       fontWeight: FontWeight.bold),
-                  // ),
-                  // SizedBox(height: 20),
-                  // Text(
-                  //   'EMAIL',
-                  //   style: TextStyle(
-                  //       fontSize: 15,
-                  //       fontWeight: FontWeight.bold,
-                  //       color: Colors.black54),
-                  // ),
-                  // Text(
-                  //   email,
-                  //   style: TextStyle(
-                  //       fontSize: 25,
-                  //       color: textColor,
-                  //       fontWeight: FontWeight.bold),
-                  // ),
                   SizedBox(height: 40),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -112,6 +90,7 @@ class ProfileScreen extends StatelessWidget {
           ),
         );
       }
+      return Text('');
     });
   }
 }

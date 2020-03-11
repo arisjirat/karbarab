@@ -14,6 +14,7 @@ dependencies:
   firebase_auth: ^0.15.4
   flutter_flip_view: ^1.0.3
   google_sign_in: ^4.1.4
+  flutter_audio_player: ^0.1.2
   # shared_preferences: ^0.5.6+2
   flutter_bloc: ^3.2.0
   equatable: ^1.0.0
@@ -28,20 +29,20 @@ dev_dependencies:
 flutter_icons:
   ios: true
   android: true
-  image_path_ios: "lib/assets/launcher/icon---.png"
-  image_path_android: "lib/assets/launcher/icon---.png"
-  adaptive_icon_background: "lib/assets/launcher/background--.png"
-  adaptive_icon_foreground: "lib/assets/launcher/foreground---.png"
+  image_path_ios: "assets/launcher/icon---.png"
+  image_path_android: "assets/launcher/icon---.png"
+  adaptive_icon_background: "assets/launcher/background--.png"
+  adaptive_icon_foreground: "assets/launcher/foreground---.png"
 
 flutter:
   uses-material-design: true
   assets:
-    - lib/assets/images/character.png
-    - lib/assets/images/card_logo.png
-    - lib/assets/images/google_logo.png
-    - lib/assets/images/congratulation_character.png
-    - lib/assets/images/neutral_triangle_right.png
-    - lib/assets/voices/
+    - assets/images/character.png
+    - assets/images/card_logo.png
+    - assets/images/google_logo.png
+    - assets/images/congratulation_character.png
+    - assets/images/neutral_triangle_right.png
+    - assets/voices/
   fonts:
     - family: Proxima
       fonts:

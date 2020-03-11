@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:karbarab/config/colors.dart';
-import 'package:karbarab/helper/scale_calculator.dart';
+import 'package:karbarab/core/config/colors.dart';
+import 'package:karbarab/core/helper/scale_calculator.dart';
 
 class LogoText extends StatelessWidget {
   final String text;
