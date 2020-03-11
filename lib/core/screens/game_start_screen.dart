@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/game_mode.dart';
-import 'package:karbarab/core/helper/model_quiz.dart';
+import 'package:karbarab/core/models/quiz.dart';
 import 'package:karbarab/core/request/quiz.dart';
 import 'package:karbarab/core/widgets/button.dart';
 import 'package:karbarab/core/widgets/cards/card_answer.dart';

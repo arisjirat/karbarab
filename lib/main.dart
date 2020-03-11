@@ -9,8 +9,8 @@ import 'package:karbarab/core/screens/home_screen.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/screens/profile_screen.dart';
 import 'package:karbarab/core/helper/bloc_delegate.dart';
-import 'package:karbarab/core/bloc/auth/auth_bloc.dart';
-import 'package:karbarab/core/repository/user_repository.dart';
+import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
+import 'package:karbarab/repository/user_repository.dart';
 import 'package:karbarab/core/screens/splash_screen.dart';
 import 'package:karbarab/features/counter/bloc/counter_bloc.dart';
 

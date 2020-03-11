@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
-import 'package:karbarab/core/repository/user_repository.dart';
+import 'package:karbarab/repository/user_repository.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';

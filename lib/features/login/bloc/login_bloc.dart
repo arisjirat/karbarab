@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:karbarab/core/bloc/login/bloc.dart';
-import 'package:karbarab/core/repository/user_repository.dart';
+import 'package:karbarab/features/login/bloc/bloc.dart';
+import 'package:karbarab/repository/user_repository.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final UserRepository _userRepository;

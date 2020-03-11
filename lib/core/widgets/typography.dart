@@ -94,12 +94,10 @@ class SmallerText extends StatelessWidget {
   }
 }
 
-class BoldRegularText extends RegularText {
-  final String textContent;
-  final bool darkMode;
-
-  BoldRegularText({@required text, dark}) : textContent = text, darkMode = dark;
-
+class BoldRegularText extends StatelessWidget {
+  final String text;
+  final bool dark;
+  BoldRegularText({@required this.text, this.dark});
   @override
   Widget build(BuildContext context) {
     return Text(

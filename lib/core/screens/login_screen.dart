@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:karbarab/core/bloc/auth/auth_bloc.dart';
+import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/core/config/colors.dart';
-import 'package:karbarab/core/bloc/login/bloc.dart';
-import 'package:karbarab/core/repository/user_repository.dart';
+import 'package:karbarab/features/login/bloc/bloc.dart';
+import 'package:karbarab/repository/user_repository.dart';
 import 'package:karbarab/core/screens/home_screen.dart';
 import 'package:karbarab/core/widgets/typography.dart';
 

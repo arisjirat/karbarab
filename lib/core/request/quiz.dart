@@ -1,4 +1,4 @@
-import 'package:karbarab/core/helper/model_quiz.dart';
+import 'package:karbarab/core/models/quiz.dart';
 
 List<QuizModel> getQuizData() {
   final listQuiz = <QuizModel>[

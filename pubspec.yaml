@@ -17,7 +17,7 @@ dependencies:
   flutter_audio_player: ^0.1.2
   # shared_preferences: ^0.5.6+2
   flutter_bloc: ^3.2.0
-  equatable: ^1.0.0
+  equatable: ^1.1.0
   meta: ^1.1.6
   firebase_crashlytics: ^0.1.3
 
