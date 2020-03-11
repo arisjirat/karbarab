@@ -1,7 +1,7 @@
 import 'package:karbarab/core/helper/model_quiz.dart';
 
 List<QuizModel> getQuizData() {
-  var listQuiz = <QuizModel>[
+  final listQuiz = <QuizModel>[
     QuizModel(
       arab: 'طاولة',
       arabVoice: 'meja.mp3',

@@ -51,7 +51,7 @@ class UserRepository {
     var displayName = '';
     final currentDisplayName = (await _firebaseAuth.currentUser()).displayName;
     displayName = currentDisplayName;
-    if (currentDisplayName.split(' ').length > 0) {
+    if (currentDisplayName.split(' ').isNotEmpty) {
       displayName = (await _firebaseAuth.currentUser()).displayName.split(' ')[0];
     }
     return displayName;

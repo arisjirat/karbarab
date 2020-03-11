@@ -12,6 +12,7 @@ import 'package:karbarab/core/helper/bloc_delegate.dart';
 import 'package:karbarab/core/bloc/auth/auth_bloc.dart';
 import 'package:karbarab/core/repository/user_repository.dart';
 import 'package:karbarab/core/screens/splash_screen.dart';
+import 'package:karbarab/features/counter/bloc/counter_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,10 +22,17 @@ void main() {
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
   runApp(
-    BlocProvider(
-      create: (context) => AuthBloc(
-        userRepository: userRepository,
-      )..add(AppStarted()),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (BuildContext context) => AuthBloc(
+            userRepository: userRepository,
+          )..add(AppStarted()),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => CounterBloc(),
+        ),
+      ],
       child: App(userRepository: userRepository),
     ),
   );
@@ -33,7 +41,7 @@ void main() {
 class App extends StatelessWidget {
   final UserRepository userRepository;
 
-  App({@required this.userRepository});
+  const App({@required this.userRepository});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +53,7 @@ class App extends StatelessWidget {
         fontFamily: 'Proxima',
       ),
       home: BlocBuilder<AuthBloc, AuthState>(
-        builder: (context, state) {
+        builder: (BuildContext context, AuthState state) {
           print(state);
           if (state is Unauthenticated) {
             return LoginScreen(userRepository: userRepository);
@@ -63,7 +71,7 @@ class App extends StatelessWidget {
       routes: {
         LoginScreen.routeName: (_) =>
             LoginScreen(userRepository: userRepository),
-        HomeScreen.routeName: (_) => HomeScreen(),
+        HomeScreen.routeName: (_) => const HomeScreen(),
         ProfileScreen.routeName: (_) => ProfileScreen(),
         GameStartScreen.routeName: (_) =>
             GameStartScreen(mode: GameMode.GambarArab)

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'dart:math' as math;
+import 'package:flutter/material.dart';
 class DashRectPainter extends CustomPainter {
   double strokeWidth;
   Color color;
@@ -10,14 +10,14 @@ class DashRectPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    Paint dashedPaint = Paint()
+    final Paint dashedPaint = Paint()
       ..color = color
       ..strokeWidth = strokeWidth
       ..style = PaintingStyle.stroke;
 
-    double y = size.height;
-    Path _leftPath = getDashedPath(
-      a: math.Point(0, 0),
+    final double y = size.height;
+    final Path _leftPath = getDashedPath(
+      a: const math.Point(0, 0),
       b: math.Point(0.001, y),
       gap: gap,
     );
@@ -29,19 +29,19 @@ class DashRectPainter extends CustomPainter {
     @required math.Point<double> b,
     @required gap,
   }) {
-    Size size = Size(b.x - a.x, b.y - a.y);
-    Path path = Path();
+    final Size size = Size(b.x - a.x, b.y - a.y);
+    final Path path = Path();
     path.moveTo(a.x, a.y);
     bool shouldDraw = true;
     math.Point currentPoint = math.Point(a.x, a.y);
 
-    num radians = math.atan(size.height / size.width);
+    final num radians = math.atan(size.height / size.width);
 
-    num dx = math.cos(radians) * gap < 0
+    final num dx = math.cos(radians) * gap < 0
         ? math.cos(radians) * gap * -1
         : math.cos(radians) * gap;
 
-    num dy = math.sin(radians) * gap < 0
+    final num dy = math.sin(radians) * gap < 0
         ? math.sin(radians) * gap * -1
         : math.sin(radians) * gap;
 

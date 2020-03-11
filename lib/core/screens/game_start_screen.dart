@@ -50,7 +50,7 @@ class _GameStartScreenState extends State<GameStartScreen> {
     List<QuizModel> listQuiz = getQuizData();
     listQuiz.shuffle();
     listQuiz = listQuiz.sublist(0, 4);
-    final random = 0 + new Random().nextInt(listQuiz.length - 0);
+    final random = 0 + Random().nextInt(listQuiz.length - 0);
     setState(() {
       _loading = false;
       _listQuiz = listQuiz.sublist(0, 4);
@@ -71,7 +71,8 @@ class _GameStartScreenState extends State<GameStartScreen> {
   }
 
   void _applyAnswer() {
-    if (_currentAnswer == '') return;
+    if (_currentAnswer == '')
+      return;
     if (_rightAnswer == _currentAnswer) {
       setState(() {
         _isCorrect = true;
@@ -131,7 +132,7 @@ class _GameStartScreenState extends State<GameStartScreen> {
         children: [
           _buildLayoutAnswer(buildOptions(_listQuiz)),
           Padding(
-            padding: EdgeInsets.only(
+            padding: const EdgeInsets.only(
               bottom: 20.0,
             ),
             child: Button(

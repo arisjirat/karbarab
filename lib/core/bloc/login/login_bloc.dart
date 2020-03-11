@@ -5,7 +5,7 @@ import 'package:karbarab/core/bloc/login/bloc.dart';
 import 'package:karbarab/core/repository/user_repository.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
-  UserRepository _userRepository;
+  final UserRepository _userRepository;
 
   LoginBloc({
     @required UserRepository userRepository,

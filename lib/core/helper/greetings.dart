@@ -1,5 +1,5 @@
 String greeting() {
-  var hour = DateTime.now().hour;
+  final hour = DateTime.now().hour;
   if (hour < 12) {
     return 'Pagi';
   }
