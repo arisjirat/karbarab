@@ -18,7 +18,7 @@ class _CongratsState extends State<Congrats> {
   @override
   void initState() {
     _controllerBottomCenter = ConfettiController(
-      duration: Duration(milliseconds: 100),
+      duration: const Duration(milliseconds: 100),
     );
     super.initState();
   }

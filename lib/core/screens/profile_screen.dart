@@ -15,7 +15,7 @@ class ProfileScreen extends StatelessWidget {
       if (state is Authenticated) {
         return Scaffold(
           body: Container(
-            decoration: BoxDecoration(),
+            decoration: const BoxDecoration(),
             child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -28,7 +28,7 @@ class ProfileScreen extends StatelessWidget {
                     radius: 60,
                     backgroundColor: Colors.transparent,
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   Text(
                     state.displayName,
                     style: TextStyle(
@@ -37,7 +37,7 @@ class ProfileScreen extends StatelessWidget {
                       color: Colors.black54,
                     ),
                   ),
-                  SizedBox(height: 40),
+                  const SizedBox(height: 40),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -90,7 +90,7 @@ class ProfileScreen extends StatelessWidget {
           ),
         );
       }
-      return Text('');
+      return const Text('');
     });
   }
 }

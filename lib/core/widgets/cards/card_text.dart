@@ -1,13 +1,13 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/widgets/typography.dart';
 import 'package:karbarab/core/config/colors.dart';
-import 'dart:async';
 
 import 'package:flutter/services.dart';
 
 class AudioPlayer {
-  static const MethodChannel _channel = const MethodChannel('audio_player');
+  static const MethodChannel _channel = MethodChannel('audio_player');
 
   static Future addSound(String path) async {
     return await _channel.invokeMethod('addSound', path);
@@ -91,7 +91,7 @@ class _CardTextState extends State<CardText> {
                 const EdgeInsets.symmetric(horizontal: 20.0, vertical: 3.0),
             decoration: BoxDecoration(
               color: redColor,
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
+              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
             ),
             child: SmallerText(
               text: widget.point.toString(),
@@ -109,7 +109,7 @@ class _CardTextState extends State<CardText> {
               color: greyColor,
               size: 40.0,
             ),
-          ) : Text(''),
+          ) : const Text(''),
         )
       ],
     );

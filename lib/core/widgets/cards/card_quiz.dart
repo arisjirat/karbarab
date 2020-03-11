@@ -22,6 +22,7 @@ class CardQuiz extends StatelessWidget {
     @required this.mode,
   });
 
+  @override
   Widget build(BuildContext context) {
     final double _cardPlainHeight = 0.3 * deviceHeight;
     final double _cardGameHeight = 0.4 * deviceHeight;

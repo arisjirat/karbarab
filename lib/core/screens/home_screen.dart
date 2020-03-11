@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:karbarab/core/bloc/auth/auth_bloc.dart';
 
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/helper/greetings.dart';
@@ -10,87 +9,106 @@ import 'package:karbarab/core/widgets/cards/card_play.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/widgets/typography.dart';
 import 'package:karbarab/core/helper/scale_calculator.dart';
+import 'package:karbarab/features/counter/bloc/counter_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
+  const HomeScreen({ this.displayName = 'Guest' });
   final String displayName;
 
-  HomeScreen({ this.displayName = 'Guest' });
 
   static const String routeName = '/home';
   @override
   Widget build(BuildContext context) {
+    final CounterBloc counterBloc = BlocProvider.of<CounterBloc>(context);
     final double padding = MediaQuery.of(context).padding.top + MediaQuery.of(context).padding.bottom;
     final double _deviceHeight = MediaQuery.of(context).size.height - padding;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SplashScreen(deviceHeight: _deviceHeight, displayName: displayName,),
-            Container(
-              height: 0.7 * _deviceHeight,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CardPlay(
-                    color: greenColor,
-                    secondaryColor: greenColorLight,
-                    title: 'Gambar Dalam Bahasa Arab',
-                    score: 2,
-                    mode: GameMode.GambarArab,
-                  ),
-                  Container(height: scaleCalculator(20.0, context)),
-                  CardPlay(
-                    color: blueColor,
-                    secondaryColor: blueColorLight,
-                    title: 'Bahasa Arab Dalam Gambar',
-                    score: 2,
-                    mode: GameMode.ArabGambar,
-                  ),
-                  Container(height: scaleCalculator(20.0, context)),
-                  CardPlay(
-                    color: redColor,
-                    secondaryColor: redColorLight,
-                    title: 'Kata Dalam Bahasa Arab',
-                    score: 0,
-                    mode: GameMode.KataArab,
-                  ),
-                  Container(height: scaleCalculator(20.0, context)),
-                  CardPlay(
-                    color: yellowColor,
-                    secondaryColor: yellowColorDark,
-                    title: 'Bahasa Arab dalam kata',
-                    score: 2,
-                    mode: GameMode.ArabKata,
-                  ),
-                  RaisedButton(
-                    onPressed: () {
-                      BlocProvider.of<AuthBloc>(context).add(
-                        LoggedOut(),
-                      );
-                      // Navigator.of(context).pushAndRemoveUntil(
-                      //     MaterialPageRoute(builder: (context) {
-                      //   return LoginScreen(userRepository: userRepository);
-                      // }), ModalRoute.withName('/'));
-                    },
-                    color: textColor,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        'Sign Out',
-                        style: TextStyle(fontSize: 25, color: Colors.white),
+      body: BlocBuilder<CounterBloc, int>(
+        builder: (context, state) {
+          return SafeArea(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                SplashScreen(deviceHeight: _deviceHeight, displayName: displayName,),
+                Container(
+                  height: 0.7 * _deviceHeight,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CardPlay(
+                        color: greenColor,
+                        secondaryColor: greenColorLight,
+                        title: 'Gambar Dalam Bahasa Arab',
+                        score: 2,
+                        mode: GameMode.GambarArab,
                       ),
-                    ),
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
+                      Container(height: scaleCalculator(20.0, context)),
+                      CardPlay(
+                        color: blueColor,
+                        secondaryColor: blueColorLight,
+                        title: 'Bahasa Arab Dalam Gambar',
+                        score: 2,
+                        mode: GameMode.ArabGambar,
+                      ),
+                      Container(height: scaleCalculator(20.0, context)),
+                      CardPlay(
+                        color: redColor,
+                        secondaryColor: redColorLight,
+                        title: 'Kata Dalam Bahasa Arab',
+                        score: 0,
+                        mode: GameMode.KataArab,
+                      ),
+                      Container(height: scaleCalculator(20.0, context)),
+                      CardPlay(
+                        color: yellowColor,
+                        secondaryColor: yellowColorDark,
+                        title: 'Bahasa Arab dalam kata',
+                        score: 2,
+                        mode: GameMode.ArabKata,
+                      ),
+                      RaisedButton(
+                        onPressed: () {
+                          counterBloc.add(Increment());
+                        },
+                        color: textColor,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Add',
+                            style: TextStyle(fontSize: 25, color: Colors.white),
+                          ),
+                        ),
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      ),
+                      Text(
+                        '$state'
+                      ),
+                      RaisedButton(
+                        onPressed: () {
+                          counterBloc.add(Decrement());
+                        },
+                        color: textColor,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Add',
+                            style: TextStyle(fontSize: 25, color: Colors.white),
+                          ),
+                        ),
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          );
+        }
       ),
     );
   }
@@ -102,6 +120,7 @@ class SplashScreen extends StatelessWidget {
 
   SplashScreen({this.deviceHeight, @required this.displayName});
 
+  @override
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
@@ -109,13 +128,13 @@ class SplashScreen extends StatelessWidget {
           margin: const EdgeInsets.only(top: 0.0),
           width: MediaQuery.of(context).size.width,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
             color: greenColor,
           ),
         ),
         Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
             color: Colors.white,
           ),
           width: MediaQuery.of(context).size.width,
@@ -130,7 +149,7 @@ class SplashScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Image(
-                      image: AssetImage('assets/images/card_logo.png'),
+                      image: const AssetImage('assets/images/card_logo.png'),
                       height: deviceHeight / 10,
                     ),
                     LogoText(text: 'Karbarab', dark: true),
@@ -143,7 +162,7 @@ class SplashScreen extends StatelessWidget {
                 bottom: 0.0,
                 left: 10.0,
                 child: Image(
-                  image: AssetImage('assets/images/character.png'),
+                  image: const AssetImage('assets/images/character.png'),
                   height: deviceHeight / 8,
                 ),
               ),

@@ -9,13 +9,9 @@ import 'package:karbarab/core/widgets/typography.dart';
 
 class LoginScreen extends StatelessWidget {
   final UserRepository userRepository;
-
-  LoginScreen({Key key, @required UserRepository userRepository})
-      : assert(userRepository != null),
-        userRepository = userRepository,
-        super(key: key);
-
   static const String routeName = '/login';
+
+  LoginScreen({@required this.userRepository});
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +45,7 @@ class Login extends StatelessWidget {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    Image(image: AssetImage('assets/images/card_logo.png')),
+                    const Image(image: AssetImage('assets/images/card_logo.png')),
                     ArabicText(
                       text: 'مرحبا مساء الخير',
                       dark: false,
@@ -62,7 +58,7 @@ class Login extends StatelessWidget {
                       text: 'Karbarab',
                       dark: false,
                     ),
-                    Image(
+                    const Image(
                       image: AssetImage('assets/images/character.png'),
                       height: 120,
                     ),
@@ -89,7 +85,7 @@ class GoogleSignInButton extends StatelessWidget {
       onPressed: () {
         _loginBloc.add(LoginWithGooglePressed());
       },
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(
           Radius.circular(5),
         ),
@@ -100,8 +96,8 @@ class GoogleSignInButton extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image(
-              image: AssetImage("assets/images/google_logo.png"),
+            const Image(
+              image: AssetImage('assets/images/google_logo.png'),
               height: 35.0,
             ),
             Padding(

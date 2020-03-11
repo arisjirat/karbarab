@@ -32,15 +32,15 @@ class CardPlay extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               height: 20.0,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10), topRight: Radius.circular(10)),
                 color: secondaryColor,
               ),
             ),
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                color: this.color,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                color: color,
               ),
               width: MediaQuery.of(context).size.width,
               height: 80.0,
@@ -58,7 +58,7 @@ class CardPlay extends StatelessWidget {
                         Container(
                           margin: const EdgeInsets.only(top: 5.0),
                           padding: const EdgeInsets.symmetric(vertical: 5.0, horizontal: 15.0),
-                          decoration: BoxDecoration(color: secondaryColor, borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                          decoration: BoxDecoration(color: secondaryColor, borderRadius: const BorderRadius.all(Radius.circular(5.0))),
                           child: SmallerText(
                             text: score > 0
                                 ? 'Nilai kamu $score/10'
@@ -68,8 +68,8 @@ class CardPlay extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Image(
-                      image: AssetImage("assets/images/neutral_triangle_right.png"),
+                  const Image(
+                      image: AssetImage('assets/images/neutral_triangle_right.png'),
                       height: 35.0),
                 ],
               ),
