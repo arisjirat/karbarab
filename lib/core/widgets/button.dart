@@ -17,13 +17,13 @@ class Button extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        this.onTap();
+        onTap();
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
             color: disabled ? greenColor.withOpacity(0.5) : Theme.of(context).primaryColor,
           ),
           width: MediaQuery.of(context).size.width,

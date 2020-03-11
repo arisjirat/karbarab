@@ -39,7 +39,7 @@ class CardAnswer extends StatelessWidget {
       case GameMode.KataArab:
         return BoldRegularText(text: item.arab, dark: true);
     }
-    return Text('warn front');
+    return const Text('warn front');
   }
 
   bool isArabMode(GameMode answerModeParams) {
@@ -122,8 +122,9 @@ class CardAnswer extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (disabled) return;
-        this.selectAnswer(answerId);
+        if (disabled)
+          return;
+        selectAnswer(answerId);
       },
       child: Container(
         margin: const EdgeInsets.symmetric(
@@ -132,7 +133,7 @@ class CardAnswer extends StatelessWidget {
         ),
         child: Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
               color: currentAnswer
                   ? Theme.of(context).secondaryHeaderColor
                   : greyColorLight,
@@ -141,7 +142,7 @@ class CardAnswer extends StatelessWidget {
                   color: textColor.withOpacity(disabled ? 0.0 : 0.2),
                   blurRadius: 20.0,
                   spreadRadius: 0.0,
-                  offset: Offset(
+                  offset: const Offset(
                     2.0,
                     10.0,
                   ),

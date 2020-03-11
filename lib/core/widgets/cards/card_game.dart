@@ -32,14 +32,14 @@ class _CardGameState extends State<CardGame>
   AnimationController _animationController;
   Animation<double> _curvedAnimation;
 
-  FocusNode _focusNode = FocusNode();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void initState() {
     super.initState();
 
     _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+        AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
     _curvedAnimation =
         CurvedAnimation(parent: _animationController, curve: Curves.easeInOut);
     _animationController.addStatusListener((AnimationStatus status) {
@@ -95,7 +95,7 @@ class _CardGameState extends State<CardGame>
         answerMode: _getMode(widget.mode),
       );
     }
-    return Text('warn front');
+    return const Text('warn front');
   }
 
   Widget _cardModeBack(context) {
@@ -134,7 +134,7 @@ class _CardGameState extends State<CardGame>
         answerMode: _getMode(widget.mode, flip: true),
       );
     }
-    return Text('warn back');
+    return const Text('warn back');
   }
 
   Widget _buildFront(context) {
@@ -175,6 +175,7 @@ class _CardGameState extends State<CardGame>
     return CardAnswerMode.Latin;
   }
 
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -211,14 +212,14 @@ class CardContainer extends StatelessWidget {
         right: 30,
       ),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
+        borderRadius: const BorderRadius.all(Radius.circular(10)),
         color: Colors.white,
         boxShadow: [
           BoxShadow(
             color: textColor.withOpacity(0.2),
             blurRadius: 20.0,
             spreadRadius: 0.0,
-            offset: Offset(
+            offset: const Offset(
               2.0,
               10.0,
             ),

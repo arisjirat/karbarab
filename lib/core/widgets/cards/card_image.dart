@@ -43,7 +43,7 @@ class CardImage extends StatelessWidget {
           child: Container(
             padding:
                 const EdgeInsets.symmetric(horizontal: 20.0, vertical: 3.0),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: redColor,
               borderRadius: BorderRadius.all(Radius.circular(5.0)),
             ),
