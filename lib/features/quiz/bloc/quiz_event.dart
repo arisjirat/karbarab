@@ -8,6 +8,8 @@ abstract class QuizEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class Answer extends QuizEvent {}
+class Initialize extends QuizEvent {}
 
-class ResetAnswer extends QuizEvent {}
+class GetQuiz extends QuizEvent {}
+
+class DestroyQuiz extends QuizEvent {}
