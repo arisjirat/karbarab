@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
 import 'package:karbarab/features/quiz/view/game_start_screen.dart';
 import 'package:karbarab/features/login/view/login_screen.dart';
 import 'package:karbarab/features/home/view/home_screen.dart';
@@ -10,6 +11,7 @@ import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/features/auth/view/profile_screen.dart';
 import 'package:karbarab/core/helper/bloc_delegate.dart';
 import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
+import 'package:karbarab/repository/quiz_repository.dart';
 import 'package:karbarab/repository/user_repository.dart';
 import 'package:karbarab/features/home/view/splash_screen.dart';
 import 'package:karbarab/features/counter/bloc/counter_bloc.dart';
@@ -18,6 +20,7 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   BlocSupervisor.delegate = SimpleBlocDelegate();
   final UserRepository userRepository = UserRepository();
+  final QuizRepository quizRepository = QuizRepository();
   Crashlytics.instance.enableInDevMode = true;
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
 
@@ -31,6 +34,11 @@ void main() {
         ),
         BlocProvider(
           create: (BuildContext context) => CounterBloc(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => QuizBloc(
+            quizRepository: quizRepository,
+          )..add(Initialize()),
         ),
       ],
       child: App(userRepository: userRepository),
