@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
-import 'package:karbarab/core/screens/home_screen.dart';
+import 'package:karbarab/features/home/view/home_screen.dart';
 
 class CardPlain extends StatelessWidget {
   final double height;

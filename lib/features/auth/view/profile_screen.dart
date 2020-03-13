@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/repository/user_repository.dart';
-import 'package:karbarab/core/screens/home_screen.dart';
-import 'package:karbarab/core/screens/login_screen.dart';
+import 'package:karbarab/features/home/view/home_screen.dart';
+import 'package:karbarab/features/login/view/login_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   static const String routeName = '/profile';

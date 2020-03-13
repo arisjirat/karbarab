@@ -4,8 +4,8 @@ import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/features/login/bloc/bloc.dart';
 import 'package:karbarab/repository/user_repository.dart';
-import 'package:karbarab/core/screens/home_screen.dart';
-import 'package:karbarab/core/widgets/typography.dart';
+import 'package:karbarab/features/home/view/home_screen.dart';
+import 'package:karbarab/core/ui/typography.dart';
 
 class LoginScreen extends StatelessWidget {
   final UserRepository userRepository;

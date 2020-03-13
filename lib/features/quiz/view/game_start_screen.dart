@@ -1,12 +1,12 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/game_mode.dart';
-import 'package:karbarab/core/models/quiz.dart';
+import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/core/request/quiz.dart';
-import 'package:karbarab/core/widgets/button.dart';
-import 'package:karbarab/core/widgets/cards/card_answer.dart';
-import 'package:karbarab/core/widgets/cards/card_quiz.dart';
-import 'package:karbarab/core/widgets/congratulation.dart';
+import 'package:karbarab/core/ui/button.dart';
+import 'package:karbarab/core/ui/cards/card_answer.dart';
+import 'package:karbarab/core/ui/cards/card_quiz.dart';
+import 'package:karbarab/core/ui/congratulation.dart';
 
 class GameStartScreen extends StatefulWidget {
   static const String routeName = '/start';

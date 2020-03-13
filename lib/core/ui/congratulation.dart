@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/helper/scale_calculator.dart';
-import 'package:karbarab/core/widgets/congrats.dart';
-import 'package:karbarab/core/widgets/typography.dart';
-import 'package:karbarab/core/widgets/button.dart';
+import 'package:karbarab/core/ui/congrats.dart';
+import 'package:karbarab/core/ui/typography.dart';
+import 'package:karbarab/core/ui/button.dart';
 
 class Congratulation extends StatelessWidget {
   final bool isCorrect;

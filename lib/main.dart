@@ -3,15 +3,15 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:karbarab/core/config/game_mode.dart';
-import 'package:karbarab/core/screens/game_start_screen.dart';
-import 'package:karbarab/core/screens/login_screen.dart';
-import 'package:karbarab/core/screens/home_screen.dart';
+import 'package:karbarab/features/quiz/view/game_start_screen.dart';
+import 'package:karbarab/features/login/view/login_screen.dart';
+import 'package:karbarab/features/home/view/home_screen.dart';
 import 'package:karbarab/core/config/colors.dart';
-import 'package:karbarab/core/screens/profile_screen.dart';
+import 'package:karbarab/features/auth/view/profile_screen.dart';
 import 'package:karbarab/core/helper/bloc_delegate.dart';
 import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/repository/user_repository.dart';
-import 'package:karbarab/core/screens/splash_screen.dart';
+import 'package:karbarab/features/home/view/splash_screen.dart';
 import 'package:karbarab/features/counter/bloc/counter_bloc.dart';
 
 void main() {

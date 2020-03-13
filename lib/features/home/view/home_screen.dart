@@ -4,10 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/helper/greetings.dart';
-import 'package:karbarab/core/screens/profile_screen.dart';
-import 'package:karbarab/core/widgets/cards/card_play.dart';
+import 'package:karbarab/features/auth/view/profile_screen.dart';
+import 'package:karbarab/core/ui/cards/card_play.dart';
 import 'package:karbarab/core/config/game_mode.dart';
-import 'package:karbarab/core/widgets/typography.dart';
+import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/helper/scale_calculator.dart';
 import 'package:karbarab/features/counter/bloc/counter_bloc.dart';
 

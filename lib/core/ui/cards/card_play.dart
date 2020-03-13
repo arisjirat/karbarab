@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:karbarab/core/screens/game_start_screen.dart';
-import 'package:karbarab/core/widgets/typography.dart';
+import 'package:karbarab/features/quiz/view/game_start_screen.dart';
+import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 
 class CardPlay extends StatelessWidget {

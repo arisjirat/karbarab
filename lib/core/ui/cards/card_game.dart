@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/config/game_mode.dart';
-import 'package:karbarab/core/models/quiz.dart';
-import 'package:karbarab/core/widgets/cards/card_image.dart';
-import 'package:karbarab/core/widgets/cards/card_text.dart';
-import 'package:karbarab/core/widgets/typography.dart';
+import 'package:karbarab/features/quiz/model/quiz.dart';
+import 'package:karbarab/core/ui/cards/card_image.dart';
+import 'package:karbarab/core/ui/cards/card_text.dart';
+import 'package:karbarab/core/ui/typography.dart';
 import 'package:flutter_flip_view/flutter_flip_view.dart';
 
 class CardGame extends StatefulWidget {

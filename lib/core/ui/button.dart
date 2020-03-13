@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
-import 'package:karbarab/core/widgets/typography.dart';
+import 'package:karbarab/core/ui/typography.dart';
 
 class Button extends StatelessWidget {
   final String text;
