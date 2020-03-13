@@ -15,11 +15,9 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({ this.displayName = 'Guest' });
   final String displayName;
 
-
   static const String routeName = '/home';
   @override
   Widget build(BuildContext context) {
-    final CounterBloc counterBloc = BlocProvider.of<CounterBloc>(context);
     final double padding = MediaQuery.of(context).padding.top + MediaQuery.of(context).padding.bottom;
     final double _deviceHeight = MediaQuery.of(context).size.height - padding;
     return Scaffold(
@@ -66,41 +64,6 @@ class HomeScreen extends StatelessWidget {
                         title: 'Bahasa Arab dalam kata',
                         score: 2,
                         mode: GameMode.ArabKata,
-                      ),
-                      RaisedButton(
-                        onPressed: () {
-                          counterBloc.add(Increment());
-                        },
-                        color: textColor,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Add',
-                            style: TextStyle(fontSize: 25, color: Colors.white),
-                          ),
-                        ),
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0)),
-                      ),
-                      Text(
-                        '$state'
-                      ),
-                      RaisedButton(
-                        onPressed: () {
-                          counterBloc.add(Decrement());
-                        },
-                        color: textColor,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Add',
-                            style: TextStyle(fontSize: 25, color: Colors.white),
-                          ),
-                        ),
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5.0)),
                       ),
                     ],
                   ),
