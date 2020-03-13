@@ -1,12 +1,17 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
-import 'package:karbarab/core/request/quiz.dart';
 import 'package:karbarab/core/ui/button.dart';
 import 'package:karbarab/core/ui/cards/card_answer.dart';
 import 'package:karbarab/core/ui/cards/card_quiz.dart';
 import 'package:karbarab/core/ui/congratulation.dart';
+
+String _getAnswerIndex(index) {
+  const answer = ['A', 'B', 'C', 'D'];
+  return answer[index];
+}
 
 class GameStartScreen extends StatefulWidget {
   static const String routeName = '/start';
@@ -18,15 +23,63 @@ class GameStartScreen extends StatefulWidget {
 }
 
 class _GameStartScreenState extends State<GameStartScreen> {
-  List _listQuiz = <QuizModel>[];
-  List _recentAnswers = [];
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    BlocProvider.of<QuizBloc>(context).add(GetQuiz());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final QuizBloc quizBloc = BlocProvider.of<QuizBloc>(context);
+    final MediaQueryData mediaContext = MediaQuery.of(context);
+    final double padding = mediaContext.padding.top +
+        mediaContext.padding.bottom;
+    final double _deviceHeight = mediaContext.size.height - padding;
+    return Scaffold(
+      body: BlocBuilder<QuizBloc, QuizState>(builder: (context, state) {
+        if (state is HasQuiz) {
+          return GameQuiz(
+            deviceHeight: _deviceHeight,
+            mode: widget.mode,
+            list: state.list,
+            correct: state.correct,
+            quizBloc: quizBloc,
+          );
+        }
+      }),
+    );
+  }
+}
+
+class GameQuiz extends StatefulWidget {
+  final double deviceHeight;
+  final GameMode mode;
+  final List<QuizModel> list;
+  final QuizModel correct;
+  final QuizBloc quizBloc;
+
+  const GameQuiz({
+    @required this.deviceHeight,
+    @required this.mode,
+    @required this.list,
+    @required this.correct,
+    @required this.quizBloc,
+  });
+
+
+  @override
+  _GameQuizState createState() => _GameQuizState();
+}
+
+class _GameQuizState extends State<GameQuiz> {
+  List<String> _recentAnswers = [];
   bool _isCorrect = false;
   bool _loading = false;
-
   String _currentAnswer = '';
-  String _rightAnswer = '';
   double _currentPoint = 300;
-  QuizModel _currentQuiz;
+  
+  String get _rightAnswer =>  _getAnswerIndex(widget.list.indexOf(widget.correct));
 
   bool _inCorrectAnswer(key) {
     return _recentAnswers.contains(key);
@@ -39,6 +92,7 @@ class _GameStartScreenState extends State<GameStartScreen> {
   }
 
   void _getQuiz() {
+    widget.quizBloc.add(GetQuiz());
     setState(() {
       _currentPoint = 300;
       _loading = true;
@@ -47,21 +101,9 @@ class _GameStartScreenState extends State<GameStartScreen> {
       _recentAnswers = [];
     });
 
-    List<QuizModel> listQuiz = getQuizData();
-    listQuiz.shuffle();
-    listQuiz = listQuiz.sublist(0, 4);
-    final random = 0 + Random().nextInt(listQuiz.length - 0);
     setState(() {
       _loading = false;
-      _listQuiz = listQuiz.sublist(0, 4);
-      _currentQuiz = _listQuiz[random];
-      _rightAnswer = _getAnswerIndex(random);
     });
-  }
-
-  String _getAnswerIndex(index) {
-    const answer = ['A', 'B', 'C', 'D'];
-    return answer[index];
   }
 
   void _selectAnswer(answer) {
@@ -71,9 +113,7 @@ class _GameStartScreenState extends State<GameStartScreen> {
   }
 
   void _applyAnswer() {
-    if (_currentAnswer == '')
-      return;
-    if (_rightAnswer == _currentAnswer) {
+    if (_rightAnswer == _currentAnswer && _currentAnswer != '') {
       setState(() {
         _isCorrect = true;
       });
@@ -88,23 +128,23 @@ class _GameStartScreenState extends State<GameStartScreen> {
 
   List<Widget> buildOptions(List<QuizModel> list) {
     return list
-        .asMap()
-        .map(
-          (i, w) => MapEntry(
-            i,
-            CardAnswer(
-              loading: _loading,
-              item: w,
-              answerId: _getAnswerIndex(i),
-              answerMode: widget.mode,
-              currentAnswer: _currentAnswer == _getAnswerIndex(i),
-              selectAnswer: _selectAnswer,
-              disabled: _inCorrectAnswer(_getAnswerIndex(i)),
-            ),
+      .asMap()
+      .map(
+        (i, w) => MapEntry(
+          i,
+          CardAnswer(
+            loading: _loading,
+            item: w,
+            answerId: _getAnswerIndex(i),
+            answerMode: widget.mode,
+            currentAnswer: _currentAnswer == _getAnswerIndex(i),
+            selectAnswer: _selectAnswer,
+            disabled: _inCorrectAnswer(_getAnswerIndex(i)),
           ),
-        )
-        .values
-        .toList();
+        ),
+      )
+      .values
+      .toList();
   }
 
   Widget _buildLayoutAnswer(List<Widget> child) {
@@ -124,13 +164,13 @@ class _GameStartScreenState extends State<GameStartScreen> {
     );
   }
 
-  Widget buildQuiz(_deviceHeight) {
+  Widget buildQuiz(_deviceHeight, listQuiz) {
     return Container(
       height: 0.6 * _deviceHeight,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildLayoutAnswer(buildOptions(_listQuiz)),
+          _buildLayoutAnswer(buildOptions(listQuiz)),
           Padding(
             padding: const EdgeInsets.only(
               bottom: 20.0,
@@ -148,31 +188,26 @@ class _GameStartScreenState extends State<GameStartScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double padding = MediaQuery.of(context).padding.top +
-        MediaQuery.of(context).padding.bottom;
-    final double _deviceHeight = MediaQuery.of(context).size.height - padding;
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CardQuiz(
-              currentPoint: _currentPoint,
-              isCorrect: _isCorrect,
-              loading: _loading,
-              deviceHeight: _deviceHeight,
-              quiz: _currentQuiz,
-              mode: widget.mode,
-            ),
-            _isCorrect
-                ? Congratulation(
-                    isCorrect: _isCorrect,
-                    onNewGame: _getQuiz,
-                    point: _currentPoint.round(),
-                  )
-                : buildQuiz(_deviceHeight)
-          ],
-        ),
+    return SafeArea(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          CardQuiz(
+            currentPoint: _currentPoint,
+            isCorrect: _isCorrect,
+            loading: _loading,
+            deviceHeight: widget.deviceHeight,
+            quiz: widget.correct,
+            mode: widget.mode,
+          ),
+          _isCorrect
+              ? Congratulation(
+                  isCorrect: _isCorrect,
+                  onNewGame: _getQuiz,
+                  point: _currentPoint.round(),
+                )
+              : buildQuiz(widget.deviceHeight, widget.list)
+        ],
       ),
     );
   }
