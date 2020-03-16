@@ -1,3 +1,4 @@
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/helper/dashed_rect.dart';
@@ -64,6 +65,27 @@ class CardAnswer extends StatelessWidget {
     return 50;
   }
 
+  Widget buildCross({String type = 'left'}) {
+    return disabled
+        ? Positioned(
+            child: Container(
+              height: 20,
+              width: 2,
+              child: Transform.rotate(
+                angle: type == 'left' ? 45 : 65,
+                child: Container(
+                  color: redColor,
+                  height: 1.0,
+                  width: 1,
+                ),
+              ),
+            ),
+            top: 1,
+            left: 5,
+          )
+        : const Padding(padding: EdgeInsets.all(0),);
+  }
+
   Widget buildMode(BuildContext context) {
     if (isGambarMode(answerMode)) {
       return Stack(
@@ -71,10 +93,16 @@ class CardAnswer extends StatelessWidget {
           Positioned(
             top: 10,
             left: 0,
-            child: RegularText(text: answerId, dark: true),
+            child: Stack(
+              children: <Widget>[
+                RegularText(text: answerId, dark: true),
+                buildCross(type: 'left'),
+                buildCross(type: 'right'),
+              ],
+            ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(top: 50.0),
+          Container(
+            height: getHeightMode(context, answerMode),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,32 +116,42 @@ class CardAnswer extends StatelessWidget {
         ],
       );
     }
-    return Row(
-      mainAxisAlignment: isArabMode(answerMode)
-          ? MainAxisAlignment.spaceBetween
-          : MainAxisAlignment.start,
-      children: [
-        Container(
-          margin: const EdgeInsets.only(right: 10.0),
-          padding: const EdgeInsets.only(right: 10.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              BoldRegularText(text: answerId, dark: true),
-              Container(
-                margin: const EdgeInsets.only(left: 20.0),
-                height: 200.0,
-                child: CustomPaint(
-                  painter: DashRectPainter(color: greyColor),
-                ),
+    return Stack(
+      children: <Widget>[
+        Row(
+          mainAxisAlignment: isArabMode(answerMode)
+              ? MainAxisAlignment.spaceBetween
+              : MainAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(right: 10.0),
+              padding: const EdgeInsets.only(right: 10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Stack(
+                    children: <Widget>[
+                      BoldRegularText(text: answerId, dark: true),
+                      buildCross(type: 'left'),
+                      buildCross(type: 'right'),
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(left: 20.0),
+                    height: 200.0,
+                    child: CustomPaint(
+                      painter: DashRectPainter(color: greyColor),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+            loading
+                ? BoldRegularText(text: '...', dark: true)
+                : _buildAnswer(context)
+          ],
         ),
-        loading
-            ? BoldRegularText(text: '...', dark: true)
-            : _buildAnswer(context)
       ],
     );
   }
@@ -122,8 +160,7 @@ class CardAnswer extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (disabled)
-          return;
+        if (disabled) return;
         selectAnswer(answerId);
       },
       child: Container(
@@ -136,7 +173,7 @@ class CardAnswer extends StatelessWidget {
               borderRadius: const BorderRadius.all(Radius.circular(10)),
               color: currentAnswer
                   ? Theme.of(context).secondaryHeaderColor
-                  : greyColorLight,
+                  : disabled ? greyColor.withOpacity(0.6) : greyColorLight,
               boxShadow: [
                 BoxShadow(
                   color: textColor.withOpacity(disabled ? 0.0 : 0.2),

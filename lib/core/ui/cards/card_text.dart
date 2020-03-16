@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/config/colors.dart';
-
+import 'package:karbarab/core/ui/cards/point.dart';
 import 'package:flutter/services.dart';
 
 class AudioPlayer {
@@ -83,22 +83,7 @@ class _CardTextState extends State<CardText> {
             ],
           ),
         ),
-        Positioned(
-          bottom: 20.0,
-          right: 20.0,
-          child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 3.0),
-            decoration: BoxDecoration(
-              color: redColor,
-              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-            ),
-            child: SmallerText(
-              text: widget.point.toString(),
-              dark: false,
-            ),
-          ),
-        ),
+        PointCard(widget.point),
         Positioned(
           top: 20.0,
           right: 20.0,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/core/ui/typography.dart';
-import 'package:karbarab/core/config/colors.dart';
+import 'package:karbarab/core/ui/cards/point.dart';
 
 class CardImage extends StatelessWidget {
   final int point;
@@ -37,22 +37,7 @@ class CardImage extends StatelessWidget {
             ],
           ),
         ),
-        Positioned(
-          bottom: 20.0,
-          right: 20.0,
-          child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 3.0),
-            decoration: const BoxDecoration(
-              color: redColor,
-              borderRadius: BorderRadius.all(Radius.circular(5.0)),
-            ),
-            child: SmallerText(
-              text: point.toString(),
-              dark: false,
-            ),
-          ),
-        ),
+        PointCard(point),
       ],
     );
   }

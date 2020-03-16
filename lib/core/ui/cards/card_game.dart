@@ -207,7 +207,6 @@ class CardContainer extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(
         top: 10.0,
-        // bottom: 20.0,
         left: 30,
         right: 30,
       ),
