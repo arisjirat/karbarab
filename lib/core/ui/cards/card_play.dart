@@ -95,7 +95,6 @@ class CardPlay extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            // Anim(),
                             ScoreContainer(score: score.roundToDouble(), color: secondaryColor, loadScore: loadScore),
                             Positioned(
                               top: 10,
@@ -174,10 +173,8 @@ class _ScoreContainerState extends State<ScoreContainer>
 
   @override
   Widget build(BuildContext context) {
-    print(animation.value);
     return Container(
       width: (widget.score * 10) * animation.value / 100,
-      // width: animation.value,
       height: 29,
       margin: const EdgeInsets.only(top: 5.0),
       padding: const EdgeInsets.symmetric(
