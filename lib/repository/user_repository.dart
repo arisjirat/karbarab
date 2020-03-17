@@ -60,4 +60,8 @@ class UserRepository {
   Future<String> getAvatar() async {
     return (await _firebaseAuth.currentUser()).photoUrl;
   }
+
+  Future<String> getEmail() async {
+    return (await _firebaseAuth.currentUser()).email;
+  }
 }

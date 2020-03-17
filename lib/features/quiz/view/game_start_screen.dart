@@ -7,6 +7,7 @@ import 'package:karbarab/core/ui/button.dart';
 import 'package:karbarab/core/ui/cards/card_answer.dart';
 import 'package:karbarab/core/ui/cards/card_quiz.dart';
 import 'package:karbarab/core/ui/congratulation.dart';
+import 'package:karbarab/features/score/bloc/score_bloc.dart';
 
 String _getAnswerIndex(index) {
   const answer = ['A', 'B', 'C', 'D'];
@@ -32,6 +33,7 @@ class _GameStartScreenState extends State<GameStartScreen> {
   @override
   Widget build(BuildContext context) {
     final QuizBloc quizBloc = BlocProvider.of<QuizBloc>(context);
+    final ScoreBloc scoreBloc = BlocProvider.of<ScoreBloc>(context);
     final MediaQueryData mediaContext = MediaQuery.of(context);
     final double padding = mediaContext.padding.top +
         mediaContext.padding.bottom;
@@ -45,6 +47,7 @@ class _GameStartScreenState extends State<GameStartScreen> {
             list: state.list,
             correct: state.correct,
             quizBloc: quizBloc,
+            scoreBloc: scoreBloc,
           );
         }
       }),
@@ -58,6 +61,7 @@ class GameQuiz extends StatefulWidget {
   final List<QuizModel> list;
   final QuizModel correct;
   final QuizBloc quizBloc;
+  final ScoreBloc scoreBloc;
 
   const GameQuiz({
     @required this.deviceHeight,
@@ -65,6 +69,7 @@ class GameQuiz extends StatefulWidget {
     @required this.list,
     @required this.correct,
     @required this.quizBloc,
+    @required this.scoreBloc,
   });
 
 
@@ -117,6 +122,12 @@ class _GameQuizState extends State<GameQuiz> {
       setState(() {
         _isCorrect = true;
       });
+      widget.scoreBloc.add(AddScoreUser(
+        mode: widget.mode,
+        metaQuiz: widget.correct,
+        score: _currentPoint.round(),
+        quizId: widget.correct.id,
+      ));
     } else {
       setState(() {
         _recentAnswers.add(_currentAnswer);

@@ -9,79 +9,98 @@ import 'package:karbarab/core/ui/cards/card_play.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/helper/scale_calculator.dart';
-import 'package:karbarab/features/counter/bloc/counter_bloc.dart';
+import 'package:karbarab/features/score/bloc/score_bloc.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({ this.displayName = 'Guest' });
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({this.displayName = 'Guest'});
   final String displayName;
 
   static const String routeName = '/home';
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    BlocProvider.of<ScoreBloc>(context)
+        .add(GetScoreUserByMode(GameMode.ArabGambar));
+  }
+
   @override
   Widget build(BuildContext context) {
-    final double padding = MediaQuery.of(context).padding.top + MediaQuery.of(context).padding.bottom;
+    final double padding = MediaQuery.of(context).padding.top +
+        MediaQuery.of(context).padding.bottom;
     final double _deviceHeight = MediaQuery.of(context).size.height - padding;
     return Scaffold(
       backgroundColor: Colors.white,
-      body: BlocBuilder<CounterBloc, int>(
-        builder: (context, state) {
-          return SafeArea(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                SplashScreen(deviceHeight: _deviceHeight, displayName: displayName,),
-                Container(
-                  height: 0.7 * _deviceHeight,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CardPlay(
-                        color: greenColor,
-                        secondaryColor: greenColorLight,
-                        title: 'Gambar Dalam Bahasa Arab',
-                        score: 2,
-                        mode: GameMode.GambarArab,
-                      ),
-                      Container(height: scaleCalculator(20.0, context)),
-                      CardPlay(
-                        color: blueColor,
-                        secondaryColor: blueColorLight,
-                        title: 'Bahasa Arab Dalam Gambar',
-                        score: 2,
-                        mode: GameMode.ArabGambar,
-                      ),
-                      Container(height: scaleCalculator(20.0, context)),
-                      CardPlay(
-                        color: redColor,
-                        secondaryColor: redColorLight,
-                        title: 'Kata Dalam Bahasa Arab',
-                        score: 0,
-                        mode: GameMode.KataArab,
-                      ),
-                      Container(height: scaleCalculator(20.0, context)),
-                      CardPlay(
-                        color: yellowColor,
-                        secondaryColor: yellowColorDark,
-                        title: 'Bahasa Arab dalam kata',
-                        score: 2,
-                        mode: GameMode.ArabKata,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+      body: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Hero(
+              deviceHeight: _deviceHeight,
+              displayName: widget.displayName,
             ),
-          );
-        }
+            BlocBuilder<ScoreBloc, ScoreState>(builder: (context, state) {
+              return Container(
+                height: 0.7 * _deviceHeight,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CardPlay(
+                      color: greenColor,
+                      secondaryColor: greenColorLight,
+                      title: 'Gambar Dalam Bahasa Arab',
+                      loadScore: state is HasScore && state.loadScore,
+                      score: state is HasScore ? state.scoreGambarArab : 0,
+                      mode: GameMode.GambarArab,
+                    ),
+                    Container(height: scaleCalculator(20.0, context)),
+                    CardPlay(
+                      color: blueColor,
+                      secondaryColor: blueColorLight,
+                      title: 'Bahasa Arab Dalam Gambar',
+                      loadScore: state is HasScore && state.loadScore,
+                      score: state is HasScore ? state.scoreArabGambar : 0,
+                      mode: GameMode.ArabGambar,
+                    ),
+                    Container(height: scaleCalculator(20.0, context)),
+                    CardPlay(
+                      color: redColor,
+                      secondaryColor: redColorLight,
+                      title: 'Kata Dalam Bahasa Arab',
+                      loadScore: state is HasScore && state.loadScore,
+                      score: state is HasScore ? state.scoreKataArab : 0,
+                      mode: GameMode.KataArab,
+                    ),
+                    Container(height: scaleCalculator(20.0, context)),
+                    CardPlay(
+                      color: yellowColor,
+                      secondaryColor: yellowColorDark,
+                      title: 'Bahasa Arab dalam kata',
+                      loadScore: state is HasScore && state.loadScore,
+                      score: state is HasScore ? state.scoreArabKata : 0,
+                      mode: GameMode.ArabKata,
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ],
+        ),
       ),
     );
   }
 }
 
-class SplashScreen extends StatelessWidget {
+class Hero extends StatelessWidget {
   final double deviceHeight;
   final String displayName;
 
-  SplashScreen({this.deviceHeight, @required this.displayName});
+  Hero({this.deviceHeight, @required this.displayName});
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +135,9 @@ class SplashScreen extends StatelessWidget {
                       height: deviceHeight / 10,
                     ),
                     LogoText(text: 'Karbarab', dark: true),
-                    RegularText(text: 'Hai, Selamat ${greeting()} $displayName', dark: true),
+                    RegularText(
+                        text: 'Hai, Selamat ${greeting()} $displayName',
+                        dark: true),
                     ArabicText(text: 'مرحبا مساء الخير', dark: true),
                   ],
                 ),

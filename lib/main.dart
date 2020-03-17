@@ -11,10 +11,10 @@ import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/features/auth/view/profile_screen.dart';
 import 'package:karbarab/core/helper/bloc_delegate.dart';
 import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
+import 'package:karbarab/features/score/bloc/score_bloc.dart';
 import 'package:karbarab/repository/quiz_repository.dart';
 import 'package:karbarab/repository/user_repository.dart';
 import 'package:karbarab/features/home/view/splash_screen.dart';
-import 'package:karbarab/features/counter/bloc/counter_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,12 +33,12 @@ void main() {
           )..add(AppStarted()),
         ),
         BlocProvider(
-          create: (BuildContext context) => CounterBloc(),
-        ),
-        BlocProvider(
           create: (BuildContext context) => QuizBloc(
             quizRepository: quizRepository,
           )..add(Initialize()),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => ScoreBloc(),
         ),
       ],
       child: App(userRepository: userRepository),
@@ -62,12 +62,10 @@ class App extends StatelessWidget {
       ),
       home: BlocBuilder<AuthBloc, AuthState>(
         builder: (BuildContext context, AuthState state) {
-          print(state);
           if (state is Unauthenticated) {
             return LoginScreen(userRepository: userRepository);
           }
           if (state is Authenticated) {
-            // return ProfileScreen();
             return HomeScreen(displayName: state.displayName);
           }
           if (state is Uninitialized) {
