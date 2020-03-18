@@ -35,7 +35,7 @@ class CardQuiz extends StatelessWidget {
               CardPlain(
                 height: _cardPlainHeight,
                 color: isCorrect ? greenColor : greyColor,
-                secondaryColor: isCorrect ? greenColorLight : softGreyColor,
+                backColor: isCorrect ? greenColorLight : softGreyColor,
               ),
               CardGame(
                 point: currentPoint.round(),
