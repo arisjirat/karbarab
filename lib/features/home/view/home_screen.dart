@@ -153,16 +153,26 @@ class Hero extends StatelessWidget {
               Positioned(
                 top: 15.0,
                 right: 15.0,
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).pushNamed(ProfileScreen.routeName);
-                  },
-                  child: Icon(
+                child: IconButton(
+                  icon: Icon(
                     Icons.person_outline,
-                    color: greyColorLight,
+                    color: greyColor,
                     size: 40.0,
                   ),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(ProfileScreen.routeName);
+                  },
                 ),
+                // child: GestureDetector(
+                //   onTap: () {
+                //     Navigator.of(context).pushNamed(ProfileScreen.routeName);
+                //   },
+                //   child: Icon(
+                //     Icons.person_outline,
+                //     color: greyColor,
+                //     size: 40.0,
+                //   ),
+                // ),
               ),
             ],
           ),

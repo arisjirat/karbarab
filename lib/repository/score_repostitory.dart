@@ -33,11 +33,10 @@ class ScoreRepository {
     }
   }
 
-  Future<List<DocumentSnapshot>> getUserScore(String email) async {
+  Future<Iterable<DocumentSnapshot>> getUserScore(String email) async {
     final QuerySnapshot scores = await scoreCollection
       .where('userEmail', isEqualTo: email)
       .getDocuments();
-    
     return scores.documents;
   }
 }

@@ -6,7 +6,10 @@ class CardPlain extends StatelessWidget {
   final double height;
   final Color color;
   final Color secondaryColor;
-  CardPlain({ this.height = 200, this.color = greyColor, this.secondaryColor = softGreyColor });
+  CardPlain(
+      {this.height = 200,
+      this.color = greyColor,
+      this.secondaryColor = softGreyColor});
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -29,13 +32,13 @@ class CardPlain extends StatelessWidget {
           child: Stack(
             children: <Widget>[
               Positioned(
-                top: 10.0,
-                left: 10.0,
-                child: GestureDetector(
-                  onTap: () {
+                top: 8.0,
+                left: 8.0,
+                child: IconButton(
+                  icon: Icon(Icons.keyboard_backspace, size: 30.0, color: Colors.white),
+                  onPressed: () {
                     Navigator.of(context).pushNamed(HomeScreen.routeName);
                   },
-                  child: Padding(padding: const EdgeInsets.all(5.0),child: Icon(Icons.keyboard_backspace, size: 30.0, color: Colors.white),),
                 ),
               ),
               Container(

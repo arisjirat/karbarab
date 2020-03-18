@@ -5,7 +5,7 @@ import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
-class CardPlay extends StatelessWidget {
+class CardPlay extends StatefulWidget {
   final Color color;
   final Color secondaryColor;
   final String title;
@@ -23,15 +23,38 @@ class CardPlay extends StatelessWidget {
   });
 
   @override
+  _CardPlayState createState() => _CardPlayState();
+}
+
+class _CardPlayState extends State<CardPlay> {
+  bool tapped = false;
+
+  void tap() {
+    setState(() {
+      tapped = true;
+    });
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => GameStartScreen(mode: widget.mode),
+      ),
+    );
+  }
+
+  void endTap() {
+    setState(() {
+      tapped = true;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => GameStartScreen(mode: mode),
-          ),
-        );
+        tap();
+      },
+      onLongPress: () {
+        tap();
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -45,13 +68,13 @@ class CardPlay extends StatelessWidget {
                 borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(10),
                     topRight: Radius.circular(10)),
-                color: secondaryColor,
+                color: widget.secondaryColor,
               ),
             ),
             Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
-                color: color,
+                color: tapped ? widget.secondaryColor : widget.color,
               ),
               width: MediaQuery.of(context).size.width,
               height: 80.0,
@@ -65,7 +88,7 @@ class CardPlay extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        BoldRegularText(text: title, dark: false),
+                        BoldRegularText(text: widget.title, dark: false),
                         Stack(
                           children: <Widget>[
                             Container(
@@ -77,7 +100,7 @@ class CardPlay extends StatelessWidget {
                                 horizontal: 15.0,
                               ),
                               decoration: BoxDecoration(
-                                color: secondaryColor.withOpacity(0.5),
+                                color: widget.secondaryColor.withOpacity(0.5),
                                 boxShadow: [
                                   BoxShadow(
                                     color: textColor.withOpacity(0.5),
@@ -95,19 +118,22 @@ class CardPlay extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            ScoreContainer(score: score.roundToDouble(), color: secondaryColor, loadScore: loadScore),
+                            ScoreContainer(
+                                score: widget.score,
+                                color: widget.secondaryColor,
+                                loadScore: widget.loadScore),
                             Positioned(
                               top: 10,
                               left: 10,
-                              child: loadScore
+                              child: widget.loadScore
                                   ? SpinKitWave(
                                       color: Colors.white,
                                       size: 15.0,
                                     )
                                   : SmallerText(
-                                      text: score > 0
-                                          ? 'Nilai kamu ${score.toStringAsPrecision(2)}/10'
-                                          : 'Kamu belum main',
+                                      text: widget.score > 0
+                                          ? 'Nilai kamu ${widget.score.toStringAsPrecision(2)}/10'
+                                          : '-',
                                       dark: false,
                                     ),
                             ),
@@ -135,7 +161,7 @@ class ScoreContainer extends StatefulWidget {
   final double score;
   final Color color;
   final bool loadScore;
-  ScoreContainer({ @required this.score, this.color, @required this.loadScore});
+  ScoreContainer({@required this.score, this.color, @required this.loadScore});
 
   @override
   _ScoreContainerState createState() => _ScoreContainerState();
@@ -154,11 +180,12 @@ class _ScoreContainerState extends State<ScoreContainer>
       vsync: this,
     );
     final Animation curve =
-    CurvedAnimation(parent: _controller, curve: Curves.easeIn);
-    animation = IntTween(begin: 0,
+        CurvedAnimation(parent: _controller, curve: Curves.easeIn);
+    animation = IntTween(
+      begin: 0,
       end: 200,
     ).animate(curve)
-    ..addListener(() {
+      ..addListener(() {
         setState(() {});
       });
   }

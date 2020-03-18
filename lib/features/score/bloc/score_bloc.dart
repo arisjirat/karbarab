@@ -14,7 +14,7 @@ part 'score_event.dart';
 part 'score_state.dart';
 
 class ListScore {
-  final Iterable<DocumentSnapshot> scoreDocuments;
+  final List<DocumentSnapshot> scoreDocuments;
   final GameMode mode;
 
   ListScore({
@@ -23,14 +23,13 @@ class ListScore {
   });
 
   double get score {
-    return ((scoreFilter.fold(0, (t, e) => e['score'] + t) /
-                scoreFilter.length) /
-            300) *
-        10;
+    final int total = scoreFilter.fold(0, (t, e) => e['score'] + t);
+    final int scoreLength = scoreFilter.isNotEmpty ? scoreFilter.length : 1;
+    return (total / scoreLength / 300) * 10;
   }
 
-  Iterable<DocumentSnapshot> get scoreFilter {
-    return scoreDocuments.where((e) => e['quizMode'] == gameModeToString(mode));
+  List<DocumentSnapshot> get scoreFilter {
+    return scoreDocuments.where((e) => e['quizMode'] == gameModeToString(mode)).toList();
   }
 }
 
@@ -71,7 +70,6 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     }
     final _email = await _userRepository.getEmail();
     final userScores = await _scoreRepository.getUserScore(_email);
-
     yield HasScore(
       scoreArabGambar: ListScore(
         mode: GameMode.ArabGambar,
