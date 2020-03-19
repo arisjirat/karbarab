@@ -237,19 +237,19 @@ class Dialog extends StatelessWidget {
 ///     context: context,
 ///     barrierDismissible: false, // user must tap button!
 ///     builder: (BuildContext context) {
-///       return new AlertDialog(
-///         title: new Text('Rewind and remember'),
-///         content: new SingleChildScrollView(
-///           child: new ListBody(
+///       return AlertDialog(
+///         title: Text('Rewind and remember'),
+///         content: SingleChildScrollView(
+///           child: ListBody(
 ///             children: <Widget>[
-///               new Text('You will never be satisfied.'),
-///               new Text('You\’re like me. I’m never satisfied.'),
+///               Text('You will never be satisfied.'),
+///               Text('You\’re like me. I’m never satisfied.'),
 ///             ],
 ///           ),
 ///         ),
 ///         actions: <Widget>[
-///           new FlatButton(
-///             child: new Text('Regret'),
+///           FlatButton(
+///             child: Text('Regret'),
 ///             onPressed: () {
 ///               Navigator.of(context).pop();
 ///             },
@@ -392,8 +392,8 @@ class CustomAlertDialog extends StatelessWidget {
       ));
     }
 
-    Widget dialogChild = new IntrinsicWidth(
-      child: new Column(
+    Widget dialogChild = IntrinsicWidth(
+      child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: children,
@@ -402,9 +402,9 @@ class CustomAlertDialog extends StatelessWidget {
 
     if (label != null)
       dialogChild =
-          new Semantics(namesRoute: true, label: label, child: dialogChild);
+          Semantics(namesRoute: true, label: label, child: dialogChild);
 
-    return new Dialog(child: dialogChild);
+    return Dialog(child: dialogChild);
   }
 }
 
@@ -424,7 +424,7 @@ class CustomAlertDialog extends StatelessWidget {
 /// ## Sample code
 ///
 /// ```dart
-/// new SimpleDialogOption(
+/// SimpleDialogOption(
 ///   onPressed: () { Navigator.pop(context, Department.treasury); },
 ///   child: const Text('Treasury department'),
 /// )
@@ -460,9 +460,9 @@ class SimpleDialogOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new InkWell(
+    return InkWell(
       onTap: onPressed,
-      child: new Padding(
+      child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24.0),
           child: child),
     );
@@ -502,14 +502,14 @@ class SimpleDialogOption extends StatelessWidget {
 ///   switch (await showDialog<Department>(
 ///     context: context,
 ///     builder: (BuildContext context) {
-///       return new SimpleDialog(
+///       return SimpleDialog(
 ///         title: const Text('Select assignment'),
 ///         children: <Widget>[
-///           new SimpleDialogOption(
+///           SimpleDialogOption(
 ///             onPressed: () { Navigator.pop(context, Department.treasury); },
 ///             child: const Text('Treasury department'),
 ///           ),
-///           new SimpleDialogOption(
+///           SimpleDialogOption(
 ///             onPressed: () { Navigator.pop(context, Department.state); },
 ///             child: const Text('State department'),
 ///           ),
@@ -544,9 +544,9 @@ class SimpleDialog extends StatelessWidget {
   const SimpleDialog({
     Key key,
     this.title,
-    this.titlePadding: const EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 0.0),
+    this.titlePadding = const EdgeInsets.fromLTRB(24.0, 24.0, 24.0, 0.0),
     this.children,
-    this.contentPadding: const EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 16.0),
+    this.contentPadding = const EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 16.0),
     this.semanticLabel,
   })  : assert(titlePadding != null),
         assert(contentPadding != null),
@@ -608,11 +608,11 @@ class SimpleDialog extends StatelessWidget {
     String label = semanticLabel;
 
     if (title != null) {
-      body.add(new Padding(
+      body.add(Padding(
           padding: titlePadding,
-          child: new DefaultTextStyle(
+          child: DefaultTextStyle(
             style: Theme.of(context).textTheme.title,
-            child: new Semantics(namesRoute: true, child: title),
+            child: Semantics(namesRoute: true, child: title),
           )));
     } else {
       switch (defaultTargetPlatform) {
@@ -627,18 +627,18 @@ class SimpleDialog extends StatelessWidget {
     }
 
     if (children != null) {
-      body.add(new Flexible(
-          child: new SingleChildScrollView(
+      body.add(Flexible(
+          child: SingleChildScrollView(
         padding: contentPadding,
-        child: new ListBody(children: children),
+        child: ListBody(children: children),
       )));
     }
 
-    Widget dialogChild = new IntrinsicWidth(
+    Widget dialogChild = IntrinsicWidth(
       stepWidth: 56.0,
-      child: new ConstrainedBox(
+      child: ConstrainedBox(
         constraints: const BoxConstraints(minWidth: 280.0),
-        child: new Column(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: body,
@@ -647,19 +647,19 @@ class SimpleDialog extends StatelessWidget {
     );
 
     if (label != null)
-      dialogChild = new Semantics(
+      dialogChild = Semantics(
         namesRoute: true,
         label: label,
         child: dialogChild,
       );
-    return new Dialog(child: dialogChild);
+    return Dialog(child: dialogChild);
   }
 }
 
 class _DialogRoute<T> extends PopupRoute<T> {
   _DialogRoute({
     @required this.theme,
-    bool barrierDismissible: true,
+    bool barrierDismissible = true,
     this.barrierLabel,
     @required this.child,
     RouteSettings settings,
@@ -686,15 +686,15 @@ class _DialogRoute<T> extends PopupRoute<T> {
   @override
   Widget buildPage(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation) {
-    return new SafeArea(
-      child: new Builder(builder: (BuildContext context) {
-        final Widget annotatedChild = new Semantics(
+    return SafeArea(
+      child: Builder(builder: (BuildContext context) {
+        final Widget annotatedChild = Semantics(
           child: child,
           scopesRoute: true,
           explicitChildNodes: true,
         );
         return theme != null
-            ? new Theme(data: theme, child: annotatedChild)
+            ? Theme(data: theme, child: annotatedChild)
             : annotatedChild;
       }),
     );
@@ -703,8 +703,8 @@ class _DialogRoute<T> extends PopupRoute<T> {
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
       Animation<double> secondaryAnimation, Widget child) {
-    return new FadeTransition(
-        opacity: new CurvedAnimation(parent: animation, curve: Curves.easeOut),
+    return FadeTransition(
+        opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
         child: child);
   }
 }
@@ -740,7 +740,7 @@ class _DialogRoute<T> extends PopupRoute<T> {
 Future<T> customShowDialog<T>({
   @required
       BuildContext context,
-  bool barrierDismissible: true,
+  bool barrierDismissible = true,
   @Deprecated(
       'Instead of using the "child" argument, return the child from a closure '
       'provided to the "builder" argument. This will ensure that the BuildContext '
@@ -749,8 +749,8 @@ Future<T> customShowDialog<T>({
   WidgetBuilder builder,
 }) {
   assert(child == null || builder == null);
-  return Navigator.of(context, rootNavigator: true).push(new _DialogRoute<T>(
-    child: child ?? new Builder(builder: builder),
+  return Navigator.of(context, rootNavigator: true).push(_DialogRoute<T>(
+    child: child ?? Builder(builder: builder),
     theme: Theme.of(context, shadowThemeOnly: true),
     barrierDismissible: barrierDismissible,
     barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
