@@ -12,10 +12,11 @@ class CardPlain extends StatelessWidget {
   final double height;
   final Color color;
   final Color backColor;
-  CardPlain(
-      {this.height = 200,
-      this.color = greyColor,
-      this.backColor = softGreyColor});
+  CardPlain({
+    this.height = 200,
+    this.color = greyColor,
+    this.backColor = softGreyColor,
+  });
 
   Future<void> _exit(context) async {
     return showDialog<void>(
@@ -44,7 +45,8 @@ class CardPlain extends StatelessWidget {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 30, left: 65),
-                  child: BoldRegularText(text: 'Yakin keluar game?', dark: true),
+                  child:
+                      BoldRegularText(text: 'Yakin keluar game?', dark: true),
                 )
               ],
             ),
@@ -60,7 +62,8 @@ class CardPlain extends StatelessWidget {
               },
             ),
             RaisedButton(
-              shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(8))),
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8))),
               child: RegularText(text: 'Ya, saya ingin keluar', dark: false),
               color: secondaryColor,
               onPressed: () {
@@ -351,8 +354,7 @@ class CustomAlertDialog extends StatelessWidget {
     if (title != null) {
       children.add(Padding(
         padding: titlePadding ??
-            EdgeInsets.fromLTRB(
-                24.0, 24.0, 24.0, content == null ? 20.0 : 0.0),
+            EdgeInsets.fromLTRB(24.0, 24.0, 24.0, content == null ? 20.0 : 0.0),
         child: DefaultTextStyle(
           style: Theme.of(context).textTheme.title,
           child: Semantics(child: title, namesRoute: true),

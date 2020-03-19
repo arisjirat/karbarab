@@ -57,6 +57,16 @@ class UserRepository {
     return displayName;
   }
 
+  Future<String> getUserFullname() async {
+    var displayName = '';
+    final currentDisplayName = (await _firebaseAuth.currentUser()).displayName;
+    displayName = currentDisplayName;
+    if (currentDisplayName.split(' ').isNotEmpty) {
+      displayName = (await _firebaseAuth.currentUser()).displayName;
+    }
+    return displayName;
+  }
+
   Future<String> getAvatar() async {
     return (await _firebaseAuth.currentUser()).photoUrl;
   }

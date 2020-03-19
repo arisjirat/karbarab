@@ -37,7 +37,8 @@ class AuthBloc
       if (isSignedIn) {
         final name = await _userRepository.getUser();
         final avatar = await _userRepository.getAvatar();
-        yield Authenticated(avatar: avatar, displayName: name);
+        final fullname = await _userRepository.getUserFullname();
+        yield Authenticated(displayName: name, avatar: avatar, fullname: fullname,);
       } else {
         yield Unauthenticated();
       }
@@ -49,7 +50,8 @@ class AuthBloc
   Stream<AuthState> _mapLoggedInToState() async* {
     final name = await _userRepository.getUser();
     final avatar = await _userRepository.getAvatar();
-    yield Authenticated(displayName: name, avatar: avatar);
+    final fullname = await _userRepository.getUserFullname();
+    yield Authenticated(displayName: name, avatar: avatar, fullname: fullname,);
   }
 
   Stream<AuthState> _mapLoggedOutToState() async* {
