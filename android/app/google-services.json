@@ -1,49 +1,41 @@
 {
   "project_info": {
-    "project_number": "388585124745",
-    "firebase_url": "https://karbarab-8d39f.firebaseio.com",
-    "project_id": "karbarab-8d39f",
-    "storage_bucket": "karbarab-8d39f.appspot.com"
+    "project_number": "948949509296",
+    "firebase_url": "https://karbarab-dev.firebaseio.com",
+    "project_id": "karbarab-dev",
+    "storage_bucket": "karbarab-dev.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:388585124745:android:56bef460e0af5f0427e758",
+        "mobilesdk_app_id": "1:948949509296:android:3c177d1d0b2f5e8da0c775",
         "android_client_info": {
           "package_name": "com.pasdigital.karbarab"
         }
       },
       "oauth_client": [
         {
-          "client_id": "388585124745-m4rdtf69m8ce4brnibs9917i6lh3u4mv.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.pasdigital.karbarab",
-            "certificate_hash": "a78d639531a618505c47ad1f269a8b96ced711f5"
-          }
-        },
-        {
-          "client_id": "388585124745-n4u3ja1j7uqkg3p9hp8i89i9u300kl7o.apps.googleusercontent.com",
+          "client_id": "948949509296-jikqjpln4n1h32luhn1pd02qt4309jfk.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCCib32vjMPnZXJLrLC3t_GXoqgkn0QFVg"
+          "current_key": "AIzaSyCa-yyX8g1FKZ0VjFAdcGXAWZbymGvCCQg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "388585124745-n4u3ja1j7uqkg3p9hp8i89i9u300kl7o.apps.googleusercontent.com",
+              "client_id": "948949509296-jikqjpln4n1h32luhn1pd02qt4309jfk.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "388585124745-4nh7h4f6e7rkkbon0csrj0sresqhsbcn.apps.googleusercontent.com",
+              "client_id": "948949509296-fl369ps83oqobn0e64igcu6fqind9tkg.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.karbarab"
+                "bundle_id": "com.pasdigital.karbarab"
               }
             }
           ]
