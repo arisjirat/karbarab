@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:karbarab/features/auth/model/user_model.dart';
 import 'package:karbarab/repository/score_repostitory.dart';
 
 part 'global_scores_event.dart';
@@ -24,7 +25,6 @@ class GlobalScoresBloc extends Bloc<GlobalScoresEvent, GlobalScoresState> {
 
   Stream<GlobalScoresState> _mapGetGlobalScores() async* {
     final scores = await _scoreRepository.getAllScore();
-    print(scores);
     yield GlobalHasScores(scores);
   }
 }

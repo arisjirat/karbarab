@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:karbarab/features/auth/model/user_model.dart';
 
 class UserRepository {
   final FirebaseAuth _firebaseAuth;
@@ -52,9 +53,21 @@ class UserRepository {
     final currentDisplayName = (await _firebaseAuth.currentUser()).displayName;
     displayName = currentDisplayName;
     if (currentDisplayName.split(' ').isNotEmpty) {
-      displayName = (await _firebaseAuth.currentUser()).displayName.split(' ')[0];
+      displayName =
+          (await _firebaseAuth.currentUser()).displayName.split(' ')[0];
     }
     return displayName;
+  }
+
+  Future<UserModel> getUserMeta() async {
+    final user = await _firebaseAuth.currentUser();
+    return UserModel(
+      id: user.uid,
+      email: user.email,
+      name: user.displayName.split(' ')[0],
+      fullname: user.displayName,
+      avatar: user.photoUrl,
+    );
   }
 
   Future<String> getUserFullname() async {

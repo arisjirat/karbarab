@@ -26,7 +26,7 @@ class Congratulation extends StatelessWidget {
       child: Column(
         children: [
           const Image(image: AssetImage('assets/images/congratulation_character.png'), height: 200),
-          Congrats(play: isCorrect),
+          Congrats(play: isCorrect, point: point,),
           Container(height: scaleCalculator(20.0, context)),
           BoldRegularText(
             text: 'Kamu dapat ${point.toString()} points!',

@@ -10,6 +10,12 @@ abstract class ScoreState extends Equatable {
 
 class ScoreAdded extends ScoreState {}
 
+class SummaryUserScore extends ScoreState {
+  final List<ScoreQuizModel> badQuiz;
+  final List<ScoreQuizModel> goodQuiz;
+  SummaryUserScore({ @required this.badQuiz, @required this.goodQuiz, });
+}
+
 class HasScore extends ScoreState {
   final double scoreGambarArab;
   final double scoreArabGambar;

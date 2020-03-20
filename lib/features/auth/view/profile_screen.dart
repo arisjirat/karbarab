@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/features/auth/view/global_score.dart';
 import 'package:karbarab/features/auth/view/hero_profile.dart';
+import 'package:karbarab/features/auth/view/summary_score.dart';
 import 'package:karbarab/repository/user_repository.dart';
 import 'package:karbarab/features/home/view/home_screen.dart';
 
@@ -31,12 +32,22 @@ class _ProfileScreenState extends State<ProfileScreen>
   }
 
   @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: greyColorLight,
       body: TabBarView(
         controller: _tabController,
         children: [
-          HeroProfile(userRepository: userRepository),
+          Stack(children: <Widget>[
+            HeroProfile(userRepository: userRepository),
+            SummaryScore(),
+          ],),
           GlobalScore(),
         ],
       ),
@@ -70,8 +81,7 @@ class BottomNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: greyColorLight,
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10,),
       child: Stack(
         children: <Widget>[
           Container(

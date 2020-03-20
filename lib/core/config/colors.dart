@@ -8,6 +8,7 @@ const Color blueColor = Color(0xFF4565F6);
 const Color blueColorLight = Color(0xFF5174FC);
 const Color yellowColor = Color(0xFFF7B500);
 const Color yellowColorDark = Color(0xFFDDA200);
+const Color brownColor = Color(0xFF8E5534);
 
 // grey colors !!!
 const Color greyColorLight = Color(0xFFECECEC);

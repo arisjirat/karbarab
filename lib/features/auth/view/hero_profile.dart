@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:karbarab/core/helper/device_height.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/features/login/view/login_screen.dart';
@@ -13,9 +14,9 @@ class HeroProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 200,
+      height: 0.25 * deviceHeight(context),
       padding: const EdgeInsets.fromLTRB(10, 30, 0, 0),
-      color: greyColorLight,
+      color: greyColor.withOpacity(0.3),
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           if (state is Authenticated) {
@@ -25,7 +26,7 @@ class HeroProfile extends StatelessWidget {
                   backgroundImage: NetworkImage(
                     state.avatar,
                   ),
-                  radius: 60,
+                  radius: 50,
                   backgroundColor: Colors.transparent,
                 ),
                 const SizedBox(
@@ -36,7 +37,7 @@ class HeroProfile extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     RegularText(text: state.fullname, dark: true),
-                    BoldRegularText(text: '8000', dark: true),
+                    BoldRegularText(text: state.totalPoints.toString(), dark: true),
                     RaisedButton(
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(

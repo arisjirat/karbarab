@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/core/helper/utils.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/core/ui/cards/card_image.dart';
 import 'package:karbarab/core/ui/cards/card_text.dart';
@@ -156,7 +157,7 @@ class _CardGameState extends State<CardGame>
 
   Widget _buildMessage(BuildContext context) {
     if (widget.correct) {
-      return RegularText(text: 'Yeay kamu hebat!', dark: false);
+      return RegularText(text: winWords(widget.point), dark: false);
     }
     return RegularText(text: 'Jawab soal ini dengan benar', dark: false);
   }

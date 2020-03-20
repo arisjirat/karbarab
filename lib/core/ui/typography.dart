@@ -80,7 +80,8 @@ class RegularText extends StatelessWidget {
 class SmallerText extends StatelessWidget {
   final String text;
   final bool dark;
-  SmallerText({@required this.text, this.dark});
+  final bool bold;
+  SmallerText({@required this.text, this.dark, this.bold = false});
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -88,6 +89,7 @@ class SmallerText extends StatelessWidget {
       style: TextStyle(
         color: dark ? textColor : whiteColor,
         // fontSize: 15.0,
+        fontWeight: bold ? FontWeight.bold : FontWeight.normal,
         fontSize: scaleCalculator(15, context),
       ),
     );
@@ -97,20 +99,20 @@ class SmallerText extends StatelessWidget {
 class BoldRegularText extends StatelessWidget {
   final String text;
   final bool dark;
-  BoldRegularText({@required this.text, this.dark});
+  final Color color;
+  BoldRegularText({@required this.text, this.dark, this.color});
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
       style: TextStyle(
-        color: dark ? textColor : whiteColor,
+        color: color != null ? color : dark ? textColor : whiteColor,
         fontWeight: FontWeight.bold,
         fontSize: scaleCalculator(20, context),
       ),
     );
   }
 }
-
 
 class LargerText extends StatelessWidget {
   final String text;

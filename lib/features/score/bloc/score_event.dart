@@ -13,6 +13,8 @@ class GetScoreUserByMode extends ScoreEvent {
   GetScoreUserByMode(this.mode);
 }
 
+class GetSummaryUserQuizScore extends ScoreEvent {}
+
 class AddScoreUser extends ScoreEvent {
   final GameMode mode;
   final int score;

@@ -20,6 +20,11 @@ class GlobalHasScores extends GlobalScoresState {
 class ScoreGlobalModel {
   final int score;
   final String userMail;
+  final UserModel metaUser;
 
-  ScoreGlobalModel(this.userMail, this.score);
+  ScoreGlobalModel(
+    this.userMail,
+    this.score,
+    this.metaUser,
+  );
 }

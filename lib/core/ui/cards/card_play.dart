@@ -193,9 +193,15 @@ class _ScoreContainerState extends State<ScoreContainer>
   @override
   void didUpdateWidget(ScoreContainer oldWidget) {
     if (oldWidget.loadScore != widget.loadScore) {
-      _controller.forward();
+      _controller.forward(from: 0.0);
     }
     super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
