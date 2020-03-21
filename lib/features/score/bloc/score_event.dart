@@ -8,10 +8,7 @@ abstract class ScoreEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetScoreUserByMode extends ScoreEvent {
-  final GameMode mode;
-  GetScoreUserByMode(this.mode);
-}
+class GetScoreUserByMode extends ScoreEvent {}
 
 class GetSummaryUserQuizScore extends ScoreEvent {}
 

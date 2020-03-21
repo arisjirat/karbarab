@@ -86,7 +86,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     ScoreEvent event,
   ) async* {
     if (event is GetScoreUserByMode) {
-      yield* _mapGetScoreUserByMode(event.mode);
+      yield* _mapGetScoreUserByMode();
     } else if (event is AddScoreUser) {
       yield* _mapAddUserScore(
           event.mode, event.quizId, event.score, event.metaQuiz);
@@ -161,7 +161,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     yield SummaryUserScore(badQuiz: badQuiz, goodQuiz: goodQuiz);
   }
 
-  Stream<ScoreState> _mapGetScoreUserByMode(mode) async* {
+  Stream<ScoreState> _mapGetScoreUserByMode() async* {
     // loading
     yield HasScore(
       scoreArabGambar: 0,

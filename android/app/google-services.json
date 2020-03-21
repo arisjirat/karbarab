@@ -1,42 +1,43 @@
 {
   "project_info": {
-    "project_number": "948949509296",
-    "firebase_url": "https://karbarab-dev.firebaseio.com",
-    "project_id": "karbarab-dev",
-    "storage_bucket": "karbarab-dev.appspot.com"
+    "project_number": "1028317937961",
+    "firebase_url": "https://karbarab-develop.firebaseio.com",
+    "project_id": "karbarab-develop",
+    "storage_bucket": "karbarab-develop.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:948949509296:android:3c177d1d0b2f5e8da0c775",
+        "mobilesdk_app_id": "1:1028317937961:android:8053ba423bfec60c50b738",
         "android_client_info": {
           "package_name": "com.pasdigital.karbarab"
         }
       },
       "oauth_client": [
         {
-          "client_id": "948949509296-jikqjpln4n1h32luhn1pd02qt4309jfk.apps.googleusercontent.com",
+          "client_id": "1028317937961-cu92u1cbl87249veqf06nquqhg0qigh5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.pasdigital.karbarab",
+            "certificate_hash": "c76dd44d85daa43580a7ddec01ec7b94ec1c6710"
+          }
+        },
+        {
+          "client_id": "1028317937961-3p1bq5l8qbgetle64jugc3038655gb07.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCa-yyX8g1FKZ0VjFAdcGXAWZbymGvCCQg"
+          "current_key": "AIzaSyDPq1GX5LlZGp23iTHyxjOl5jIbXZc938A"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "948949509296-jikqjpln4n1h32luhn1pd02qt4309jfk.apps.googleusercontent.com",
+              "client_id": "1028317937961-3p1bq5l8qbgetle64jugc3038655gb07.apps.googleusercontent.com",
               "client_type": 3
-            },
-            {
-              "client_id": "948949509296-fl369ps83oqobn0e64igcu6fqind9tkg.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "com.pasdigital.karbarab"
-              }
             }
           ]
         }

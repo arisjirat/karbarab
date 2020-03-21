@@ -1,15 +1,19 @@
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/helper/greetings.dart';
+import 'package:karbarab/features/admob/view/ads.dart';
 import 'package:karbarab/features/auth/view/profile_screen.dart';
 import 'package:karbarab/core/ui/cards/card_play.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/helper/scale_calculator.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
+
+const APP_ID = 'ca-app-pub-8844883376001707~8468099801';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({this.displayName = 'Guest'});
@@ -22,18 +26,77 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   // BlocProvider.of<ScoreBloc>(context)
-  //   //     .add(GetScoreUserByMode(GameMode.ArabGambar));
-  // }
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    testDevices: APP_ID != null ? <String>[APP_ID] : null,
+    keywords: <String>['Games', 'Kartu', 'Arab'],
+  );
+
+  BannerAd _bannerAd;
+  NativeAd _nativeAd;
+  InterstitialAd _interstitialAd;
+  int _coins = 0;
+
+  BannerAd createBannerAd() {
+    return BannerAd(
+      adUnitId: BannerAd.testAdUnitId,
+      size: AdSize.banner,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print('BannerAd event $event');
+      },
+    );
+  }
+
+  InterstitialAd createInterstitialAd() {
+    return InterstitialAd(
+      adUnitId: InterstitialAd.testAdUnitId,
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print('InterstitialAd event $event');
+      },
+    );
+  }
+
+  NativeAd createNativeAd() {
+    return NativeAd(
+      adUnitId: NativeAd.testAdUnitId,
+      factoryId: 'adFactoryExample',
+      targetingInfo: targetingInfo,
+      listener: (MobileAdEvent event) {
+        print('$NativeAd event $event');
+      },
+    );
+  }
 
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<ScoreBloc>(context)
-        .add(GetScoreUserByMode(GameMode.ArabGambar));
+    BlocProvider.of<ScoreBloc>(context).add(GetScoreUserByMode());
+    // FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
+    // _bannerAd = createBannerAd()..load();
+    // RewardedVideoAd.instance.listener =
+    //     (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+    //   print('RewardedVideoAd event $event');
+    //   if (event == RewardedVideoAdEvent.rewarded) {
+    //     setState(() {
+    //       _coins += rewardAmount;
+    //     });
+    //   }
+    // };
+    // _nativeAd ??= createNativeAd();
+    // _nativeAd
+    //   ..load()
+    //   ..show();
+
+    // RewardedVideoAd.instance.load();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    _nativeAd?.dispose();
+    _interstitialAd?.dispose();
+    super.dispose();
   }
 
   @override
@@ -167,19 +230,9 @@ class Hero extends StatelessWidget {
                     size: 40.0,
                   ),
                   onPressed: () {
-                    Navigator.of(context).pushNamed(ProfileScreen.routeName);
+                    Navigator.of(context).pushNamed(AdsScreen.routeName);
                   },
                 ),
-                // child: GestureDetector(
-                //   onTap: () {
-                //     Navigator.of(context).pushNamed(ProfileScreen.routeName);
-                //   },
-                //   child: Icon(
-                //     Icons.person_outline,
-                //     color: greyColor,
-                //     size: 40.0,
-                //   ),
-                // ),
               ),
             ],
           ),
