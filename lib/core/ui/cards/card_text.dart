@@ -25,6 +25,7 @@ class CardText extends StatefulWidget {
   final double height;
   final bool loading;
   final bool isCorrect;
+  final Function rewarded;
   final CardAnswerMode answerMode;
 
   CardText({
@@ -34,6 +35,7 @@ class CardText extends StatefulWidget {
     @required this.loading,
     @required this.answerMode,
     @required this.isCorrect,
+    @required this.rewarded,
     this.voice = '',
   });
 
@@ -108,23 +110,31 @@ class _CardTextState extends State<CardText> {
         !widget.isCorrect ? Positioned(
           bottom: 10.0,
           left: 10.0,
-          child: Container(
-            padding: const EdgeInsets.only(right: 10),
-            decoration: BoxDecoration(
-              color: greenColor,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(20),
-              ),
-            ),
-            child: Row(
-              children: <Widget>[
-                Icon(Icons.help_outline, size: 30, color: whiteColor),
-                SmallerText(
-                  text: 'Bantuan',
-                  dark: false,
-                  bold: true,
+          child: GestureDetector(
+            onTap: () {
+              widget.rewarded();
+            },
+            onLongPress: () {
+              widget.rewarded();
+            },
+                      child: Container(
+              padding: const EdgeInsets.only(right: 10),
+              decoration: BoxDecoration(
+                color: greenColor,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(20),
                 ),
-              ],
+              ),
+              child: Row(
+                children: <Widget>[
+                  Icon(Icons.help_outline, size: 30, color: whiteColor),
+                  SmallerText(
+                    text: 'Bantuan',
+                    dark: false,
+                    bold: true,
+                  ),
+                ],
+              ),
             ),
           ),
         ) : Container(width: 0,height: 0,)

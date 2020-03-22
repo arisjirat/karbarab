@@ -15,11 +15,13 @@ class CardGame extends StatefulWidget {
   final bool loading;
   final QuizModel quiz;
   final GameMode mode;
+  final Function rewarded;
   CardGame({
     this.correct,
     this.point,
     this.height = 200,
     this.loading = false,
+    @required this.rewarded,
     @required this.quiz,
     @required this.mode,
   });
@@ -77,6 +79,7 @@ class _CardGameState extends State<CardGame>
         height: widget.height,
         point: widget.point,
         isCorrect: widget.correct,
+        rewarded: widget.rewarded,
         answerMode: _getMode(widget.mode),
       );
       case GameMode.ArabKata:
@@ -86,6 +89,7 @@ class _CardGameState extends State<CardGame>
         voice: widget.quiz.arabVoice,
         height: widget.height,
         isCorrect: widget.correct,
+        rewarded: widget.rewarded,
         point: widget.point,
         answerMode: _getMode(widget.mode),
       );
@@ -95,6 +99,7 @@ class _CardGameState extends State<CardGame>
         text: widget.quiz.bahasa,
         height: widget.height,
         isCorrect: widget.correct,
+        rewarded: widget.rewarded,
         point: widget.point,
         answerMode: _getMode(widget.mode),
       );
@@ -111,6 +116,7 @@ class _CardGameState extends State<CardGame>
         voice: widget.quiz.arabVoice,
         height: widget.height,
         isCorrect: widget.correct,
+        rewarded: widget.rewarded,
         point: widget.point,
         answerMode: _getMode(widget.mode, flip: true),
       );
@@ -128,6 +134,7 @@ class _CardGameState extends State<CardGame>
         height: widget.height,
         point: widget.point,
         isCorrect: widget.correct,
+        rewarded: widget.rewarded,
         answerMode: _getMode(widget.mode, flip: true),
       );
       case GameMode.KataArab:
@@ -137,6 +144,7 @@ class _CardGameState extends State<CardGame>
         voice: widget.quiz.arabVoice,
         height: widget.height,
         isCorrect: widget.correct,
+        rewarded: widget.rewarded,
         point: widget.point,
         answerMode: _getMode(widget.mode, flip: true),
       );

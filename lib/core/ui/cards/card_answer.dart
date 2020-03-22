@@ -12,17 +12,20 @@ class CardAnswer extends StatelessWidget {
   final GameMode answerMode;
   final bool disabled;
   final bool loading;
+  final bool hint;
   final Function selectAnswer;
 
   CardAnswer({
+    Key key,
     @required this.item,
     @required this.answerId,
     @required this.answerMode,
     @required this.currentAnswer,
     @required this.selectAnswer,
+    @required this.hint,
     @required this.loading,
     this.disabled = false,
-  });
+  }) : super(key: key);
 
   Widget _buildAnswer(context) {
     switch (answerMode) {
@@ -170,6 +173,7 @@ class CardAnswer extends StatelessWidget {
         child: Container(
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(10)),
+              border: Border.all(width: hint ? 2.0 : 0, color: hint ? greenColor : greenColor.withOpacity(0)),
               color: currentAnswer
                   ? Theme.of(context).secondaryHeaderColor
                   : disabled ? greyColor.withOpacity(0.6) : greyColorLight,

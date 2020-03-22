@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/core/config/keywords_ads.dart';
 import 'package:karbarab/core/config/score_value.dart';
 import 'package:karbarab/core/ui/popup.dart';
+import 'package:karbarab/features/home/view/home_screen.dart';
 import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/core/ui/button.dart';
@@ -20,8 +22,6 @@ String _getAnswerIndex(index) {
   return answer[index];
 }
 
-const APP_ID = 'ca-app-pub-8844883376001707~8468099801';
-
 class GameStartScreen extends StatefulWidget {
   static const String routeName = '/start';
   final GameMode mode;
@@ -32,11 +32,6 @@ class GameStartScreen extends StatefulWidget {
 }
 
 class _GameStartScreenState extends State<GameStartScreen> {
-  // static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-  //   testDevices: APP_ID != null ? <String>[APP_ID] : null,
-  //   keywords: <String>['Games', 'Kartu', 'Arab'],
-  // );
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -99,6 +94,12 @@ class _GameQuizState extends State<GameQuiz> {
   bool _loading = false;
   String _currentAnswer = '';
   double _currentPoint = SCORE_BASE;
+  bool _hint = false;
+
+  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+    testDevices: APP_ID != null ? <String>[APP_ID] : null,
+    keywords: KEYWORDS,
+  );
 
   String get _rightAnswer =>
       _getAnswerIndex(widget.list.indexOf(widget.correct));
@@ -111,6 +112,25 @@ class _GameQuizState extends State<GameQuiz> {
   void initState() {
     super.initState();
     _getQuiz();
+    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
+    RewardedVideoAd.instance.listener =
+        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
+      print('RewardedVideoAd event $event');
+      if (event == RewardedVideoAdEvent.rewarded) {
+        setState(() {
+          _hint = true;
+        });
+      } else {
+        RewardedVideoAd.instance.load(
+          adUnitId: RewardedVideoAd.testAdUnitId,
+          targetingInfo: targetingInfo,
+        );
+      }
+    };
+    RewardedVideoAd.instance.load(
+      adUnitId: RewardedVideoAd.testAdUnitId,
+      targetingInfo: targetingInfo,
+    );
   }
 
   void _getQuiz() {
@@ -120,7 +140,12 @@ class _GameQuizState extends State<GameQuiz> {
       _isCorrect = false;
       _currentAnswer = '';
       _recentAnswers = [];
+      _hint = false;
     });
+    RewardedVideoAd.instance.load(
+      adUnitId: RewardedVideoAd.testAdUnitId,
+      targetingInfo: targetingInfo,
+    );
     Timer(const Duration(milliseconds: 500), () {
       widget.quizBloc.add(GetQuiz());
       setState(() {
@@ -166,7 +191,6 @@ class _GameQuizState extends State<GameQuiz> {
         confirmColor: greenColor,
         cancelAble: false,
       );
-
     } else {
       setState(() {
         _recentAnswers.add(_currentAnswer);
@@ -185,6 +209,7 @@ class _GameQuizState extends State<GameQuiz> {
             CardAnswer(
               loading: _loading,
               item: w,
+              hint: _hint && (_rightAnswer == _getAnswerIndex(i)),
               answerId: _getAnswerIndex(i),
               answerMode: widget.mode,
               currentAnswer: _currentAnswer == _getAnswerIndex(i),
@@ -249,6 +274,10 @@ class _GameQuizState extends State<GameQuiz> {
             deviceHeight: widget.deviceHeight,
             quiz: widget.correct,
             mode: widget.mode,
+            rewarded: RewardedVideoAd.instance.show,
+            // rewarded: () {
+            //   RewardedVideoAd.instance.show();
+            // }
           ),
           _isCorrect
               ? Congratulation(
