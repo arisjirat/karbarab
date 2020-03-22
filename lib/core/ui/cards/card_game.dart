@@ -76,6 +76,7 @@ class _CardGameState extends State<CardGame>
         voice: widget.quiz.arabVoice,
         height: widget.height,
         point: widget.point,
+        isCorrect: widget.correct,
         answerMode: _getMode(widget.mode),
       );
       case GameMode.ArabKata:
@@ -84,6 +85,7 @@ class _CardGameState extends State<CardGame>
         text: widget.quiz.arab,
         voice: widget.quiz.arabVoice,
         height: widget.height,
+        isCorrect: widget.correct,
         point: widget.point,
         answerMode: _getMode(widget.mode),
       );
@@ -92,6 +94,7 @@ class _CardGameState extends State<CardGame>
         loading: widget.loading,
         text: widget.quiz.bahasa,
         height: widget.height,
+        isCorrect: widget.correct,
         point: widget.point,
         answerMode: _getMode(widget.mode),
       );
@@ -107,6 +110,7 @@ class _CardGameState extends State<CardGame>
         text: widget.quiz.arab,
         voice: widget.quiz.arabVoice,
         height: widget.height,
+        isCorrect: widget.correct,
         point: widget.point,
         answerMode: _getMode(widget.mode, flip: true),
       );
@@ -123,6 +127,7 @@ class _CardGameState extends State<CardGame>
         text: widget.quiz.bahasa,
         height: widget.height,
         point: widget.point,
+        isCorrect: widget.correct,
         answerMode: _getMode(widget.mode, flip: true),
       );
       case GameMode.KataArab:
@@ -131,6 +136,7 @@ class _CardGameState extends State<CardGame>
         text: widget.quiz.arab,
         voice: widget.quiz.arabVoice,
         height: widget.height,
+        isCorrect: widget.correct,
         point: widget.point,
         answerMode: _getMode(widget.mode, flip: true),
       );

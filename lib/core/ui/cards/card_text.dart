@@ -18,13 +18,13 @@ class AudioPlayer {
   }
 }
 
-
 class CardText extends StatefulWidget {
   final int point;
   final String text;
   final String voice;
   final double height;
   final bool loading;
+  final bool isCorrect;
   final CardAnswerMode answerMode;
 
   CardText({
@@ -33,6 +33,7 @@ class CardText extends StatefulWidget {
     @required this.height,
     @required this.loading,
     @required this.answerMode,
+    @required this.isCorrect,
     this.voice = '',
   });
 
@@ -41,7 +42,6 @@ class CardText extends StatefulWidget {
 }
 
 class _CardTextState extends State<CardText> {
-
   @override
   void initState() {
     super.initState();
@@ -61,9 +61,16 @@ class _CardTextState extends State<CardText> {
 
   Widget _buildText() {
     if (widget.answerMode == CardAnswerMode.Arab) {
-      return BiggerArabicText(text: widget.text ,dark: true,);
+      return BiggerArabicText(
+        text: widget.text,
+        dark: true,
+      );
     }
-    return LargerText(text: widget.text, dark: true, bold: true, );
+    return LargerText(
+      text: widget.text,
+      dark: true,
+      bold: true,
+    );
   }
 
   @override
@@ -85,17 +92,42 @@ class _CardTextState extends State<CardText> {
         ),
         PointCard(widget.point),
         Positioned(
-          top: 20.0,
-          right: 20.0,
-          child: widget.answerMode == CardAnswerMode.Arab ? GestureDetector(
-            onTap: _play,
-            child: Icon(
-              Icons.volume_up,
-              color: greyColor,
-              size: 40.0,
+          top: 10.0,
+          right: 10.0,
+          child: widget.answerMode == CardAnswerMode.Arab
+              ? GestureDetector(
+                  onTap: _play,
+                  child: Icon(
+                    Icons.volume_up,
+                    color: greyColor,
+                    size: 40.0,
+                  ),
+                )
+              : const Text(''),
+        ),
+        !widget.isCorrect ? Positioned(
+          bottom: 10.0,
+          left: 10.0,
+          child: Container(
+            padding: const EdgeInsets.only(right: 10),
+            decoration: BoxDecoration(
+              color: greenColor,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(20),
+              ),
             ),
-          ) : const Text(''),
-        )
+            child: Row(
+              children: <Widget>[
+                Icon(Icons.help_outline, size: 30, color: whiteColor),
+                SmallerText(
+                  text: 'Bantuan',
+                  dark: false,
+                  bold: true,
+                ),
+              ],
+            ),
+          ),
+        ) : Container(width: 0,height: 0,)
       ],
     );
   }

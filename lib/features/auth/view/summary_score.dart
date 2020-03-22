@@ -38,7 +38,7 @@ class _SummaryScoreState extends State<SummaryScore>
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 0.25 * deviceHeight(context) - 15),
+      margin: EdgeInsets.only(top: 0.25 * deviceHeight(context) - 20),
       height: 0.8 * deviceHeight(context) - 40,
       child: Column(
         children: [
@@ -83,7 +83,7 @@ class _SummaryScoreState extends State<SummaryScore>
           ),
           Container(
             width: double.infinity,
-            height: 0.8 * deviceHeight(context) - 95,
+            height: 0.8 * deviceHeight(context) - (40 + 60),
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: BlocBuilder<ScoreBloc, ScoreState>(
               builder: (context, state) {

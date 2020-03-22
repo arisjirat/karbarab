@@ -45,7 +45,7 @@ class ScoreRepository {
   }
 
   Future<List<ScoreGlobalModel>> getAllScore() async {
-    final QuerySnapshot scores = await scoreCollection.getDocuments();
+    final QuerySnapshot scores = await scoreCollection.limit(10000).getDocuments();
     final List<ScoreGlobalModel> grouped =
         scores.documents.fold([], (acc, cur) {
       final found = acc.indexWhere((e) => e.userMail == cur['userEmail']);
@@ -72,6 +72,7 @@ class ScoreRepository {
       ));
       return acc;
     });
+    grouped.sort((a, b) => b.score.compareTo(a.score));
     return grouped;
   }
 }

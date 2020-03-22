@@ -1,6 +1,12 @@
+import 'dart:async';
+
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/core/config/score_value.dart';
+import 'package:karbarab/core/ui/popup.dart';
 import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/core/ui/button.dart';
@@ -14,6 +20,8 @@ String _getAnswerIndex(index) {
   return answer[index];
 }
 
+const APP_ID = 'ca-app-pub-8844883376001707~8468099801';
+
 class GameStartScreen extends StatefulWidget {
   static const String routeName = '/start';
   final GameMode mode;
@@ -24,6 +32,11 @@ class GameStartScreen extends StatefulWidget {
 }
 
 class _GameStartScreenState extends State<GameStartScreen> {
+  // static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
+  //   testDevices: APP_ID != null ? <String>[APP_ID] : null,
+  //   keywords: <String>['Games', 'Kartu', 'Arab'],
+  // );
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -35,8 +48,8 @@ class _GameStartScreenState extends State<GameStartScreen> {
     final QuizBloc quizBloc = BlocProvider.of<QuizBloc>(context);
     final ScoreBloc scoreBloc = BlocProvider.of<ScoreBloc>(context);
     final MediaQueryData mediaContext = MediaQuery.of(context);
-    final double padding = mediaContext.padding.top +
-        mediaContext.padding.bottom;
+    final double padding =
+        mediaContext.padding.top + mediaContext.padding.bottom;
     final double _deviceHeight = mediaContext.size.height - padding;
     return Scaffold(
       body: BlocBuilder<QuizBloc, QuizState>(builder: (context, state) {
@@ -50,6 +63,10 @@ class _GameStartScreenState extends State<GameStartScreen> {
             scoreBloc: scoreBloc,
           );
         }
+        return Container(
+          width: 0,
+          height: 0,
+        );
       }),
     );
   }
@@ -72,7 +89,6 @@ class GameQuiz extends StatefulWidget {
     @required this.scoreBloc,
   });
 
-
   @override
   _GameQuizState createState() => _GameQuizState();
 }
@@ -82,9 +98,10 @@ class _GameQuizState extends State<GameQuiz> {
   bool _isCorrect = false;
   bool _loading = false;
   String _currentAnswer = '';
-  double _currentPoint = 300;
-  
-  String get _rightAnswer =>  _getAnswerIndex(widget.list.indexOf(widget.correct));
+  double _currentPoint = SCORE_BASE;
+
+  String get _rightAnswer =>
+      _getAnswerIndex(widget.list.indexOf(widget.correct));
 
   bool _inCorrectAnswer(key) {
     return _recentAnswers.contains(key);
@@ -97,17 +114,18 @@ class _GameQuizState extends State<GameQuiz> {
   }
 
   void _getQuiz() {
-    widget.quizBloc.add(GetQuiz());
     setState(() {
-      _currentPoint = 300;
+      _currentPoint = SCORE_BASE;
       _loading = true;
       _isCorrect = false;
       _currentAnswer = '';
       _recentAnswers = [];
     });
-
-    setState(() {
-      _loading = false;
+    Timer(const Duration(milliseconds: 500), () {
+      widget.quizBloc.add(GetQuiz());
+      setState(() {
+        _loading = false;
+      });
     });
   }
 
@@ -128,10 +146,31 @@ class _GameQuizState extends State<GameQuiz> {
         score: _currentPoint.round(),
         quizId: widget.correct.id,
       ));
+    } else if (_recentAnswers.length > 1) {
+      popup(
+        context,
+        text: 'Kata Selanjutnya?',
+        cancel: () {
+          Navigator.of(context).pop();
+        },
+        confirm: () {
+          _getQuiz();
+          widget.scoreBloc.add(AddScoreUser(
+            mode: widget.mode,
+            metaQuiz: widget.correct,
+            score: _currentPoint.round(),
+            quizId: widget.correct.id,
+          ));
+          Navigator.of(context).pop();
+        },
+        confirmColor: greenColor,
+        cancelAble: false,
+      );
+
     } else {
       setState(() {
         _recentAnswers.add(_currentAnswer);
-        _currentPoint = _currentPoint - 100;
+        _currentPoint = _currentPoint - (SCORE_BASE / FAIL_TOLERANCE);
         _currentAnswer = '';
       });
     }
@@ -139,23 +178,23 @@ class _GameQuizState extends State<GameQuiz> {
 
   List<Widget> buildOptions(List<QuizModel> list) {
     return list
-      .asMap()
-      .map(
-        (i, w) => MapEntry(
-          i,
-          CardAnswer(
-            loading: _loading,
-            item: w,
-            answerId: _getAnswerIndex(i),
-            answerMode: widget.mode,
-            currentAnswer: _currentAnswer == _getAnswerIndex(i),
-            selectAnswer: _selectAnswer,
-            disabled: _inCorrectAnswer(_getAnswerIndex(i)),
+        .asMap()
+        .map(
+          (i, w) => MapEntry(
+            i,
+            CardAnswer(
+              loading: _loading,
+              item: w,
+              answerId: _getAnswerIndex(i),
+              answerMode: widget.mode,
+              currentAnswer: _currentAnswer == _getAnswerIndex(i),
+              selectAnswer: _selectAnswer,
+              disabled: _inCorrectAnswer(_getAnswerIndex(i)),
+            ),
           ),
-        ),
-      )
-      .values
-      .toList();
+        )
+        .values
+        .toList();
   }
 
   Widget _buildLayoutAnswer(List<Widget> child) {

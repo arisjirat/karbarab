@@ -132,7 +132,7 @@ class _CardPlayState extends State<CardPlay> {
                                     )
                                   : SmallerText(
                                       text: widget.score > 0
-                                          ? 'Nilai kamu ${widget.score.toStringAsPrecision(2)}/10'
+                                          ? 'Nilai kamu ${(widget.score * 10).round().toString()}/100'
                                           : '-',
                                       dark: false,
                                     ),

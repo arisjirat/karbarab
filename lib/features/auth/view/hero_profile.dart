@@ -68,6 +68,7 @@ class HeroProfile extends StatelessWidget {
               ],
             );
           }
+          return Container(width: 0,height: 0,);
         },
       ),
     );

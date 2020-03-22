@@ -46,7 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         children: [
           Stack(children: <Widget>[
             HeroProfile(userRepository: userRepository),
-            SummaryScore(),
+            const SummaryScore(),
           ],),
           GlobalScore(),
         ],
