@@ -12,7 +12,8 @@ class CardQuiz extends StatelessWidget {
   final double deviceHeight;
   final QuizModel quiz;
   final GameMode mode;
-  final Function rewarded ;
+  final Function rewarded;
+  final bool adsLoaded;
 
   CardQuiz({
     @required this.currentPoint,
@@ -22,6 +23,7 @@ class CardQuiz extends StatelessWidget {
     @required this.quiz,
     @required this.mode,
     @required this.rewarded,
+    @required this.adsLoaded,
   });
 
   @override
@@ -47,6 +49,7 @@ class CardQuiz extends StatelessWidget {
                 quiz: quiz,
                 mode: mode,
                 rewarded: rewarded,
+                adsLoaded: adsLoaded,
               ),
             ],
           ),

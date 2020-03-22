@@ -95,6 +95,7 @@ class _GameQuizState extends State<GameQuiz> {
   String _currentAnswer = '';
   double _currentPoint = SCORE_BASE;
   bool _hint = false;
+  bool _adsLoaded = false;
 
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
     testDevices: APP_ID != null ? <String>[APP_ID] : null,
@@ -119,18 +120,34 @@ class _GameQuizState extends State<GameQuiz> {
       if (event == RewardedVideoAdEvent.rewarded) {
         setState(() {
           _hint = true;
+          _adsLoaded = false;
         });
-      } else {
-        RewardedVideoAd.instance.load(
-          adUnitId: RewardedVideoAd.testAdUnitId,
-          targetingInfo: targetingInfo,
-        );
+      }
+      if (event == RewardedVideoAdEvent.loaded) {
+        setState(() {
+          _adsLoaded = true;
+        });
+      }
+      if (event == RewardedVideoAdEvent.closed && _adsLoaded) {
+        _loadRewardHint();
       }
     };
+    
+  }
+
+  void _loadRewardHint() {
+    setState(() {
+      _adsLoaded = false;
+    });
     RewardedVideoAd.instance.load(
-      adUnitId: RewardedVideoAd.testAdUnitId,
-      targetingInfo: targetingInfo,
-    );
+      adUnitId: 'ca-app-pub-8844883376001707/4243991756',
+      // adUnitId: RewardedVideoAd.testAdUnitId,
+      targetingInfo: targetingInfo,  
+    ).then((e) {
+      setState(() {
+        _adsLoaded = e;
+      });
+    });
   }
 
   void _getQuiz() {
@@ -139,13 +156,11 @@ class _GameQuizState extends State<GameQuiz> {
       _loading = true;
       _isCorrect = false;
       _currentAnswer = '';
+      _adsLoaded = false;
       _recentAnswers = [];
       _hint = false;
     });
-    RewardedVideoAd.instance.load(
-      adUnitId: RewardedVideoAd.testAdUnitId,
-      targetingInfo: targetingInfo,
-    );
+    _loadRewardHint();
     Timer(const Duration(milliseconds: 500), () {
       widget.quizBloc.add(GetQuiz());
       setState(() {
@@ -274,10 +289,8 @@ class _GameQuizState extends State<GameQuiz> {
             deviceHeight: widget.deviceHeight,
             quiz: widget.correct,
             mode: widget.mode,
+            adsLoaded: _adsLoaded,
             rewarded: RewardedVideoAd.instance.show,
-            // rewarded: () {
-            //   RewardedVideoAd.instance.show();
-            // }
           ),
           _isCorrect
               ? Congratulation(

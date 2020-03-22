@@ -27,6 +27,7 @@ class CardText extends StatefulWidget {
   final bool isCorrect;
   final Function rewarded;
   final CardAnswerMode answerMode;
+  final bool adsLoaded;
 
   CardText({
     @required this.point,
@@ -36,6 +37,7 @@ class CardText extends StatefulWidget {
     @required this.answerMode,
     @required this.isCorrect,
     @required this.rewarded,
+    @required this.adsLoaded,
     this.voice = '',
   });
 
@@ -107,37 +109,42 @@ class _CardTextState extends State<CardText> {
                 )
               : const Text(''),
         ),
-        !widget.isCorrect ? Positioned(
-          bottom: 10.0,
-          left: 10.0,
-          child: GestureDetector(
-            onTap: () {
-              widget.rewarded();
-            },
-            onLongPress: () {
-              widget.rewarded();
-            },
-                      child: Container(
-              padding: const EdgeInsets.only(right: 10),
-              decoration: BoxDecoration(
-                color: greenColor,
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(20),
-                ),
-              ),
-              child: Row(
-                children: <Widget>[
-                  Icon(Icons.help_outline, size: 30, color: whiteColor),
-                  SmallerText(
-                    text: 'Bantuan',
-                    dark: false,
-                    bold: true,
+        (!widget.isCorrect && widget.adsLoaded)
+            ? Positioned(
+                bottom: 10.0,
+                left: 10.0,
+                child: GestureDetector(
+                  onTap: () {
+                    widget.rewarded();
+                  },
+                  onLongPress: () {
+                    widget.rewarded();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(right: 10),
+                    decoration: BoxDecoration(
+                      color: greenColor,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Icon(Icons.help_outline, size: 30, color: whiteColor),
+                        SmallerText(
+                          text: 'Bantuan',
+                          dark: false,
+                          bold: true,
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-          ),
-        ) : Container(width: 0,height: 0,)
+                ),
+              )
+            : Container(
+                width: 0,
+                height: 0,
+              )
       ],
     );
   }

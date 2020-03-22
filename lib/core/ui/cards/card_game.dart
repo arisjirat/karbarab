@@ -16,6 +16,7 @@ class CardGame extends StatefulWidget {
   final QuizModel quiz;
   final GameMode mode;
   final Function rewarded;
+  final bool adsLoaded;
   CardGame({
     this.correct,
     this.point,
@@ -24,6 +25,7 @@ class CardGame extends StatefulWidget {
     @required this.rewarded,
     @required this.quiz,
     @required this.mode,
+    @required this.adsLoaded,
   });
 
   @override
@@ -68,6 +70,9 @@ class _CardGameState extends State<CardGame>
         return CardImage(
         loading: widget.loading,
         quiz: widget.quiz,
+        isCorrect: widget.correct,
+        rewarded: widget.rewarded,
+        adsLoaded: widget.adsLoaded,
         height: widget.height,
         point: widget.point,
       );
@@ -80,6 +85,7 @@ class _CardGameState extends State<CardGame>
         point: widget.point,
         isCorrect: widget.correct,
         rewarded: widget.rewarded,
+        adsLoaded: widget.adsLoaded,
         answerMode: _getMode(widget.mode),
       );
       case GameMode.ArabKata:
@@ -90,6 +96,7 @@ class _CardGameState extends State<CardGame>
         height: widget.height,
         isCorrect: widget.correct,
         rewarded: widget.rewarded,
+        adsLoaded: widget.adsLoaded,
         point: widget.point,
         answerMode: _getMode(widget.mode),
       );
@@ -100,6 +107,7 @@ class _CardGameState extends State<CardGame>
         height: widget.height,
         isCorrect: widget.correct,
         rewarded: widget.rewarded,
+        adsLoaded: widget.adsLoaded,
         point: widget.point,
         answerMode: _getMode(widget.mode),
       );
@@ -117,12 +125,16 @@ class _CardGameState extends State<CardGame>
         height: widget.height,
         isCorrect: widget.correct,
         rewarded: widget.rewarded,
+        adsLoaded: widget.adsLoaded,
         point: widget.point,
         answerMode: _getMode(widget.mode, flip: true),
       );
       case GameMode.ArabGambar:
         return CardImage(
         loading: widget.loading,
+        isCorrect: widget.correct,
+        rewarded: widget.rewarded,
+        adsLoaded: widget.adsLoaded,
         quiz: widget.quiz,
         height: widget.height,
         point: widget.point,
@@ -135,6 +147,7 @@ class _CardGameState extends State<CardGame>
         point: widget.point,
         isCorrect: widget.correct,
         rewarded: widget.rewarded,
+        adsLoaded: widget.adsLoaded,
         answerMode: _getMode(widget.mode, flip: true),
       );
       case GameMode.KataArab:
@@ -145,6 +158,7 @@ class _CardGameState extends State<CardGame>
         height: widget.height,
         isCorrect: widget.correct,
         rewarded: widget.rewarded,
+        adsLoaded: widget.adsLoaded,
         point: widget.point,
         answerMode: _getMode(widget.mode, flip: true),
       );
@@ -173,7 +187,7 @@ class _CardGameState extends State<CardGame>
     if (widget.correct) {
       return RegularText(text: winWords(widget.point), dark: false);
     }
-    return RegularText(text: 'Jawab soal ini dengan benar', dark: false);
+    return RegularText(text: 'Tebak Kartu ini', dark: false);
   }
 
   CardAnswerMode _getMode(GameMode mode, { bool flip = false }) {

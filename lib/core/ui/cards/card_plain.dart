@@ -40,15 +40,9 @@ class CardPlain extends StatelessWidget {
           child: Stack(
             children: <Widget>[
               Positioned(
-                top: 5.0,
-                left: 5.0,
-                child: ButtonTheme(
-                  minWidth: 40,
-                  height: 40,
-                  child: RaisedButton(
-                    color: secondaryColor,
-                    padding: const EdgeInsets.all(0),
-                    elevation: 10,
+                  top: 5.0,
+                  left: -15.0,
+                  child: RawMaterialButton(
                     onPressed: () {
                       popup(
                         context,
@@ -64,13 +58,42 @@ class CardPlain extends StatelessWidget {
                         confirmLabel: 'Ya, saya ingin keluar',
                       );
                     },
-                    child: RegularText(
-                      text: 'X',
-                      dark: false,
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.white,
+                      size: 15.0,
                     ),
+                    shape: const CircleBorder(),
+                    elevation: 2.0,
+                    fillColor: secondaryColor,
+                    padding: const EdgeInsets.all(15.0),
+                  )
+                  // child: RaisedButton(
+                  //   color: secondaryColor,
+                  //   padding: const EdgeInsets.all(0),
+                  //   elevation: 10,
+                  //   onPressed: () {
+                  //     popup(
+                  //       context,
+                  //       text: 'Yakin keluar game?',
+                  //       cancel: () {
+                  //         Navigator.of(context).pop();
+                  //       },
+                  //       confirm: () {
+                  //         Navigator.of(context).pushNamed(HomeScreen.routeName);
+                  //       },
+                  //       cancelAble: true,
+                  //       cancelLabel: 'Jangan!',
+                  //       confirmLabel: 'Ya, saya ingin keluar',
+                  //     );
+                  //   },
+                  //   child: RegularText(
+                  //     text: 'X',
+                  //     dark: false,
+                  //   ),
+                  // ),
+                  // ),
                   ),
-                ),
-              ),
               Container(
                 padding: const EdgeInsets.all(30.0),
                 width: MediaQuery.of(context).size.width,

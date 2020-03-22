@@ -48,6 +48,11 @@ class _CardPlayState extends State<CardPlay> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
