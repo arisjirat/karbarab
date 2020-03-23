@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
 import 'package:karbarab/features/global_scores/bloc/global_scores_bloc.dart';
 import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
 import 'package:karbarab/features/quiz/view/game_start_screen.dart';
@@ -43,6 +44,9 @@ void main() {
         ),
         BlocProvider(
           create: (BuildContext context) => GlobalScoresBloc(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => AdmobBloc(),
         ),
       ],
       child: App(userRepository: userRepository),
