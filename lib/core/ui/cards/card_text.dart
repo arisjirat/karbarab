@@ -130,9 +130,18 @@ class _CardTextState extends State<CardText> {
                     ),
                     child: Row(
                       children: <Widget>[
-                        Icon(Icons.help_outline, size: 30, color: whiteColor),
+                        Container(
+                          margin: const EdgeInsets.all(3.0),
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: whiteColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(Icons.vpn_key, size: 20, color: greenColor),
+                        ),
                         SmallerText(
-                          text: 'Bantuan',
+                          text: 'Jawaban',
                           dark: false,
                           bold: true,
                         ),
