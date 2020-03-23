@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/core/config/score_value.dart';
 import 'package:karbarab/core/helper/utils.dart';
 import 'package:karbarab/features/auth/model/user_model.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
@@ -59,7 +60,7 @@ class ListScore {
   double get score {
     final int total = scoreFilter.fold(0, (t, e) => e['score'] + t);
     final int scoreLength = scoreFilter.isNotEmpty ? scoreFilter.length : 1;
-    return (total / scoreLength / 300) * 10;
+    return (total / scoreLength / SCORE_BASE) * 10;
   }
 
   List<DocumentSnapshot> get scoreFilter {
@@ -147,7 +148,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
             date: date,
           ),
           quizMode: quizMode,
-          averageScore: totalScore / (300 * 1),
+          averageScore: totalScore / (SCORE_BASE * 1),
           totalScore: totalScore,
           scores: scores,
         ));
