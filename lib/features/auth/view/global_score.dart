@@ -6,6 +6,7 @@ import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/config/keywords_ads.dart';
 import 'package:karbarab/core/helper/device_height.dart';
 import 'package:karbarab/core/ui/typography.dart';
+import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
 import 'package:karbarab/features/global_scores/bloc/global_scores_bloc.dart';
 import 'package:karbarab/features/home/view/home_screen.dart';
 
@@ -31,6 +32,7 @@ class _GlobalScoreState extends State<GlobalScore> {
         (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
       print('RewardedVideoAd event $event');
       if (event == RewardedVideoAdEvent.rewarded) {
+        BlocProvider.of<AdmobBloc>(context).add(UserAdsrewards(adsMode: 'global-score'));
         BlocProvider.of<GlobalScoresBloc>(context).add(GetGlobalScores());
         setState(() {
           _watched = true;
@@ -48,6 +50,14 @@ class _GlobalScoreState extends State<GlobalScore> {
     };
 
     _loadRewardHint();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setState(() {
+      _watched = false;
+    });
   }
 
   void _loadRewardHint() {
@@ -93,7 +103,50 @@ class _GlobalScoreState extends State<GlobalScore> {
       color: greyColorLight,
       child: BlocBuilder<GlobalScoresBloc, GlobalScoresState>(
         builder: (context, state) {
-          if (state is GlobalHasScores) {
+          if (!_watched) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.center,
+                  child: Image(
+                    image: const AssetImage('assets/images/character.png'),
+                    height: deviceHeight(context) / 5,
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: RegularText(
+                    text: 'Mau lihat score global?',
+                    dark: true,
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: RegularText(
+                    text: 'Tonton iklan dulu yuk',
+                    dark: true,
+                  ),
+                ),
+                const SizedBox(height: 20,),
+                RawMaterialButton(
+                  onPressed: () {
+                    RewardedVideoAd.instance.show();
+                  },
+                  child: Icon(
+                    Icons.play_circle_outline,
+                    color: Colors.white,
+                    size: 35.0,
+                  ),
+                  shape: const CircleBorder(),
+                  elevation: 2.0,
+                  fillColor: greenColor,
+                  padding: const EdgeInsets.all(15.0),
+                )
+              ],
+            );
+          } else if (state is GlobalHasScores) {
             return ListView.builder(
               itemCount: state.all.length,
               itemBuilder: (context, position) {
@@ -141,49 +194,6 @@ class _GlobalScoreState extends State<GlobalScore> {
                   ),
                 );
               },
-            );
-          } else if (!_watched) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.center,
-                  child: Image(
-                    image: const AssetImage('assets/images/character.png'),
-                    height: deviceHeight(context) / 5,
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: RegularText(
-                    text: 'Mau lihat score global?',
-                    dark: true,
-                  ),
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: RegularText(
-                    text: 'Tonton iklan dulu yuk',
-                    dark: true,
-                  ),
-                ),
-                const SizedBox(height: 20,),
-                RawMaterialButton(
-                  onPressed: () {
-                    RewardedVideoAd.instance.show();
-                  },
-                  child: Icon(
-                    Icons.play_circle_outline,
-                    color: Colors.white,
-                    size: 35.0,
-                  ),
-                  shape: const CircleBorder(),
-                  elevation: 2.0,
-                  fillColor: greenColor,
-                  padding: const EdgeInsets.all(15.0),
-                )
-              ],
             );
           }
           return SpinKitRotatingPlain(color: greenColor);

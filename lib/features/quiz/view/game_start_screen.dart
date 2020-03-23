@@ -8,6 +8,7 @@ import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/config/keywords_ads.dart';
 import 'package:karbarab/core/config/score_value.dart';
 import 'package:karbarab/core/ui/popup.dart';
+import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
 import 'package:karbarab/features/home/view/home_screen.dart';
 import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
@@ -118,6 +119,7 @@ class _GameQuizState extends State<GameQuiz> {
         (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
       print('RewardedVideoAd event $event');
       if (event == RewardedVideoAdEvent.rewarded) {
+        BlocProvider.of<AdmobBloc>(context).add(UserAdsrewards(adsMode: 'hint', quizId: widget.correct.id));
         setState(() {
           _hint = true;
           _adsLoaded = false;
