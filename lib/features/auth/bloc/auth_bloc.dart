@@ -42,7 +42,7 @@ class AuthBloc
         final fullname = await _userRepository.getUserFullname();
         final email = await _userRepository.getEmail();
         final scores = await _scoreRepository.getUserScore(email);
-        final totalScore = scores.fold(0, (t, e) => e['score'] + t);
+        final totalScore = await scores.fold(0, (t, e) => e['score'] + t);
 
         yield Authenticated(displayName: name, avatar: avatar, fullname: fullname, totalPoints: totalScore);
       } else {
@@ -57,7 +57,10 @@ class AuthBloc
     final name = await _userRepository.getUser();
     final avatar = await _userRepository.getAvatar();
     final fullname = await _userRepository.getUserFullname();
-    yield Authenticated(displayName: name, avatar: avatar, fullname: fullname,);
+    final email = await _userRepository.getEmail();
+    final scores = await _scoreRepository.getUserScore(email);
+    final totalScore = await scores.fold(0, (t, e) => e['score'] + t);
+    yield Authenticated(displayName: name, avatar: avatar, fullname: fullname, totalPoints: totalScore);
   }
 
   Stream<AuthState> _mapLoggedOutToState() async* {
