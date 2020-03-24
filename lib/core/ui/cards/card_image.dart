@@ -12,6 +12,7 @@ class CardImage extends StatelessWidget {
   final bool isCorrect;
   final bool adsLoaded;
   final Function getHint;
+  final Function giveFeedback;
 
   CardImage({
     @required this.point,
@@ -21,6 +22,7 @@ class CardImage extends StatelessWidget {
     @required this.isCorrect,
     @required this.adsLoaded,
     @required this.getHint,
+    @required this.giveFeedback
   });
 
   @override
