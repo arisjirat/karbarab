@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
+import 'package:karbarab/features/feedback/bloc/feedback_bloc.dart';
 import 'package:karbarab/features/global_scores/bloc/global_scores_bloc.dart';
 import 'package:karbarab/features/karbarab/view/karbarab.dart';
 import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
@@ -50,6 +51,9 @@ void main() {
         ),
         BlocProvider(
           create: (BuildContext context) => AdmobBloc(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => FeedbackBloc(),
         ),
       ],
       child: App(userRepository: userRepository),
