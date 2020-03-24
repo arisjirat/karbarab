@@ -17,11 +17,13 @@ class CardGame extends StatefulWidget {
   final GameMode mode;
   final Function getHint;
   final bool adsLoaded;
+  final Function giveFeedback;
   CardGame({
     this.correct,
     this.point,
     this.height = 200,
     this.loading = false,
+    @required this.giveFeedback,
     @required this.getHint,
     @required this.quiz,
     @required this.mode,
@@ -36,8 +38,19 @@ class _CardGameState extends State<CardGame>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
   Animation<double> _curvedAnimation;
+  String word = '';
 
   final FocusNode _focusNode = FocusNode();
+
+  @override
+  void didUpdateWidget(CardGame oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!oldWidget.correct && widget.correct) {
+      setState(() {
+        word = winWords(widget.point);
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -73,6 +86,7 @@ class _CardGameState extends State<CardGame>
         isCorrect: widget.correct,
         getHint: widget.getHint,
         adsLoaded: widget.adsLoaded,
+        giveFeedback: widget.giveFeedback,
         height: widget.height,
         point: widget.point,
       );
@@ -86,6 +100,7 @@ class _CardGameState extends State<CardGame>
         isCorrect: widget.correct,
         getHint: widget.getHint,
         adsLoaded: widget.adsLoaded,
+        giveFeedback: widget.giveFeedback,
         answerMode: _getMode(widget.mode),
       );
       case GameMode.ArabKata:
@@ -97,6 +112,7 @@ class _CardGameState extends State<CardGame>
         isCorrect: widget.correct,
         getHint: widget.getHint,
         adsLoaded: widget.adsLoaded,
+        giveFeedback: widget.giveFeedback,
         point: widget.point,
         answerMode: _getMode(widget.mode),
       );
@@ -108,6 +124,7 @@ class _CardGameState extends State<CardGame>
         isCorrect: widget.correct,
         getHint: widget.getHint,
         adsLoaded: widget.adsLoaded,
+        giveFeedback: widget.giveFeedback,
         point: widget.point,
         answerMode: _getMode(widget.mode),
       );
@@ -126,6 +143,7 @@ class _CardGameState extends State<CardGame>
         isCorrect: widget.correct,
         getHint: widget.getHint,
         adsLoaded: widget.adsLoaded,
+        giveFeedback: widget.giveFeedback,
         point: widget.point,
         answerMode: _getMode(widget.mode, flip: true),
       );
@@ -135,6 +153,7 @@ class _CardGameState extends State<CardGame>
         isCorrect: widget.correct,
         getHint: widget.getHint,
         adsLoaded: widget.adsLoaded,
+        giveFeedback: widget.giveFeedback,
         quiz: widget.quiz,
         height: widget.height,
         point: widget.point,
@@ -148,6 +167,7 @@ class _CardGameState extends State<CardGame>
         isCorrect: widget.correct,
         getHint: widget.getHint,
         adsLoaded: widget.adsLoaded,
+        giveFeedback: widget.giveFeedback,
         answerMode: _getMode(widget.mode, flip: true),
       );
       case GameMode.KataArab:
@@ -159,6 +179,7 @@ class _CardGameState extends State<CardGame>
         isCorrect: widget.correct,
         getHint: widget.getHint,
         adsLoaded: widget.adsLoaded,
+        giveFeedback: widget.giveFeedback,
         point: widget.point,
         answerMode: _getMode(widget.mode, flip: true),
       );
@@ -185,7 +206,7 @@ class _CardGameState extends State<CardGame>
 
   Widget _buildMessage(BuildContext context) {
     if (widget.correct) {
-      return RegularText(text: winWords(widget.point), dark: false);
+      return RegularText(text: word, dark: false);
     }
     return RegularText(text: 'Tebak Kartu ini', dark: false);
   }
