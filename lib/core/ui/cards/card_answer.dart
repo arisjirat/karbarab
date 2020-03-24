@@ -162,7 +162,9 @@ class CardAnswer extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (disabled) return;
+        if (disabled) {
+          return;
+        }
         selectAnswer(answerId);
       },
       child: Container(
