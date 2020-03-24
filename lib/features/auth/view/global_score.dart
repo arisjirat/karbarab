@@ -235,7 +235,7 @@ class _GlobalScoreState extends State<GlobalScore> {
               },
             );
           }
-          return SpinKitRotatingPlain(color: greenColor);
+          return const SpinKitRotatingPlain(color: greenColor);
         },
       ),
     );
