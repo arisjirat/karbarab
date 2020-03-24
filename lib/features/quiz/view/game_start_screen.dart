@@ -144,7 +144,7 @@ class _GameQuizState extends State<GameQuiz> {
     };
   }
 
-  _getHint() async {
+  void _getHint() async {
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {

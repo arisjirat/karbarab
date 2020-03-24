@@ -100,8 +100,8 @@ class BottomNavigation extends StatelessWidget {
             height: 55.0,
             padding: const EdgeInsets.symmetric(horizontal: 0),
             margin: const EdgeInsets.only(top: 5.0),
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(15)),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(15)),
               color: greenColor,
             ),
             child: ClipRRect(

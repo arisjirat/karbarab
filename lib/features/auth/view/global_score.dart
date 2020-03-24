@@ -87,7 +87,7 @@ class _GlobalScoreState extends State<GlobalScore> {
     super.dispose();
   }
 
-  _getScore() async {
+  void _getScore() async {
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {

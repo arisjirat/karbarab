@@ -115,8 +115,8 @@ class Hero extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(top: 0.0),
           width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
             color: greenColor,
           ),
         ),

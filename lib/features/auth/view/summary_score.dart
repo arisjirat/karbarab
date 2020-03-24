@@ -126,7 +126,7 @@ class _SummaryScoreState extends State<SummaryScore>
                     ],
                   );
                 }
-                return SpinKitRotatingPlain(color: greenColor);
+                return const SpinKitRotatingPlain(color: greenColor);
               },
             ),
           ),
