@@ -28,6 +28,7 @@ class CardText extends StatefulWidget {
   final Function getHint;
   final CardAnswerMode answerMode;
   final bool adsLoaded;
+  final Function giveFeedback;
 
   CardText({
     @required this.point,
@@ -38,6 +39,7 @@ class CardText extends StatefulWidget {
     @required this.isCorrect,
     @required this.getHint,
     @required this.adsLoaded,
+    @required this.giveFeedback,
     this.voice = '',
   });
 
@@ -150,9 +152,36 @@ class _CardTextState extends State<CardText> {
                   ),
                 ),
               )
-            : Container(
-                width: 0,
-                height: 0,
+            : Positioned(
+                bottom: 10.0,
+                left: 10.0,
+                child: GestureDetector(
+                  onTap: () {
+                    widget.giveFeedback();
+                  },
+                  onLongPress: () {
+                    widget.giveFeedback();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(
+                      color: yellowColor,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                         Icon(Icons.report, size: 20, color: whiteColor),
+                        SmallerText(
+                          text: 'Soal Salah?',
+                          dark: false,
+                          bold: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               )
       ],
     );
