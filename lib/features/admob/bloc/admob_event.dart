@@ -8,8 +8,6 @@ abstract class AdmobEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetSummaryUserQuizScore extends AdmobEvent {}
-
 class UserAdsrewards extends AdmobEvent {
   
   final String adsMode;
