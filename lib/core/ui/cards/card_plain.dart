@@ -1,10 +1,8 @@
-import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/ui/popup.dart';
-import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/features/home/view/home_screen.dart';
 import 'package:flutter/widgets.dart';
 
