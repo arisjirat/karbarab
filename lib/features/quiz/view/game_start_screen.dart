@@ -12,9 +12,11 @@ import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/config/keywords_ads.dart';
 import 'package:karbarab/core/config/score_value.dart';
 import 'package:karbarab/core/helper/log_printer.dart';
+import 'package:karbarab/core/ui/feedback_form.dart';
 import 'package:karbarab/core/ui/popup.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
+import 'package:karbarab/features/feedback/bloc/feedback_bloc.dart';
 import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/core/ui/button.dart';
@@ -39,8 +41,8 @@ class GameStartScreen extends StatefulWidget {
 
 class _GameStartScreenState extends State<GameStartScreen> {
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
     BlocProvider.of<QuizBloc>(context).add(GetQuiz());
   }
 
@@ -107,9 +109,6 @@ class _GameQuizState extends State<GameQuiz> {
     testDevices: APP_ID != null ? <String>[APP_ID] : null,
     keywords: KEYWORDS,
   );
-
-  final Widget snackBar =
-      const SnackBar(content: Text('Ga ada internet coeg!'));
 
   String get _rightAnswer =>
       _getAnswerIndex(widget.list.indexOf(widget.correct));
@@ -197,6 +196,7 @@ class _GameQuizState extends State<GameQuiz> {
   }
 
   void _getQuiz() {
+    BlocProvider.of<FeedbackBloc>(context).add(ResetFeedbackQuiz());
     setState(() {
       _currentPoint = SCORE_BASE;
       _loading = true;
@@ -260,6 +260,51 @@ class _GameQuizState extends State<GameQuiz> {
         _currentAnswer = '';
       });
     }
+  }
+
+  void _giveFeedback() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Align(
+            alignment: Alignment.center,
+            child: BoldRegularText(
+              text: 'Beritahu koreksi kamu',
+            ),
+          ),
+          contentPadding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(15),
+            ),
+            side: BorderSide(color: greenColor, width: 2),
+          ),
+          titlePadding: const EdgeInsets.symmetric(vertical: 20),
+          content: BlocBuilder<FeedbackBloc, FeedbackState>(
+            builder: (context, state) {
+              return FeedbackForm(
+                onBack: Navigator.of(context).pop,
+                onSubmit: (String shouldBe) async {
+                  BlocProvider.of<FeedbackBloc>(context).add(
+                    AddFeedbackQuiz(
+                      quizId: widget.correct.id,
+                      shouldBe: shouldBe,
+                      notes: '',
+                      quizMode: widget.mode,
+                      metaQuiz: widget.correct,
+                    ),
+                  );
+                },
+                isLoading: state is FeedbackState && state.isLoading,
+                isSuccess: state is FeedbackState && state.isSuccess,
+                isFailure: state is FeedbackState && state.isFailure,
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 
   List<Widget> buildOptions(List<QuizModel> list) {
@@ -326,27 +371,30 @@ class _GameQuizState extends State<GameQuiz> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          CardQuiz(
-            currentPoint: _currentPoint,
-            isCorrect: _isCorrect,
-            loading: _loading,
-            deviceHeight: widget.deviceHeight,
-            quiz: widget.correct,
-            mode: widget.mode,
-            adsLoaded: _adsLoaded,
-            getHint: _getHint,
-          ),
-          _isCorrect
-              ? Congratulation(
-                  isCorrect: _isCorrect,
-                  onNewGame: _getQuiz,
-                  point: _currentPoint.round(),
-                )
-              : buildQuiz(widget.deviceHeight, widget.list)
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            CardQuiz(
+              currentPoint: _currentPoint,
+              isCorrect: _isCorrect,
+              loading: _loading,
+              deviceHeight: widget.deviceHeight,
+              quiz: widget.correct,
+              mode: widget.mode,
+              adsLoaded: _adsLoaded,
+              getHint: _getHint,
+              giveFeedback: _giveFeedback,
+            ),
+            _isCorrect
+                ? Congratulation(
+                    isCorrect: _isCorrect,
+                    onNewGame: _getQuiz,
+                    point: _currentPoint.round(),
+                  )
+                : buildQuiz(widget.deviceHeight, widget.list)
+          ],
+        ),
       ),
     );
   }
