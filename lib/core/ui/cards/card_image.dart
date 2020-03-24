@@ -11,7 +11,7 @@ class CardImage extends StatelessWidget {
   final bool loading;
   final bool isCorrect;
   final bool adsLoaded;
-  final Function rewarded;
+  final Function getHint;
 
   CardImage({
     @required this.point,
@@ -20,7 +20,7 @@ class CardImage extends StatelessWidget {
     @required this.loading,
     @required this.isCorrect,
     @required this.adsLoaded,
-    @required this.rewarded,
+    @required this.getHint,
   });
 
   @override
@@ -51,10 +51,10 @@ class CardImage extends StatelessWidget {
                 left: 10.0,
                 child: GestureDetector(
                   onTap: () {
-                    rewarded();
+                    getHint();
                   },
                   onLongPress: () {
-                    rewarded();
+                    getHint();
                   },
                   child: Container(
                     padding: const EdgeInsets.only(right: 10),

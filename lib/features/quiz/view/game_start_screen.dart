@@ -1,15 +1,20 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:android_intent/android_intent.dart';
 import 'package:firebase_admob/firebase_admob.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:karbarab/core/config/ads.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/config/keywords_ads.dart';
 import 'package:karbarab/core/config/score_value.dart';
+import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:karbarab/core/ui/popup.dart';
+import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
-import 'package:karbarab/features/home/view/home_screen.dart';
 import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/core/ui/button.dart';
@@ -103,6 +108,9 @@ class _GameQuizState extends State<GameQuiz> {
     keywords: KEYWORDS,
   );
 
+  final Widget snackBar =
+      const SnackBar(content: Text('Ga ada internet coeg!'));
+
   String get _rightAnswer =>
       _getAnswerIndex(widget.list.indexOf(widget.correct));
 
@@ -119,7 +127,8 @@ class _GameQuizState extends State<GameQuiz> {
         (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
       print('RewardedVideoAd event $event');
       if (event == RewardedVideoAdEvent.rewarded) {
-        BlocProvider.of<AdmobBloc>(context).add(UserAdsrewards(adsMode: 'hint', quizId: widget.correct.id));
+        BlocProvider.of<AdmobBloc>(context)
+            .add(UserAdsrewards(adsMode: 'hint', quizId: widget.correct.id));
         setState(() {
           _hint = true;
           _adsLoaded = false;
@@ -134,18 +143,53 @@ class _GameQuizState extends State<GameQuiz> {
         _loadRewardHint();
       }
     };
-    
+  }
+
+  _getHint() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        getLogger('InternetService').w('internet ada');
+        RewardedVideoAd.instance.show();
+      }
+    } on SocketException catch (_) {
+      getLogger('InternetService').e('ga ada internet');
+      popup(
+        context,
+        text: 'Internet kamu mati ya?',
+        cancel: () {
+          Navigator.of(context).pop();
+        },
+        confirm: () async {
+          if (Platform.isAndroid) {
+            const AndroidIntent intent = AndroidIntent(
+              action: 'android.settings.SETTINGS',
+            );
+            await intent.launch();
+          } else {
+            Navigator.of(context).pop();
+          }
+        },
+        cancelAble: true,
+        cancelLabel: 'Lanjutkan game',
+        confirmLabel: 'Hidupkan',
+      );
+    } catch (e) {
+      getLogger('InternetService').e('another catch');
+    }
   }
 
   void _loadRewardHint() {
     setState(() {
       _adsLoaded = false;
     });
-    RewardedVideoAd.instance.load(
+    RewardedVideoAd.instance
+        .load(
       adUnitId: 'ca-app-pub-8844883376001707/4243991756',
       // adUnitId: RewardedVideoAd.testAdUnitId,
-      targetingInfo: targetingInfo,  
-    ).then((e) {
+      targetingInfo: targetingInfo,
+    )
+        .then((e) {
       setState(() {
         _adsLoaded = e;
       });
@@ -191,7 +235,8 @@ class _GameQuizState extends State<GameQuiz> {
     } else if (_recentAnswers.length > 1) {
       popup(
         context,
-        text: 'Kata Selanjutnya?',
+        text: 'Kesempatan Kamu habis',
+        confirmLabel: 'Kartu Selanjutnya',
         cancel: () {
           Navigator.of(context).pop();
         },
@@ -292,7 +337,7 @@ class _GameQuizState extends State<GameQuiz> {
             quiz: widget.correct,
             mode: widget.mode,
             adsLoaded: _adsLoaded,
-            rewarded: RewardedVideoAd.instance.show,
+            getHint: _getHint,
           ),
           _isCorrect
               ? Congratulation(

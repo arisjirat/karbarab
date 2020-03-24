@@ -5,8 +5,9 @@ import 'package:karbarab/core/helper/scale_calculator.dart';
 class LogoText extends StatelessWidget {
   final String text;
   final bool dark;
+  final Color color;
 
-  LogoText({@required this.text, this.dark});
+  LogoText({@required this.text, this.dark = true, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class LogoText extends StatelessWidget {
       text,
       style: TextStyle(
         fontFamily: 'FTF-Ahlan',
-        color: dark ? textColor : whiteColor,
+        color: color != null ? color : dark ? textColor : whiteColor,
         // fontSize: 50.0,
         fontSize: scaleCalculator(50, context),
       ),
@@ -63,7 +64,7 @@ class BiggerArabicText extends StatelessWidget {
 class RegularText extends StatelessWidget {
   final String text;
   final bool dark;
-  RegularText({@required this.text, this.dark});
+  RegularText({@required this.text, this.dark = true});
   @override
   Widget build(BuildContext context) {
     return Text(
@@ -100,7 +101,7 @@ class BoldRegularText extends StatelessWidget {
   final String text;
   final bool dark;
   final Color color;
-  BoldRegularText({@required this.text, this.dark, this.color});
+  BoldRegularText({@required this.text, this.dark = true, this.color});
   @override
   Widget build(BuildContext context) {
     return Text(

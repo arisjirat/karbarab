@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/helper/greetings.dart';
+import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/features/auth/view/profile_screen.dart';
 import 'package:karbarab/core/ui/cards/card_play.dart';
 import 'package:karbarab/core/config/game_mode.dart';
@@ -11,12 +12,7 @@ import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/helper/scale_calculator.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
 
-const APP_ID = 'ca-app-pub-8844883376001707~8468099801';
-
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({this.displayName = 'Guest'});
-  final String displayName;
-
   static const String routeName = '/home';
 
   @override
@@ -24,6 +20,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String displayName = '';
   @override
   void initState() {
     super.initState();
@@ -41,10 +38,18 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Hero(
-              deviceHeight: _deviceHeight,
-              displayName: widget.displayName,
-            ),
+            BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
+              if (state is Authenticated) {
+                return Hero(
+                  deviceHeight: _deviceHeight,
+                  displayName: state.displayName,
+                );
+              }
+              return Hero(
+                  deviceHeight: _deviceHeight,
+                  displayName: '',
+                );
+            }),
             BlocBuilder<ScoreBloc, ScoreState>(builder: (context, state) {
               return Container(
                 height: 0.7 * _deviceHeight,

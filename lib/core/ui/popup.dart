@@ -38,8 +38,8 @@ Future<void> popup(
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 30, left: 65),
-                child: BoldRegularText(text: text, dark: true),
+                padding: const EdgeInsets.only(top: 30,),
+                child: Align(alignment: Alignment.center, child: BoldRegularText(text: text, dark: true),),
               )
             ],
           ),

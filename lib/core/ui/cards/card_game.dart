@@ -15,14 +15,14 @@ class CardGame extends StatefulWidget {
   final bool loading;
   final QuizModel quiz;
   final GameMode mode;
-  final Function rewarded;
+  final Function getHint;
   final bool adsLoaded;
   CardGame({
     this.correct,
     this.point,
     this.height = 200,
     this.loading = false,
-    @required this.rewarded,
+    @required this.getHint,
     @required this.quiz,
     @required this.mode,
     @required this.adsLoaded,
@@ -71,7 +71,7 @@ class _CardGameState extends State<CardGame>
         loading: widget.loading,
         quiz: widget.quiz,
         isCorrect: widget.correct,
-        rewarded: widget.rewarded,
+        getHint: widget.getHint,
         adsLoaded: widget.adsLoaded,
         height: widget.height,
         point: widget.point,
@@ -84,7 +84,7 @@ class _CardGameState extends State<CardGame>
         height: widget.height,
         point: widget.point,
         isCorrect: widget.correct,
-        rewarded: widget.rewarded,
+        getHint: widget.getHint,
         adsLoaded: widget.adsLoaded,
         answerMode: _getMode(widget.mode),
       );
@@ -95,7 +95,7 @@ class _CardGameState extends State<CardGame>
         voice: widget.quiz.arabVoice,
         height: widget.height,
         isCorrect: widget.correct,
-        rewarded: widget.rewarded,
+        getHint: widget.getHint,
         adsLoaded: widget.adsLoaded,
         point: widget.point,
         answerMode: _getMode(widget.mode),
@@ -106,7 +106,7 @@ class _CardGameState extends State<CardGame>
         text: widget.quiz.bahasa,
         height: widget.height,
         isCorrect: widget.correct,
-        rewarded: widget.rewarded,
+        getHint: widget.getHint,
         adsLoaded: widget.adsLoaded,
         point: widget.point,
         answerMode: _getMode(widget.mode),
@@ -124,7 +124,7 @@ class _CardGameState extends State<CardGame>
         voice: widget.quiz.arabVoice,
         height: widget.height,
         isCorrect: widget.correct,
-        rewarded: widget.rewarded,
+        getHint: widget.getHint,
         adsLoaded: widget.adsLoaded,
         point: widget.point,
         answerMode: _getMode(widget.mode, flip: true),
@@ -133,7 +133,7 @@ class _CardGameState extends State<CardGame>
         return CardImage(
         loading: widget.loading,
         isCorrect: widget.correct,
-        rewarded: widget.rewarded,
+        getHint: widget.getHint,
         adsLoaded: widget.adsLoaded,
         quiz: widget.quiz,
         height: widget.height,
@@ -146,7 +146,7 @@ class _CardGameState extends State<CardGame>
         height: widget.height,
         point: widget.point,
         isCorrect: widget.correct,
-        rewarded: widget.rewarded,
+        getHint: widget.getHint,
         adsLoaded: widget.adsLoaded,
         answerMode: _getMode(widget.mode, flip: true),
       );
@@ -157,7 +157,7 @@ class _CardGameState extends State<CardGame>
         voice: widget.quiz.arabVoice,
         height: widget.height,
         isCorrect: widget.correct,
-        rewarded: widget.rewarded,
+        getHint: widget.getHint,
         adsLoaded: widget.adsLoaded,
         point: widget.point,
         answerMode: _getMode(widget.mode, flip: true),

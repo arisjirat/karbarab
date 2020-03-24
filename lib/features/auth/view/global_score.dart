@@ -1,14 +1,19 @@
+import 'dart:io';
+
+import 'package:android_intent/android_intent.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:karbarab/core/config/ads.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/config/keywords_ads.dart';
 import 'package:karbarab/core/helper/device_height.dart';
+import 'package:karbarab/core/helper/log_printer.dart';
+import 'package:karbarab/core/ui/popup.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
 import 'package:karbarab/features/global_scores/bloc/global_scores_bloc.dart';
-import 'package:karbarab/features/home/view/home_screen.dart';
 
 class GlobalScore extends StatefulWidget {
   @override
@@ -82,6 +87,40 @@ class _GlobalScoreState extends State<GlobalScore> {
     super.dispose();
   }
 
+  _getScore() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        getLogger('InternetService').w('internet ada');
+        RewardedVideoAd.instance.show();
+      }
+    } on SocketException catch (_) {
+      getLogger('InternetService').e('ga ada internet');
+      popup(
+        context,
+        text: 'Internet kamu mati ya?',
+        cancel: () {
+          Navigator.of(context).pop();
+        },
+        confirm: () async {
+          if (Platform.isAndroid) {
+            const AndroidIntent intent = AndroidIntent(
+              action: 'android.settings.SETTINGS',
+            );
+            await intent.launch();
+          } else {
+            Navigator.of(context).pop();
+          }
+        },
+        cancelAble: true,
+        cancelLabel: 'Kembali',
+        confirmLabel: 'Hidupkan',
+      );
+    } catch (e) {
+      getLogger('InternetService').e('another catch');
+    }
+  }
+
   Color getColor(int position) {
     switch (position) {
       case 0:
@@ -132,7 +171,7 @@ class _GlobalScoreState extends State<GlobalScore> {
                 const SizedBox(height: 20,),
                 RawMaterialButton(
                   onPressed: () {
-                    RewardedVideoAd.instance.show();
+                    _getScore();
                   },
                   child: Icon(
                     Icons.play_circle_outline,

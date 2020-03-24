@@ -25,7 +25,7 @@ class CardText extends StatefulWidget {
   final double height;
   final bool loading;
   final bool isCorrect;
-  final Function rewarded;
+  final Function getHint;
   final CardAnswerMode answerMode;
   final bool adsLoaded;
 
@@ -36,7 +36,7 @@ class CardText extends StatefulWidget {
     @required this.loading,
     @required this.answerMode,
     @required this.isCorrect,
-    @required this.rewarded,
+    @required this.getHint,
     @required this.adsLoaded,
     this.voice = '',
   });
@@ -115,10 +115,10 @@ class _CardTextState extends State<CardText> {
                 left: 10.0,
                 child: GestureDetector(
                   onTap: () {
-                    widget.rewarded();
+                    widget.getHint();
                   },
                   onLongPress: () {
-                    widget.rewarded();
+                    widget.getHint();
                   },
                   child: Container(
                     padding: const EdgeInsets.only(right: 10),
