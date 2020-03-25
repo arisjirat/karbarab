@@ -90,7 +90,6 @@ class _GlobalScoreState extends State<GlobalScore> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       checkConnectionFirst(_loadRewardsScore, context);
-      Navigator.of(context).pop();
     }
   }
 

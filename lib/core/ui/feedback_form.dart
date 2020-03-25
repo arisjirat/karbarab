@@ -126,8 +126,9 @@ class FeedbackFormState extends State<FeedbackForm> {
                 RaisedButton(
                   color: whiteColor,
                   shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                      side: BorderSide(color: greenColor, width: 2)),
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    side: BorderSide(color: greenColor, width: 2),
+                  ),
                   onPressed: () {
                     if (!widget.isLoading) {
                       widget.onBack();

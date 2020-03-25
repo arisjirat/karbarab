@@ -23,7 +23,7 @@ Future<void> popup(
           decoration: const BoxDecoration(
             shape: BoxShape.rectangle,
             color: whiteColor,
-            borderRadius: BorderRadius.all(Radius.circular(5.0)),
+            borderRadius: BorderRadius.all(Radius.circular(10.0)),
           ),
           height: 70,
           child: Stack(
@@ -45,10 +45,15 @@ Future<void> popup(
           ),
         ),
         actions: <Widget>[
-          cancelAble ? FlatButton(
+          cancelAble ? RaisedButton(
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              side: BorderSide(color: greenColor, width: 2),
+            ),
+            color: whiteColor,
             child: RegularText(
               text: cancelLabel,
-              dark: true,
+              color: greenColor,
             ),
             onPressed: () {
               cancel();
@@ -57,9 +62,9 @@ Future<void> popup(
           RaisedButton(
             padding: cancelAble ? const EdgeInsets.symmetric(horizontal: 10) : const EdgeInsets.all(5),
             shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(8))),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
             child: RegularText(text: confirmLabel, dark: false),
-            color: confirmColor,
+            color: greenColor,
             onPressed: () {
               confirm();
             },

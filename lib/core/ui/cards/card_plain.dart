@@ -58,8 +58,8 @@ class CardPlain extends StatelessWidget {
                   },
                   child: Icon(
                     Icons.close,
-                    color: Colors.white,
-                    size: 15.0,
+                    color: Colors.black,
+                    size: 20.0,
                   ),
                   shape: const CircleBorder(),
                   elevation: 2.0,

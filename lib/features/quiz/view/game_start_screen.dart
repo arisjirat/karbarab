@@ -147,37 +147,6 @@ class _GameQuizState extends State<GameQuiz> with WidgetsBindingObserver {
 
   void _getHint() async {
     checkConnectionFirst(RewardedVideoAd.instance.show, context);
-    // try {
-    //   final result = await InternetAddress.lookup('google.com');
-    //   if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-    //     getLogger('InternetService').w('internet ada');
-    //     RewardedVideoAd.instance.show();
-    //   }
-    // } on SocketException catch (_) {
-    //   getLogger('InternetService').e('ga ada internet');
-    //   popup(
-    //     context,
-    //     text: 'Internet kamu mati ya?',
-    //     cancel: () {
-    //       Navigator.of(context).pop();
-    //     },
-    //     confirm: () async {
-    //       if (Platform.isAndroid) {
-    //         const AndroidIntent intent = AndroidIntent(
-    //           action: 'android.settings.SETTINGS',
-    //         );
-    //         await intent.launch();
-    //       } else {
-    //         Navigator.of(context).pop();
-    //       }
-    //     },
-    //     cancelAble: true,
-    //     cancelLabel: 'Lanjutkan game',
-    //     confirmLabel: 'Hidupkan',
-    //   );
-    // } catch (e) {
-    //   getLogger('InternetService').e('another catch');
-    // }
   }
 
   void _loadRewardHint() {
@@ -202,7 +171,6 @@ class _GameQuizState extends State<GameQuiz> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.resumed) {
       checkConnectionFirst(_loadRewardHint, context);
-      Navigator.of(context).pop();
     }
   }
 

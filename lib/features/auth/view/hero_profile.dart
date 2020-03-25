@@ -85,15 +85,14 @@ class HeroProfile extends StatelessWidget {
                           width: 15,
                         ),
                         RaisedButton(
+                          color: whiteColor,
                           shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
-                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
                           onPressed: () {
-                            Navigator.of(context).pushNamed(KarbarabScreen.routeName);
+                            Navigator.of(context)
+                                .pushNamed(KarbarabScreen.routeName);
                           },
-                          color: greyColorLight,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: SmallerText(

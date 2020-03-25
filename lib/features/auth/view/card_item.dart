@@ -35,9 +35,9 @@ class CardItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.only(bottom: 20),
+      margin: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
       child: Container(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -50,9 +50,9 @@ class CardItem extends StatelessWidget {
                       children: <Widget>[
                         const Image(
                         image: AssetImage('assets/images/no-photo.jpg'),
-                        height: 60,
+                        height: 30,
                       ),
-                      SmallerText(text: 'tidak ada gambar', dark: true)
+                      TinyText(text: 'tidak ada gambar', dark: true)
                       ],
                     )
                     : Image.network(
@@ -60,7 +60,7 @@ class CardItem extends StatelessWidget {
                         height: 60,
                         fit: BoxFit.fill,
                       ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 BoldRegularText(text: bahasa, dark: true),
               ],
             ),
@@ -76,15 +76,15 @@ class CardItem extends StatelessWidget {
                     size: 40.0,
                   ),
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 5),
                 BoldRegularText(text: arab, dark: true),
-                const SizedBox(height: 10),
+                const SizedBox(height: 5),
                 Container(
                   color: positive ? greenColor : redColor,
                   child: Row(
                     children: <Widget>[
                       Container(
-                        padding: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(5),
                         color: secondaryColor,
                         child: SmallerText(
                             text: gameModeToString(gameMode),
@@ -92,7 +92,7 @@ class CardItem extends StatelessWidget {
                             bold: true),
                       ),
                       Container(
-                        padding: const EdgeInsets.all(10),
+                        padding: const EdgeInsets.all(5),
                         child: SmallerText(
                           text: (averageScore * 100).round().toString(),
                           dark: false,
