@@ -201,7 +201,9 @@ class _GameQuizState extends State<GameQuiz> with WidgetsBindingObserver {
   }
 
   void _applyAnswer() {
-    if (_rightAnswer == _currentAnswer && _currentAnswer != '') {
+    if (_currentAnswer == '') {
+
+    } else if (_rightAnswer == _currentAnswer && _currentAnswer != '') {
       setState(() {
         _isCorrect = true;
       });
