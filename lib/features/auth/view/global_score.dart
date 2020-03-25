@@ -24,7 +24,7 @@ class _GlobalScoreState extends State<GlobalScore> with WidgetsBindingObserver {
   );
 
   bool _adsLoaded = false;
-  bool _watched = true;
+  bool _watched = false;
 
   @override
   void initState() {
@@ -60,7 +60,7 @@ class _GlobalScoreState extends State<GlobalScore> with WidgetsBindingObserver {
   void didChangeDependencies() {
     super.didChangeDependencies();
     setState(() {
-      _watched = true;
+      _watched = false;
     });
   }
 

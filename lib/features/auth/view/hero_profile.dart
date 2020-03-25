@@ -18,7 +18,20 @@ class HeroProfile extends StatelessWidget {
     return Container(
       height: 0.25 * deviceHeight(context),
       padding: const EdgeInsets.fromLTRB(10, 30, 0, 20),
-      color: greyColor.withOpacity(0.3),
+      decoration: BoxDecoration(
+        color: greyColorLight,
+        boxShadow: [
+          BoxShadow(
+            color: textColor.withOpacity(0.2),
+            blurRadius: 10.0,
+            spreadRadius: 0.0,
+            offset: const Offset(
+              2.0,
+              5.0,
+            ),
+          )
+        ],
+      ),
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           if (state is Authenticated) {

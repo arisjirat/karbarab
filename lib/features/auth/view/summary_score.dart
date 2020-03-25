@@ -102,8 +102,8 @@ class _SummaryScoreState extends State<SummaryScore>
         Container(
           width: MediaQuery.of(context).size.width,
           height: 40.0,
-          margin: const EdgeInsets.only(
-            top: 140,
+          margin: EdgeInsets.only(
+            top: 0.25 * deviceHeight(context) - 20,
             left: 90,
             right: 90,
           ),
