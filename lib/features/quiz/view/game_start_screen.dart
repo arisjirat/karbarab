@@ -11,6 +11,7 @@ import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/config/keywords_ads.dart';
 import 'package:karbarab/core/config/score_value.dart';
+import 'package:karbarab/core/helper/hasInternet.dart';
 import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:karbarab/core/ui/feedback_form.dart';
 import 'package:karbarab/core/ui/popup.dart';
@@ -43,7 +44,7 @@ class _GameStartScreenState extends State<GameStartScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<QuizBloc>(context).add(GetQuiz());
+    BlocProvider.of<QuizBloc>(context).add(GetQuiz(image: widget.mode == GameMode.ArabGambar || widget.mode == GameMode.GambarArab));
   }
 
   @override
@@ -96,7 +97,7 @@ class GameQuiz extends StatefulWidget {
   _GameQuizState createState() => _GameQuizState();
 }
 
-class _GameQuizState extends State<GameQuiz> {
+class _GameQuizState extends State<GameQuiz> with WidgetsBindingObserver {
   List<String> _recentAnswers = [];
   bool _isCorrect = false;
   bool _loading = false;
@@ -145,37 +146,38 @@ class _GameQuizState extends State<GameQuiz> {
   }
 
   void _getHint() async {
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        getLogger('InternetService').w('internet ada');
-        RewardedVideoAd.instance.show();
-      }
-    } on SocketException catch (_) {
-      getLogger('InternetService').e('ga ada internet');
-      popup(
-        context,
-        text: 'Internet kamu mati ya?',
-        cancel: () {
-          Navigator.of(context).pop();
-        },
-        confirm: () async {
-          if (Platform.isAndroid) {
-            const AndroidIntent intent = AndroidIntent(
-              action: 'android.settings.SETTINGS',
-            );
-            await intent.launch();
-          } else {
-            Navigator.of(context).pop();
-          }
-        },
-        cancelAble: true,
-        cancelLabel: 'Lanjutkan game',
-        confirmLabel: 'Hidupkan',
-      );
-    } catch (e) {
-      getLogger('InternetService').e('another catch');
-    }
+    checkConnectionFirst(RewardedVideoAd.instance.show, context);
+    // try {
+    //   final result = await InternetAddress.lookup('google.com');
+    //   if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+    //     getLogger('InternetService').w('internet ada');
+    //     RewardedVideoAd.instance.show();
+    //   }
+    // } on SocketException catch (_) {
+    //   getLogger('InternetService').e('ga ada internet');
+    //   popup(
+    //     context,
+    //     text: 'Internet kamu mati ya?',
+    //     cancel: () {
+    //       Navigator.of(context).pop();
+    //     },
+    //     confirm: () async {
+    //       if (Platform.isAndroid) {
+    //         const AndroidIntent intent = AndroidIntent(
+    //           action: 'android.settings.SETTINGS',
+    //         );
+    //         await intent.launch();
+    //       } else {
+    //         Navigator.of(context).pop();
+    //       }
+    //     },
+    //     cancelAble: true,
+    //     cancelLabel: 'Lanjutkan game',
+    //     confirmLabel: 'Hidupkan',
+    //   );
+    // } catch (e) {
+    //   getLogger('InternetService').e('another catch');
+    // }
   }
 
   void _loadRewardHint() {
@@ -195,6 +197,15 @@ class _GameQuizState extends State<GameQuiz> {
     });
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      checkConnectionFirst(_loadRewardHint, context);
+      Navigator.of(context).pop();
+    }
+  }
+
   void _getQuiz() {
     BlocProvider.of<FeedbackBloc>(context).add(ResetFeedbackQuiz());
     setState(() {
@@ -208,7 +219,7 @@ class _GameQuizState extends State<GameQuiz> {
     });
     _loadRewardHint();
     Timer(const Duration(milliseconds: 500), () {
-      widget.quizBloc.add(GetQuiz());
+      widget.quizBloc.add(GetQuiz(image: widget.mode == GameMode.ArabGambar || widget.mode == GameMode.GambarArab));
       setState(() {
         _loading = false;
       });

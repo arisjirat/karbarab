@@ -111,6 +111,39 @@ class _CardTextState extends State<CardText> {
                 )
               : const Text(''),
         ),
+        (widget.isCorrect) 
+          ? Positioned(
+                bottom: 10.0,
+                left: 10.0,
+                child: GestureDetector(
+                  onTap: () {
+                    widget.giveFeedback();
+                  },
+                  onLongPress: () {
+                    widget.giveFeedback();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(
+                      color: yellowColor,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                         Icon(Icons.report, size: 20, color: whiteColor),
+                        SmallerText(
+                          text: 'Soal Salah?',
+                          dark: false,
+                          bold: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+          : const SizedBox(width: 0,),
         (!widget.isCorrect && widget.adsLoaded)
             ? Positioned(
                 bottom: 10.0,
@@ -152,37 +185,7 @@ class _CardTextState extends State<CardText> {
                   ),
                 ),
               )
-            : Positioned(
-                bottom: 10.0,
-                left: 10.0,
-                child: GestureDetector(
-                  onTap: () {
-                    widget.giveFeedback();
-                  },
-                  onLongPress: () {
-                    widget.giveFeedback();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    decoration: BoxDecoration(
-                      color: yellowColor,
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                         Icon(Icons.report, size: 20, color: whiteColor),
-                        SmallerText(
-                          text: 'Soal Salah?',
-                          dark: false,
-                          bold: true,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
+            : const SizedBox(width: 0)
       ],
     );
   }

@@ -15,7 +15,7 @@ class LogoText extends StatelessWidget {
       text,
       style: TextStyle(
         fontFamily: 'FTF-Ahlan',
-        color: color == null ? color : dark ? textColor : whiteColor,
+        color: color == null ? dark ? textColor : whiteColor : color,
         // fontSize: 50.0,
         fontSize: scaleCalculator(50, context),
       ),

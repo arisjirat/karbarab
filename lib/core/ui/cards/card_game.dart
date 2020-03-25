@@ -94,7 +94,7 @@ class _CardGameState extends State<CardGame>
         return CardText(
         loading: widget.loading,
         text: widget.quiz.arab,
-        voice: widget.quiz.arabVoice,
+        voice: widget.quiz.voice,
         height: widget.height,
         point: widget.point,
         isCorrect: widget.correct,
@@ -107,7 +107,7 @@ class _CardGameState extends State<CardGame>
         return CardText(
         loading: widget.loading,
         text: widget.quiz.arab,
-        voice: widget.quiz.arabVoice,
+        voice: widget.quiz.voice,
         height: widget.height,
         isCorrect: widget.correct,
         getHint: widget.getHint,
@@ -138,7 +138,7 @@ class _CardGameState extends State<CardGame>
         return CardText(
         loading: widget.loading,
         text: widget.quiz.arab,
-        voice: widget.quiz.arabVoice,
+        voice: widget.quiz.voice,
         height: widget.height,
         isCorrect: widget.correct,
         getHint: widget.getHint,
@@ -174,7 +174,7 @@ class _CardGameState extends State<CardGame>
         return CardText(
         loading: widget.loading,
         text: widget.quiz.arab,
-        voice: widget.quiz.arabVoice,
+        voice: widget.quiz.voice,
         height: widget.height,
         isCorrect: widget.correct,
         getHint: widget.getHint,

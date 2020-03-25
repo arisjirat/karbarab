@@ -10,6 +10,9 @@ abstract class QuizEvent extends Equatable {
 
 class Initialize extends QuizEvent {}
 
-class GetQuiz extends QuizEvent {}
+class GetQuiz extends QuizEvent {
+  final bool image;
+  GetQuiz({ this.image = true });
+}
 
 class DestroyQuiz extends QuizEvent {}

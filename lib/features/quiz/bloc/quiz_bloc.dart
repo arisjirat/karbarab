@@ -26,7 +26,7 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
     if (event is Initialize) {
       yield* _mapAppStartedToState();
     } else if (event is GetQuiz) {
-      yield* _mapGetQuizToState();
+      yield* _mapGetQuizToState(event.image);
     } else if (event is DestroyQuiz) {
       yield* _mapResetQuizToState();
     }
@@ -39,8 +39,8 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
     yield EmptyQuiz();
   }
 
-  Stream<QuizState> _mapGetQuizToState() async* {
-    final quiz = _quizRepository.getQuiz();
+  Stream<QuizState> _mapGetQuizToState(bool image) async* {
+    final quiz = _quizRepository.getQuiz(image);
     yield HasQuiz(list: quiz.list, correct: quiz.correct);
   }
 }

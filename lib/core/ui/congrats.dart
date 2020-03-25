@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import 'package:karbarab/core/config/colors.dart';
+import 'package:karbarab/core/config/score_value.dart';
 
 class Congrats extends StatefulWidget {
   final bool play;
@@ -38,7 +39,7 @@ class _CongratsState extends State<Congrats> {
     return ConfettiWidget(
       confettiController: _controllerBottomCenter,
       blastDirection: -pi / 2,
-      numberOfParticles: widget.point >= 200 ? 20 : widget.point >= 100 ? 10 : 1,
+      numberOfParticles: widget.point >= SCORE_BASE ? 20 : widget.point >= 0.5 * SCORE_BASE ? 10 : 1,
       emissionFrequency: 0.6,
       minimumSize: const Size( 5, 5), // set the minimum potential size for the confetti (width, height)
       maximumSize: const Size(20, 20),

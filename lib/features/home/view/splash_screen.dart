@@ -7,39 +7,46 @@ class SplashLoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: greenColor,
-      body: Row(
+      body: Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Column(
-                children: <Widget>[
-                  LogoText(
-                    text: 'Karbarab',
-                    dark: false,
-                  ),
-                  Stack(
-                    overflow: Overflow.visible,
-                    children: <Widget>[
-                      const Image(
-                        image: AssetImage('assets/images/character.png'),
-                        height: 150,
+              LogoText(
+                text: 'Karbarab',
+                dark: false,
+              ),
+              Container(
+                alignment: Alignment.center,
+                child: Stack(
+                  overflow: Overflow.visible,
+                  children: <Widget>[
+                    Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 0),
+                        child: const Image(
+                          image: AssetImage('assets/images/character.png'),
+                          height: 150,
+                        ),
                       ),
-                      const Positioned(
-                        top: 100,
-                        left: -45,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        margin: const EdgeInsets.only(top: 110),
                         width: 200,
-                        child: Image(
+                        child: const Image(
                           image: AssetImage('assets/images/card_logo.png'),
                           height: 110,
                         ),
                       ),
-                    ],
-                  ),
-                ],
-              )
+                    ),
+                  ],
+                ),
+              ),
             ],
           )
         ],

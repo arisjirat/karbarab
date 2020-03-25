@@ -9,7 +9,7 @@ class CardItem extends StatelessWidget {
   final String bahasa;
   final String id;
   final String arab;
-  final String arabVoice;
+  final String voice;
   final String image;
   final GameMode gameMode;
   final int totalScore;
@@ -21,7 +21,7 @@ class CardItem extends StatelessWidget {
     @required this.bahasa,
     @required this.id,
     @required this.arab,
-    @required this.arabVoice,
+    @required this.voice,
     @required this.image,
     @required this.totalScore,
     @required this.averageScore,
@@ -29,7 +29,7 @@ class CardItem extends StatelessWidget {
   }) : super(key: key);
 
   void _play() {
-    SoundPlayerUtil.addSoundName(arabVoice);
+    SoundPlayerUtil.addSoundName(voice);
   }
 
   @override
@@ -45,18 +45,28 @@ class CardItem extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.network(
-                  image,
-                  height: 60,
-                  fit: BoxFit.fill,
-                ),
+                image == ''
+                    ? Column(
+                      children: <Widget>[
+                        const Image(
+                        image: AssetImage('assets/images/no-photo.jpg'),
+                        height: 60,
+                      ),
+                      SmallerText(text: 'tidak ada gambar', dark: true)
+                      ],
+                    )
+                    : Image.network(
+                        image,
+                        height: 60,
+                        fit: BoxFit.fill,
+                      ),
                 const SizedBox(height: 20),
                 BoldRegularText(text: bahasa, dark: true),
               ],
             ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
                   onTap: _play,
@@ -73,16 +83,24 @@ class CardItem extends StatelessWidget {
                   color: positive ? greenColor : redColor,
                   child: Row(
                     children: <Widget>[
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      color: secondaryColor,
-                      child: SmallerText(text: gameModeToString(gameMode), dark: false, bold: true),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.all(10),
-                      child: SmallerText(text: (averageScore * 100).round().toString(), dark: false, bold: true,),
-                    ),
-                  ],),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        color: secondaryColor,
+                        child: SmallerText(
+                            text: gameModeToString(gameMode),
+                            dark: false,
+                            bold: true),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        child: SmallerText(
+                          text: (averageScore * 100).round().toString(),
+                          dark: false,
+                          bold: true,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             )

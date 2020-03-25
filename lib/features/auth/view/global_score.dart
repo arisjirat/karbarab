@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:android_intent/android_intent.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,8 +6,7 @@ import 'package:karbarab/core/config/ads.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/config/keywords_ads.dart';
 import 'package:karbarab/core/helper/device_height.dart';
-import 'package:karbarab/core/helper/log_printer.dart';
-import 'package:karbarab/core/ui/popup.dart';
+import 'package:karbarab/core/helper/hasInternet.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
 import 'package:karbarab/features/global_scores/bloc/global_scores_bloc.dart';
@@ -20,7 +16,7 @@ class GlobalScore extends StatefulWidget {
   _GlobalScoreState createState() => _GlobalScoreState();
 }
 
-class _GlobalScoreState extends State<GlobalScore> {
+class _GlobalScoreState extends State<GlobalScore> with WidgetsBindingObserver {
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
     testDevices: APP_ID != null ? <String>[APP_ID] : null,
     keywords: KEYWORDS,
@@ -32,6 +28,7 @@ class _GlobalScoreState extends State<GlobalScore> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
     RewardedVideoAd.instance.listener =
         (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
@@ -50,11 +47,11 @@ class _GlobalScoreState extends State<GlobalScore> {
         });
       }
       if (event == RewardedVideoAdEvent.closed && _adsLoaded) {
-        _loadRewardHint();
+        _loadRewardsScore();
       }
     };
 
-    _loadRewardHint();
+    _loadRewardsScore();
   }
 
   @override
@@ -65,7 +62,7 @@ class _GlobalScoreState extends State<GlobalScore> {
     });
   }
 
-  void _loadRewardHint() {
+  void _loadRewardsScore() {
     setState(() {
       _adsLoaded = false;
     });
@@ -85,40 +82,20 @@ class _GlobalScoreState extends State<GlobalScore> {
   @override
   void dispose() {
     super.dispose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      checkConnectionFirst(_loadRewardsScore, context);
+      Navigator.of(context).pop();
+    }
   }
 
   void _getScore() async {
-    try {
-      final result = await InternetAddress.lookup('google.com');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        getLogger('InternetService').w('internet ada');
-        RewardedVideoAd.instance.show();
-      }
-    } on SocketException catch (_) {
-      getLogger('InternetService').e('ga ada internet');
-      popup(
-        context,
-        text: 'Internet kamu mati ya?',
-        cancel: () {
-          Navigator.of(context).pop();
-        },
-        confirm: () async {
-          if (Platform.isAndroid) {
-            const AndroidIntent intent = AndroidIntent(
-              action: 'android.settings.SETTINGS',
-            );
-            await intent.launch();
-          } else {
-            Navigator.of(context).pop();
-          }
-        },
-        cancelAble: true,
-        cancelLabel: 'Kembali',
-        confirmLabel: 'Hidupkan',
-      );
-    } catch (e) {
-      getLogger('InternetService').e('another catch');
-    }
+    checkConnectionFirst(RewardedVideoAd.instance.show, context);
   }
 
   Color getColor(int position) {
@@ -217,7 +194,7 @@ class _GlobalScoreState extends State<GlobalScore> {
                                 ),
                                 BoldRegularText(
                                   text: score.score.toString(),
-                                  dark: true,
+                                  dark: false,
                                   color: greenColor,
                                 ),
                               ],
