@@ -98,6 +98,8 @@ class CardScoreItem extends StatelessWidget {
             children: [
               Row(
                 children: [
+                  BoldRegularText(text: tier.toString(),),
+                  const SizedBox(width: 15,),
                   CircleAvatar(
                     backgroundImage: NetworkImage(
                       score.metaUser.avatar,
