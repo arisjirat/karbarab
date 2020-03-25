@@ -45,11 +45,18 @@ class ScoreRepository {
   }
 
   Future<List<ScoreGlobalModel>> getAllScore() async {
-    final QuerySnapshot scores = await scoreCollection.limit(10000).getDocuments();
+    final QuerySnapshot scores =
+        await scoreCollection.limit(10000).getDocuments();
     final List<ScoreGlobalModel> grouped =
         scores.documents.fold([], (acc, cur) {
       final found = acc.indexWhere((e) => e.userMail == cur['userEmail']);
       final metaUser = cur['metaUser'];
+      final Timestamp timestamp = cur['createdAt'];
+      final DateTime createdAt =
+          Timestamp(timestamp.seconds, timestamp.nanoseconds).toDate();
+      final String bahasa = cur['metaQuiz']['bahasa'];
+      final GameMode quizMode = stringToGameMode(cur['quizMode']);
+      final int score = cur['score'];
       final UserModel user = UserModel(
         id: metaUser['id'],
         email: metaUser['email'],
@@ -59,16 +66,28 @@ class ScoreRepository {
       );
       if (found >= 0) {
         acc[found] = ScoreGlobalModel(
-          cur['userEmail'],
-          acc[found].score + cur['score'],
-          user,
+          metaUser: user,
+          score: acc[found].score + cur['score'],
+          userMail: user.email,
+          scoreHistory: acc[found].scoreHistory,
         );
+        acc[found].scoreHistory.add(ScoreItem(
+              bahasa: bahasa,
+              date: createdAt,
+              score: score,
+              mode: quizMode,
+            ));
         return acc;
       }
       acc.add(ScoreGlobalModel(
-        cur['userEmail'],
-        cur['score'],
-        user,
+        metaUser: user,
+        userMail: user.email,
+        score: cur['score'],
+        scoreHistory: [ScoreItem(
+              bahasa: bahasa,
+              date: createdAt,
+              score: score,
+              mode: quizMode)],
       ));
       return acc;
     });
