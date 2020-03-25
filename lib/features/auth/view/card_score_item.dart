@@ -74,6 +74,5 @@ class _CardScoreItemState extends State<CardScoreItem> {
         ),
       ),
     );
-    ;
   }
 }
