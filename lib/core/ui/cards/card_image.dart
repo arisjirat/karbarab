@@ -68,7 +68,7 @@ class CardImage extends StatelessWidget {
                     ),
                     child: Row(
                       children: <Widget>[
-                         Icon(Icons.report, size: 20, color: whiteColor),
+                        Icon(Icons.report, size: 20, color: whiteColor),
                         SmallerText(
                           text: 'Soal Salah?',
                           dark: false,

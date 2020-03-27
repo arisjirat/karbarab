@@ -32,10 +32,13 @@ class CardAnswer extends StatelessWidget {
       case GameMode.GambarArab:
         return BoldRegularText(text: item.arab, dark: true);
       case GameMode.ArabGambar:
-        return Image(
-          image: AssetImage('assets/quiz/${item.image}'),
-          height: 70,
-          fit: BoxFit.fitWidth,
+        return ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(15),),
+          child: Image(
+            image: AssetImage('assets/quiz/${item.image}'),
+            height: 70,
+            fit: BoxFit.fitWidth,
+          ),
         );
       case GameMode.ArabKata:
         return BoldRegularText(text: item.bahasa, dark: true);
