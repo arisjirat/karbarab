@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:karbarab/core/config/colors.dart';
+import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/features/auth/view/global_score.dart';
 import 'package:karbarab/features/auth/view/hero_profile.dart';
 import 'package:karbarab/features/auth/view/summary_score.dart';
@@ -25,6 +27,7 @@ class _ProfileScreenState extends State<ProfileScreen>
     super.initState();
     _tabController = TabController(vsync: this, length: 2);
     _tabController.addListener(_handleTabSelection);
+    BlocProvider.of<AuthBloc>(context).add(LoggedIn());
   }
 
   void _handleTabSelection() {
@@ -46,7 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen>
         children: [
           Stack(children: <Widget>[
             HeroProfile(userRepository: userRepository),
-            SummaryScore(),
+            const SummaryScore(),
           ],),
           GlobalScore(),
         ],
@@ -97,8 +100,8 @@ class BottomNavigation extends StatelessWidget {
             height: 55.0,
             padding: const EdgeInsets.symmetric(horizontal: 0),
             margin: const EdgeInsets.only(top: 5.0),
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(15)),
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(15)),
               color: greenColor,
             ),
             child: ClipRRect(

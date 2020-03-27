@@ -2,6 +2,28 @@
 import 'dart:math';
 
 import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/core/config/score_value.dart';
+
+enum CardCategory { Animal, Plant, Fruit, Object }
+
+String cardCategoryToString(CardCategory cardCategory) {
+  return cardCategory.toString().substring(cardCategory.toString().indexOf('.')+1);
+}
+
+CardCategory stringToCardCategory(String cardCategory) {
+  switch (cardCategory) {
+    case 'Animal':
+      return CardCategory.Animal;
+    case 'Plant':
+      return CardCategory.Plant;
+    case 'Fruit':
+      return CardCategory.Fruit;
+    case 'Object':
+      return CardCategory.Object;
+    default:
+    return CardCategory.Object;
+  }
+}
 
 String gameModeToString(GameMode mode) {
   return mode.toString().substring(mode.toString().indexOf('.')+1);
@@ -47,18 +69,15 @@ List<List<String>> words = [
 
 String winWords(int point) {
   List<String> potensialWord = [];
-  switch (point) {
-    case 100:
-      potensialWord = words[1];
-      break;
-    case 200:
-      potensialWord = words[2];
-      break;
-    case 300:
-      potensialWord = words[3];
-      break;
-    default:
-      potensialWord = words[0];
+  const SCORE_TOLERANCE = SCORE_BASE / FAIL_TOLERANCE;
+  if (point == SCORE_BASE) {
+    potensialWord = words[3];
+  } else if (point == SCORE_TOLERANCE * 2) {
+    potensialWord = words[2];
+  } else if (point == SCORE_TOLERANCE) {
+    potensialWord = words[2];
+  } else {
+    potensialWord = words[1];
   }
   final int random = 0 + Random().nextInt(potensialWord.length - 0);
   return potensialWord[random];

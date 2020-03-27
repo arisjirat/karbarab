@@ -178,6 +178,9 @@ PODS:
   - Crashlytics (3.14.0):
     - Fabric (~> 1.10.2)
   - Fabric (1.10.2)
+  - Firebase/AdMob (6.17.0):
+    - Firebase/CoreOnly
+    - Google-Mobile-Ads-SDK (~> 7.50)
   - Firebase/Auth (6.17.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 6.4.3)
@@ -189,6 +192,10 @@ PODS:
   - Firebase/Firestore (6.17.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 1.10.2)
+  - firebase_admob (0.0.1):
+    - Firebase/AdMob
+    - Firebase/Core
+    - Flutter
   - firebase_auth (0.0.1):
     - Firebase/Auth (~> 6.3)
     - Firebase/Core
@@ -258,6 +265,8 @@ PODS:
   - Flutter (1.0.0)
   - flutter_audio_player (0.0.1):
     - Flutter
+  - Google-Mobile-Ads-SDK (7.57.0):
+    - GoogleAppMeasurement (~> 6.0)
   - google_sign_in (0.0.1):
     - Flutter
     - GoogleSignIn (~> 5.0)
@@ -330,6 +339,7 @@ PODS:
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - cloud_firestore_web (from `.symlinks/plugins/cloud_firestore_web/ios`)
+  - firebase_admob (from `.symlinks/plugins/firebase_admob/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_auth_web (from `.symlinks/plugins/firebase_auth_web/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -357,6 +367,7 @@ SPEC REPOS:
     - FirebaseFirestore
     - FirebaseInstallations
     - FirebaseInstanceID
+    - Google-Mobile-Ads-SDK
     - GoogleAppMeasurement
     - GoogleDataTransport
     - GoogleDataTransportCCTSupport
@@ -375,6 +386,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   cloud_firestore_web:
     :path: ".symlinks/plugins/cloud_firestore_web/ios"
+  firebase_admob:
+    :path: ".symlinks/plugins/firebase_admob/ios"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_auth_web:
@@ -403,9 +416,10 @@ SPEC CHECKSUMS:
   Crashlytics: 540b7e5f5da5a042647227a5e3ac51d85eed06df
   Fabric: 706c8b8098fff96c33c0db69cbf81f9c551d0d74
   Firebase: 2672e5636b42f977177716317e68346ae5e9de25
-  firebase_auth: 6d80e045930cb692e06cf124ecbf622a7b896c8c
+  firebase_admob: d8c2bc95b5e0069406280ce6adb816cdee6aa595
+  firebase_auth: 1f46484071219159ad6c64d304af425ad7373052
   firebase_auth_web: 0955c07bcc06e84af76b9d4e32e6f31518f2d7de
-  firebase_core: 0d8be0e0d14c4902953aeb5ac5d7316d1fe4b978
+  firebase_core: dc539d4bdc69894823e4a6e557034a9e48960f21
   firebase_core_web: d501d8b946b60c8af265428ce483b0fff5ad52d1
   firebase_crashlytics: bd8c58df07f107cb7e1a20cb190b9a468e0a69fd
   FirebaseAnalytics: cf95d3aab897612783020fbd98401d5366f135ee
@@ -419,6 +433,7 @@ SPEC CHECKSUMS:
   FirebaseInstanceID: 031d7d0c8e7b5c030bbeb4d2a690550375e83fec
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_audio_player: 1f3a1d240b32db1cbbe89a2d7fa51fa24f393dd0
+  Google-Mobile-Ads-SDK: ec897018b9ab9b447e7aa4876e7f75aba13ba2de
   google_sign_in: decaf71f56e22fb1dc179de062177ae6df415716
   google_sign_in_web: 52deb24929ac0992baff65c57956031c44ed44c3
   GoogleAppMeasurement: d0560d915abf15e692e8538ba1d58442217b6aff

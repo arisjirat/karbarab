@@ -48,6 +48,11 @@ class _CardPlayState extends State<CardPlay> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -132,7 +137,7 @@ class _CardPlayState extends State<CardPlay> {
                                     )
                                   : SmallerText(
                                       text: widget.score > 0
-                                          ? 'Nilai kamu ${widget.score.toStringAsPrecision(2)}/10'
+                                          ? 'Nilai kamu ${(widget.score * 10).round().toString()}/100'
                                           : '-',
                                       dark: false,
                                     ),

@@ -15,10 +15,10 @@ class Authenticated extends AuthState {
   final String fullname;
   final int totalPoints;
 
-  const Authenticated({@required this.displayName, @required this.avatar, @required this.fullname, this.totalPoints = 0, });
+  const Authenticated({@required this.displayName, @required this.avatar, @required this.fullname, @required this.totalPoints, });
 
   @override
-  List<Object> get props => [displayName, avatar, fullname];
+  List<Object> get props => [displayName, avatar, fullname, totalPoints];
 
   @override
   String toString() => 'Authenticated { displayName: $displayName, avatar: $avatar }';

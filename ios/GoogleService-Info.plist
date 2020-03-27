@@ -3,21 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>948949509296-fl369ps83oqobn0e64igcu6fqind9tkg.apps.googleusercontent.com</string>
+	<string>1028317937961-e2iov35p6k6389komcibjcujko49hvtt.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.948949509296-fl369ps83oqobn0e64igcu6fqind9tkg</string>
+	<string>com.googleusercontent.apps.1028317937961-e2iov35p6k6389komcibjcujko49hvtt</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>1028317937961-cu92u1cbl87249veqf06nquqhg0qigh5.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBbLx9TafbXu22XX1dCZ0HTXlR5Xd15aco</string>
+	<string>AIzaSyAwqiaQ2ZCCmgwaiYfzdWddOu7OS7bUNMo</string>
 	<key>GCM_SENDER_ID</key>
-	<string>948949509296</string>
+	<string>1028317937961</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.pasdigital.karbarab</string>
 	<key>PROJECT_ID</key>
-	<string>karbarab-dev</string>
+	<string>karbarab-develop</string>
 	<key>STORAGE_BUCKET</key>
-	<string>karbarab-dev.appspot.com</string>
+	<string>karbarab-develop.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,8 +31,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:948949509296:ios:7e5e4fb59368a783a0c775</string>
+	<string>1:1028317937961:ios:ba38c8cdf5df6f3550b738</string>
 	<key>DATABASE_URL</key>
-	<string>https://karbarab-dev.firebaseio.com</string>
+	<string>https://karbarab-develop.firebaseio.com</string>
 </dict>
 </plist>

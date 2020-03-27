@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/ui/cards/point.dart';
@@ -8,12 +9,20 @@ class CardImage extends StatelessWidget {
   final QuizModel quiz;
   final double height;
   final bool loading;
+  final bool isCorrect;
+  final bool adsLoaded;
+  final Function getHint;
+  final Function giveFeedback;
 
   CardImage({
     @required this.point,
     @required this.quiz,
     @required this.height,
     @required this.loading,
+    @required this.isCorrect,
+    @required this.adsLoaded,
+    @required this.getHint,
+    @required this.giveFeedback
   });
 
   @override
@@ -38,6 +47,84 @@ class CardImage extends StatelessWidget {
           ),
         ),
         PointCard(point),
+        isCorrect
+          ? Positioned(
+                bottom: 10.0,
+                left: 10.0,
+                child: GestureDetector(
+                  onTap: () {
+                    giveFeedback();
+                  },
+                  onLongPress: () {
+                    giveFeedback();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    decoration: BoxDecoration(
+                      color: yellowColor,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                         Icon(Icons.report, size: 20, color: whiteColor),
+                        SmallerText(
+                          text: 'Soal Salah?',
+                          dark: false,
+                          bold: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+          : const SizedBox(width: 0,),
+        (!isCorrect && adsLoaded)
+            ? Positioned(
+                bottom: 10.0,
+                left: 10.0,
+                child: GestureDetector(
+                  onTap: () {
+                    getHint();
+                  },
+                  onLongPress: () {
+                    getHint();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.only(right: 10),
+                    decoration: BoxDecoration(
+                      color: greenColor,
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(20),
+                      ),
+                    ),
+                    child: Row(
+                      children: <Widget>[
+                        Container(
+                          margin: const EdgeInsets.all(3.0),
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: whiteColor,
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(Icons.vpn_key, size: 20, color: greenColor),
+                        ),
+                        SmallerText(
+                          text: 'Jawaban',
+                          dark: false,
+                          bold: true,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              )
+            : Container(
+                width: 0,
+                height: 0,
+              )
       ],
     );
   }

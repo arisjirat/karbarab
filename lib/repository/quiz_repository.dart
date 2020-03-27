@@ -14,8 +14,11 @@ class Quiz {
 class QuizRepository {
   QuizRepository();
 
-  Quiz getQuiz() {
+  Quiz getQuiz(bool image) {
     List<QuizModel> listQuiz = getQuizData();
+    if (image) {
+      listQuiz = listQuiz.where((q) => q.image != '').toList();
+    }
     listQuiz.shuffle();
     listQuiz = listQuiz.sublist(0, 4);
     final List<QuizModel> quizList = listQuiz.sublist(0, 4);

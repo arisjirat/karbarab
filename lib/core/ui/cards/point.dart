@@ -33,8 +33,8 @@ class _PointCardState extends State<PointCard> {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 20.0,
-      right: 20.0,
+      bottom: 10.0,
+      right: 10.0,
       child: Dance(
         manualTrigger: true,
         duration: const Duration(milliseconds: 300),

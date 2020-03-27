@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/helper/greetings.dart';
+import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/features/auth/view/profile_screen.dart';
 import 'package:karbarab/core/ui/cards/card_play.dart';
 import 'package:karbarab/core/config/game_mode.dart';
@@ -12,9 +13,6 @@ import 'package:karbarab/core/helper/scale_calculator.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({this.displayName = 'Guest'});
-  final String displayName;
-
   static const String routeName = '/home';
 
   @override
@@ -22,18 +20,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //   // BlocProvider.of<ScoreBloc>(context)
-  //   //     .add(GetScoreUserByMode(GameMode.ArabGambar));
-  // }
-
+  String displayName = '';
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<ScoreBloc>(context)
-        .add(GetScoreUserByMode(GameMode.ArabGambar));
+    BlocProvider.of<ScoreBloc>(context).add(GetScoreUserByMode());
   }
 
   @override
@@ -47,10 +38,18 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Hero(
-              deviceHeight: _deviceHeight,
-              displayName: widget.displayName,
-            ),
+            BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
+              if (state is Authenticated) {
+                return Hero(
+                  deviceHeight: _deviceHeight,
+                  displayName: state.displayName,
+                );
+              }
+              return Hero(
+                  deviceHeight: _deviceHeight,
+                  displayName: '',
+                );
+            }),
             BlocBuilder<ScoreBloc, ScoreState>(builder: (context, state) {
               return Container(
                 height: 0.7 * _deviceHeight,
@@ -116,8 +115,8 @@ class Hero extends StatelessWidget {
         Container(
           margin: const EdgeInsets.only(top: 0.0),
           width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(10)),
             color: greenColor,
           ),
         ),
@@ -170,16 +169,6 @@ class Hero extends StatelessWidget {
                     Navigator.of(context).pushNamed(ProfileScreen.routeName);
                   },
                 ),
-                // child: GestureDetector(
-                //   onTap: () {
-                //     Navigator.of(context).pushNamed(ProfileScreen.routeName);
-                //   },
-                //   child: Icon(
-                //     Icons.person_outline,
-                //     color: greyColor,
-                //     size: 40.0,
-                //   ),
-                // ),
               ),
             ],
           ),

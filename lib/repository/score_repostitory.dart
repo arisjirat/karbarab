@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:karbarab/core/helper/utils.dart';
 import 'package:karbarab/features/auth/model/user_model.dart';
 import 'package:karbarab/features/global_scores/bloc/global_scores_bloc.dart';
@@ -31,8 +32,7 @@ class ScoreRepository {
         'createdAt': FieldValue.serverTimestamp()
       });
     } catch (e) {
-      print('error submit score:');
-      print(e);
+      getLogger('AddUserScore').e(e);
     }
   }
 
@@ -45,11 +45,18 @@ class ScoreRepository {
   }
 
   Future<List<ScoreGlobalModel>> getAllScore() async {
-    final QuerySnapshot scores = await scoreCollection.getDocuments();
+    final QuerySnapshot scores =
+        await scoreCollection.limit(10000).getDocuments();
     final List<ScoreGlobalModel> grouped =
         scores.documents.fold([], (acc, cur) {
       final found = acc.indexWhere((e) => e.userMail == cur['userEmail']);
       final metaUser = cur['metaUser'];
+      final Timestamp timestamp = cur['createdAt'];
+      final DateTime createdAt =
+          Timestamp(timestamp.seconds, timestamp.nanoseconds).toDate();
+      final String bahasa = cur['metaQuiz']['bahasa'];
+      final GameMode quizMode = stringToGameMode(cur['quizMode']);
+      final int score = cur['score'];
       final UserModel user = UserModel(
         id: metaUser['id'],
         email: metaUser['email'],
@@ -59,19 +66,32 @@ class ScoreRepository {
       );
       if (found >= 0) {
         acc[found] = ScoreGlobalModel(
-          cur['userEmail'],
-          acc[found].score + cur['score'],
-          user,
+          metaUser: user,
+          score: acc[found].score + cur['score'],
+          userMail: user.email,
+          scoreHistory: acc[found].scoreHistory,
         );
+        acc[found].scoreHistory.add(ScoreItem(
+              bahasa: bahasa,
+              date: createdAt,
+              score: score,
+              mode: quizMode,
+            ));
         return acc;
       }
       acc.add(ScoreGlobalModel(
-        cur['userEmail'],
-        cur['score'],
-        user,
+        metaUser: user,
+        userMail: user.email,
+        score: cur['score'],
+        scoreHistory: [ScoreItem(
+              bahasa: bahasa,
+              date: createdAt,
+              score: score,
+              mode: quizMode)],
       ));
       return acc;
     });
+    grouped.sort((a, b) => b.score.compareTo(a.score));
     return grouped;
   }
 }

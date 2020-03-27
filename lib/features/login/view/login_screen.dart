@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/features/login/bloc/bloc.dart';
+import 'package:karbarab/core/helper/greetings.dart';
 import 'package:karbarab/repository/user_repository.dart';
 import 'package:karbarab/features/home/view/home_screen.dart';
 import 'package:karbarab/core/ui/typography.dart';
@@ -24,7 +26,7 @@ class LoginScreen extends StatelessWidget {
 
 class Login extends StatelessWidget {
   final UserRepository userRepository;
-  Login({ this.userRepository });
+  Login({this.userRepository});
   @override
   Widget build(BuildContext context) {
     return BlocListener<LoginBloc, LoginState>(
@@ -45,13 +47,15 @@ class Login extends StatelessWidget {
               children: <Widget>[
                 Column(
                   children: <Widget>[
-                    const Image(image: AssetImage('assets/images/card_logo.png')),
+                    const Image(
+                      image: AssetImage('assets/images/card_logo.png'),
+                    ),
                     ArabicText(
                       text: 'مرحبا مساء الخير',
                       dark: false,
                     ),
                     BiggerText(
-                      text: 'Hai, Selamat Siang',
+                      text: 'Hai, Selamat ${greeting()}',
                       dark: false,
                     ),
                     LogoText(
@@ -62,7 +66,19 @@ class Login extends StatelessWidget {
                       image: AssetImage('assets/images/character.png'),
                       height: 120,
                     ),
-                    GoogleSignInButton(),
+                    BlocBuilder<LoginBloc, LoginState>(
+                      builder: (context, state) {
+                        if (state is LoginState) {
+                          if (state.isLoading) {
+                            return const Padding(
+                              padding: EdgeInsets.all(20),
+                              child: SpinKitDoubleBounce(color: whiteColor),
+                            );
+                          }
+                        }
+                        return GoogleSignInButton();
+                      },
+                    ),
                   ],
                 )
               ],

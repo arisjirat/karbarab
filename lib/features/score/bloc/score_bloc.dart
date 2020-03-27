@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/core/config/score_value.dart';
+import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:karbarab/core/helper/utils.dart';
 import 'package:karbarab/features/auth/model/user_model.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
@@ -59,7 +61,7 @@ class ListScore {
   double get score {
     final int total = scoreFilter.fold(0, (t, e) => e['score'] + t);
     final int scoreLength = scoreFilter.isNotEmpty ? scoreFilter.length : 1;
-    return (total / scoreLength / 300) * 10;
+    return (total / scoreLength / SCORE_BASE) * 10;
   }
 
   List<DocumentSnapshot> get scoreFilter {
@@ -86,7 +88,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     ScoreEvent event,
   ) async* {
     if (event is GetScoreUserByMode) {
-      yield* _mapGetScoreUserByMode(event.mode);
+      yield* _mapGetScoreUserByMode();
     } else if (event is AddScoreUser) {
       yield* _mapAddUserScore(
           event.mode, event.quizId, event.score, event.metaQuiz);
@@ -104,12 +106,14 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
         final found = acc.indexWhere((e) => e.quizId == cur['quizId']);
         final Timestamp timestamp = cur['metaQuiz']['date'];
         final String quizId = cur['quizId'];
+        final int level = cur['level'];
+        final CardCategory cardCategory = stringToCardCategory(cur['cardCategory']);
         final int totalAttempt = 1;
         final String id = cur['metaQuiz']['id'];
         final String arab = cur['metaQuiz']['arab'];
         final String bahasa = cur['metaQuiz']['bahasa'];
         final String image = cur['metaQuiz']['image'];
-        final String arabVoice = cur['metaQuiz']['arabVoice'];
+        final String voice = cur['metaQuiz']['voice'];
         final GameMode quizMode = stringToGameMode(cur['quizMode']);
         final DateTime date = Timestamp(timestamp.seconds, timestamp.nanoseconds).toDate();
         final int totalScore = cur['score'];
@@ -120,13 +124,15 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
           acc[found] = ScoreQuizModel(
             quizId: quizId,
             totalAttempt: totalAttempt + 1,
-            averageScore: totalScoreSum / (300 * acc[found].scores.length),
+            averageScore: totalScoreSum / (SCORE_BASE * acc[found].scores.length),
             quiz: QuizModel(
               id: id,
               arab: arab,
               bahasa: bahasa,
               image: image,
-              arabVoice: arabVoice,
+              level: level,
+              cardCategory: cardCategory,
+              voice: voice,
               date: date,
             ),
             quizMode: quizMode,
@@ -143,11 +149,13 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
             arab: arab,
             bahasa: bahasa,
             image: image,
-            arabVoice: arabVoice,
+            voice: voice,
             date: date,
+            level: level,
+            cardCategory: cardCategory,
           ),
           quizMode: quizMode,
-          averageScore: totalScore / (300 * 1),
+          averageScore: totalScore / (SCORE_BASE * 1),
           totalScore: totalScore,
           scores: scores,
         ));
@@ -161,7 +169,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     yield SummaryUserScore(badQuiz: badQuiz, goodQuiz: goodQuiz);
   }
 
-  Stream<ScoreState> _mapGetScoreUserByMode(mode) async* {
+  Stream<ScoreState> _mapGetScoreUserByMode() async* {
     // loading
     yield HasScore(
       scoreArabGambar: 0,
@@ -200,7 +208,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     try {
       _scoreRepository.addScoreUser(user.email, quizMode, quizId, score, metaQuiz, user);
     } catch (e) {
-      print(e);
+      getLogger('AddUserScore').e(e);
     }
     // yield ScoreAdded();
   }

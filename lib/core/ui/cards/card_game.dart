@@ -15,13 +15,19 @@ class CardGame extends StatefulWidget {
   final bool loading;
   final QuizModel quiz;
   final GameMode mode;
+  final Function getHint;
+  final bool adsLoaded;
+  final Function giveFeedback;
   CardGame({
     this.correct,
     this.point,
     this.height = 200,
     this.loading = false,
+    @required this.giveFeedback,
+    @required this.getHint,
     @required this.quiz,
     @required this.mode,
+    @required this.adsLoaded,
   });
 
   @override
@@ -32,8 +38,19 @@ class _CardGameState extends State<CardGame>
     with SingleTickerProviderStateMixin {
   AnimationController _animationController;
   Animation<double> _curvedAnimation;
+  String word = '';
 
   final FocusNode _focusNode = FocusNode();
+
+  @override
+  void didUpdateWidget(CardGame oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (!oldWidget.correct && widget.correct) {
+      setState(() {
+        word = winWords(widget.point);
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -66,6 +83,10 @@ class _CardGameState extends State<CardGame>
         return CardImage(
         loading: widget.loading,
         quiz: widget.quiz,
+        isCorrect: widget.correct,
+        getHint: widget.getHint,
+        adsLoaded: widget.adsLoaded,
+        giveFeedback: widget.giveFeedback,
         height: widget.height,
         point: widget.point,
       );
@@ -73,17 +94,25 @@ class _CardGameState extends State<CardGame>
         return CardText(
         loading: widget.loading,
         text: widget.quiz.arab,
-        voice: widget.quiz.arabVoice,
+        voice: widget.quiz.voice,
         height: widget.height,
         point: widget.point,
+        isCorrect: widget.correct,
+        getHint: widget.getHint,
+        adsLoaded: widget.adsLoaded,
+        giveFeedback: widget.giveFeedback,
         answerMode: _getMode(widget.mode),
       );
       case GameMode.ArabKata:
         return CardText(
         loading: widget.loading,
         text: widget.quiz.arab,
-        voice: widget.quiz.arabVoice,
+        voice: widget.quiz.voice,
         height: widget.height,
+        isCorrect: widget.correct,
+        getHint: widget.getHint,
+        adsLoaded: widget.adsLoaded,
+        giveFeedback: widget.giveFeedback,
         point: widget.point,
         answerMode: _getMode(widget.mode),
       );
@@ -92,6 +121,10 @@ class _CardGameState extends State<CardGame>
         loading: widget.loading,
         text: widget.quiz.bahasa,
         height: widget.height,
+        isCorrect: widget.correct,
+        getHint: widget.getHint,
+        adsLoaded: widget.adsLoaded,
+        giveFeedback: widget.giveFeedback,
         point: widget.point,
         answerMode: _getMode(widget.mode),
       );
@@ -105,14 +138,22 @@ class _CardGameState extends State<CardGame>
         return CardText(
         loading: widget.loading,
         text: widget.quiz.arab,
-        voice: widget.quiz.arabVoice,
+        voice: widget.quiz.voice,
         height: widget.height,
+        isCorrect: widget.correct,
+        getHint: widget.getHint,
+        adsLoaded: widget.adsLoaded,
+        giveFeedback: widget.giveFeedback,
         point: widget.point,
         answerMode: _getMode(widget.mode, flip: true),
       );
       case GameMode.ArabGambar:
         return CardImage(
         loading: widget.loading,
+        isCorrect: widget.correct,
+        getHint: widget.getHint,
+        adsLoaded: widget.adsLoaded,
+        giveFeedback: widget.giveFeedback,
         quiz: widget.quiz,
         height: widget.height,
         point: widget.point,
@@ -123,14 +164,22 @@ class _CardGameState extends State<CardGame>
         text: widget.quiz.bahasa,
         height: widget.height,
         point: widget.point,
+        isCorrect: widget.correct,
+        getHint: widget.getHint,
+        adsLoaded: widget.adsLoaded,
+        giveFeedback: widget.giveFeedback,
         answerMode: _getMode(widget.mode, flip: true),
       );
       case GameMode.KataArab:
         return CardText(
         loading: widget.loading,
         text: widget.quiz.arab,
-        voice: widget.quiz.arabVoice,
+        voice: widget.quiz.voice,
         height: widget.height,
+        isCorrect: widget.correct,
+        getHint: widget.getHint,
+        adsLoaded: widget.adsLoaded,
+        giveFeedback: widget.giveFeedback,
         point: widget.point,
         answerMode: _getMode(widget.mode, flip: true),
       );
@@ -157,9 +206,9 @@ class _CardGameState extends State<CardGame>
 
   Widget _buildMessage(BuildContext context) {
     if (widget.correct) {
-      return RegularText(text: winWords(widget.point), dark: false);
+      return RegularText(text: word, dark: false);
     }
-    return RegularText(text: 'Jawab soal ini dengan benar', dark: false);
+    return RegularText(text: 'Tebak Kartu ini', dark: false);
   }
 
   CardAnswerMode _getMode(GameMode mode, { bool flip = false }) {

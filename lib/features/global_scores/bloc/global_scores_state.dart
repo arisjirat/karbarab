@@ -21,10 +21,25 @@ class ScoreGlobalModel {
   final int score;
   final String userMail;
   final UserModel metaUser;
+  final List<ScoreItem> scoreHistory;
 
-  ScoreGlobalModel(
-    this.userMail,
-    this.score,
-    this.metaUser,
-  );
+  ScoreGlobalModel({
+    @required this.userMail,
+    @required this.score,
+    @required this.metaUser,
+    @required this.scoreHistory,
+  });
+}
+
+class ScoreItem {
+  final GameMode mode;
+  final int score;
+  final String bahasa;
+  final DateTime date;
+  ScoreItem({
+    @required this.mode,
+    @required this.score,
+    @required this.bahasa,
+    @required this.date,
+  });
 }

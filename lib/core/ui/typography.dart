@@ -5,8 +5,9 @@ import 'package:karbarab/core/helper/scale_calculator.dart';
 class LogoText extends StatelessWidget {
   final String text;
   final bool dark;
+  final Color color;
 
-  LogoText({@required this.text, this.dark});
+  LogoText({@required this.text, this.dark = true, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class LogoText extends StatelessWidget {
       text,
       style: TextStyle(
         fontFamily: 'FTF-Ahlan',
-        color: dark ? textColor : whiteColor,
+        color: color == null ? dark ? textColor : whiteColor : color,
         // fontSize: 50.0,
         fontSize: scaleCalculator(50, context),
       ),
@@ -63,13 +64,15 @@ class BiggerArabicText extends StatelessWidget {
 class RegularText extends StatelessWidget {
   final String text;
   final bool dark;
-  RegularText({@required this.text, this.dark});
+  final Color color;
+
+  RegularText({@required this.text, this.dark = true, this.color});
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
       style: TextStyle(
-        color: dark ? textColor : whiteColor,
+        color: color == null ? dark ? textColor : whiteColor : color,
         // fontSize: 20.0,
         fontSize: scaleCalculator(20, context),
       ),
@@ -96,11 +99,30 @@ class SmallerText extends StatelessWidget {
   }
 }
 
+class TinyText extends StatelessWidget {
+  final String text;
+  final bool dark;
+  final bool bold;
+  TinyText({@required this.text, this.dark, this.bold = false});
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(
+        color: dark ? textColor : whiteColor,
+        // fontSize: 15.0,
+        fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+        fontSize: scaleCalculator(10, context),
+      ),
+    );
+  }
+}
+
 class BoldRegularText extends StatelessWidget {
   final String text;
   final bool dark;
   final Color color;
-  BoldRegularText({@required this.text, this.dark, this.color});
+  BoldRegularText({@required this.text, this.dark = true, this.color});
   @override
   Widget build(BuildContext context) {
     return Text(
