@@ -330,7 +330,7 @@ List<QuizModel> getQuizData() {
     QuizModel(
       arab: 'مُوتُوسِيكل',
       bahasa: 'Sepeda Motor',
-      image: 'motor.jpg',
+      image: 'sepeda-motor.jpg',
       date: DateTime.now(),
       cardCategory: CardCategory.Object,
       voice: '',
