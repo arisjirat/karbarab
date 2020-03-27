@@ -1,6 +1,5 @@
 import 'package:karbarab/core/helper/utils.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
-import 'package:uuid/uuid.dart';
 /*
 === quiz template ===
 QuizModel(
