@@ -12,7 +12,7 @@ QuizModel(
   voice: '',
   cardCategory: CardCategory.Object,
   level: 1,
-  id: Uuid().v4(),
+  id: 'nomor',
   image: '',
 ),
 
@@ -28,7 +28,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '1',
     ),
     QuizModel(
       arab: 'بَاب',
@@ -38,7 +38,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '2',
     ),
     QuizModel(
       arab: 'كَنَّاسَة',
@@ -48,7 +48,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '3',
     ),
     QuizModel(
       arab: 'سَجَّادَة',
@@ -58,7 +58,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '4',
     ),
     QuizModel(
       arab: 'كُرْسِيّ',
@@ -68,7 +68,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '5',
     ),
     QuizModel(
       arab: 'كَنَبَة',
@@ -78,7 +78,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '6',
     ),
     QuizModel(
       arab: 'طَرَبِيْزَة',
@@ -88,7 +88,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '7',
     ),
     QuizModel(
       arab: 'حَقِيْبَة',
@@ -98,7 +98,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '8',
     ),
     QuizModel(
       arab: 'أَلْبِسَة',
@@ -108,7 +108,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '9',
     ),
     QuizModel(
       arab: 'بُرْنَيطَة',
@@ -118,7 +118,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '10',
     ),
     QuizModel(
       arab: 'تِلِفْزِيُون',
@@ -128,7 +128,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '11',
     ),
     QuizModel(
       arab: 'بَيْت',
@@ -138,7 +138,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '12',
     ),
     QuizModel(
       arab: 'نَافِذَة',
@@ -148,7 +148,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '13',
     ),
     QuizModel(
       arab: 'جَزْمَة',
@@ -158,7 +158,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '14',
     ),
     QuizModel(
       arab: 'شِبْشِب',
@@ -168,7 +168,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '15',
     ),
     QuizModel(
       arab: 'سَاعَة',
@@ -178,7 +178,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '16',
     ),
     QuizModel(
       arab: 'كَسْتَك',
@@ -188,7 +188,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '17',
     ),
     QuizModel(
       arab: 'وَجْه',
@@ -197,7 +197,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '18',
     ),
     QuizModel(
       arab: 'أنْف',
@@ -207,7 +207,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '19',
     ),
     QuizModel(
       arab: 'عَيْن',
@@ -217,7 +217,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '20',
     ),
     QuizModel(
       arab: 'أُذُن',
@@ -227,7 +227,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '21',
     ),
     QuizModel(
       arab: 'يَد',
@@ -236,7 +236,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '22',
     ),
     QuizModel(
       arab: 'صَحْفَة',
@@ -246,7 +246,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '23',
     ),
     QuizModel(
       arab: 'جَرْدَل',
@@ -256,7 +256,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '24',
     ),
     QuizModel(
       arab: 'مِظَلَّة',
@@ -266,7 +266,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '25',
     ),
     QuizModel(
       arab: 'طَاسِ',
@@ -276,7 +276,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '26',
     ),
     QuizModel(
       arab: 'سَيَّارَة',
@@ -286,7 +286,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '27',
     ),
     QuizModel(
       arab: 'قَاطِرَة',
@@ -296,7 +296,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '28',
     ),
     QuizModel(
       arab: 'سَفِيْنَة',
@@ -306,7 +306,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '29',
     ),
     QuizModel(
       arab: 'لِلطَّائِرَات',
@@ -316,7 +316,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '30',
     ),
     QuizModel(
       arab: 'بِسْكِلِيت',
@@ -326,7 +326,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '31',
     ),
     QuizModel(
       arab: 'مُوتُوسِيكل',
@@ -336,7 +336,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '32',
     ),
     QuizModel(
       arab: 'أمْطَرَ',
@@ -345,7 +345,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '33',
     ),
     QuizModel(
       arab: 'كُرَة',
@@ -355,7 +355,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '34',
     ),
     QuizModel(
       arab: 'مَسْطَرَة',
@@ -365,7 +365,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '35',
     ),
     QuizModel(
       arab: 'عَجَلَة',
@@ -375,7 +375,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '36',
     ),
     QuizModel(
       arab: 'مُعَلِّم',
@@ -384,7 +384,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '37',
     ),
     QuizModel(
       arab: 'مَدْرَسَة',
@@ -393,7 +393,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '38',
     ),
     QuizModel(
       arab: 'مَكْتَب',
@@ -402,7 +402,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '39',
     ),
     QuizModel(
       arab: 'سُوْق',
@@ -412,7 +412,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '40',
     ),
     QuizModel(
       arab: 'كِتَاب',
@@ -422,7 +422,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '41',
     ),
     QuizModel(
       arab: 'قِنِّيْنَة',
@@ -432,7 +432,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '42',
     ),
     QuizModel(
       arab: 'خِزَانَة',
@@ -442,7 +442,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '43',
     ),
     QuizModel(
       arab: 'فِرَاش',
@@ -452,7 +452,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '44',
     ),
     QuizModel(
       arab: 'مِفْتَاح',
@@ -462,7 +462,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '45',
     ),
     QuizModel(
       arab: 'لَمْبَة',
@@ -472,7 +472,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '46',
     ),
     QuizModel(
       arab: 'دَجَاجَة',
@@ -482,7 +482,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '47',
     ),
     QuizModel(
       arab: 'بَعِيْر',
@@ -492,7 +492,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '48',
     ),
     QuizModel(
       arab: 'حِصَان',
@@ -502,7 +502,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '49',
     ),
     QuizModel(
       arab: 'نَظَّارَات',
@@ -512,7 +512,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '50',
     ),
     QuizModel(
       arab: 'بُرْتُقَال',
@@ -522,7 +522,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '51',
     ),
     QuizModel(
       arab: 'تُفَّاحَة',
@@ -532,7 +532,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '52',
     ),
     QuizModel(
       arab: 'عِنَب',
@@ -542,7 +542,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '53',
     ),
     QuizModel(
       arab: 'مَانْجَا',
@@ -552,7 +552,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '54',
     ),
     QuizModel(
       arab: 'بَطَّة',
@@ -562,7 +562,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '55',
     ),
     QuizModel(
       arab: 'وَزَّة',
@@ -572,7 +572,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '56',
     ),
     QuizModel(
       arab: 'أرْنَب',
@@ -582,7 +582,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '57',
     ),
     QuizModel(
       arab: 'مِعْز',
@@ -592,7 +592,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '58',
     ),
     QuizModel(
       arab: 'بَقَرَة',
@@ -602,7 +602,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '59',
     ),
     QuizModel(
       arab: 'جَامُوْس',
@@ -612,7 +612,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '60',
     ),
     QuizModel(
       arab: 'مَوْز',
@@ -622,7 +622,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '61',
     ),
     QuizModel(
       arab: 'مَاء',
@@ -631,7 +631,7 @@ List<QuizModel> getQuizData() {
       cardCategory: CardCategory.Object,
       voice: '',
       level: 1,
-      id: Uuid().v4(),
+      id: '62',
     ),
   ];
 }
