@@ -43,16 +43,16 @@ class CardItem extends StatelessWidget {
               children: [
                 image == ''
                     ? Column(
-                      children: <Widget>[
-                        const Image(
-                        image: AssetImage('assets/images/no-photo.jpg'),
-                        height: 30,
-                      ),
-                      TinyText(text: 'tidak ada gambar', dark: true)
-                      ],
-                    )
-                    : Image.network(
-                        image,
+                        children: <Widget>[
+                          const Image(
+                            image: AssetImage('assets/images/no-photo.jpg'),
+                            height: 30,
+                          ),
+                          TinyText(text: 'tidak ada gambar', dark: true)
+                        ],
+                      )
+                    : Image(
+                        image: AssetImage('assets/quiz/$image'),
                         height: 60,
                         fit: BoxFit.fill,
                       ),
@@ -64,7 +64,10 @@ class CardItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Speech(id: id, arab: arab,),
+                Speech(
+                  id: id,
+                  arab: arab,
+                ),
                 const SizedBox(height: 5),
                 BoldRegularText(text: arab, dark: true),
                 const SizedBox(height: 5),

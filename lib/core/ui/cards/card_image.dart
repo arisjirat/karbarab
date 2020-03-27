@@ -38,11 +38,11 @@ class CardImage extends StatelessWidget {
             children: [
               loading || quiz == null
                   ? RegularText(text: 'Loading', dark: true)
-                  : Image.network(
-                      quiz.image,
-                      height: height - 120,
-                      fit: BoxFit.fill,
-                    )
+                  : Image(
+                          image: AssetImage('assets/quiz/${quiz.image}'),
+                          height: height - 120,
+                          fit: BoxFit.fill,
+                        ),
             ],
           ),
         ),

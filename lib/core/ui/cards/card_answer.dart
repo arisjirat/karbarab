@@ -32,9 +32,9 @@ class CardAnswer extends StatelessWidget {
       case GameMode.GambarArab:
         return BoldRegularText(text: item.arab, dark: true);
       case GameMode.ArabGambar:
-        return Image.network(
-          item.image,
-          width: 70,
+        return Image(
+          image: AssetImage('assets/quiz/${item.image}'),
+          height: 70,
           fit: BoxFit.fitWidth,
         );
       case GameMode.ArabKata:
@@ -85,7 +85,9 @@ class CardAnswer extends StatelessWidget {
             top: 1,
             left: 5,
           )
-        : const Padding(padding: EdgeInsets.all(0),);
+        : const Padding(
+            padding: EdgeInsets.all(0),
+          );
   }
 
   Widget buildMode(BuildContext context) {
@@ -175,7 +177,9 @@ class CardAnswer extends StatelessWidget {
         child: Container(
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.all(Radius.circular(10)),
-              border: Border.all(width: hint ? 2.0 : 0, color: hint ? greenColor : greenColor.withOpacity(0)),
+              border: Border.all(
+                  width: hint ? 2.0 : 0,
+                  color: hint ? greenColor : greenColor.withOpacity(0)),
               color: currentAnswer
                   ? Theme.of(context).secondaryHeaderColor
                   : disabled ? greyColor.withOpacity(0.6) : greyColorLight,
