@@ -15,6 +15,7 @@ class CardQuiz extends StatelessWidget {
   final Function getHint;
   final bool adsLoaded;
   final Function giveFeedback;
+  final Widget speech;
 
   CardQuiz({
     @required this.currentPoint,
@@ -26,6 +27,7 @@ class CardQuiz extends StatelessWidget {
     @required this.getHint,
     @required this.adsLoaded,
     @required this.giveFeedback,
+    @required this.speech,
   });
 
   @override
@@ -53,6 +55,7 @@ class CardQuiz extends StatelessWidget {
                 getHint: getHint,
                 adsLoaded: adsLoaded,
                 giveFeedback: giveFeedback,
+                speech: speech,
               ),
             ],
           ),

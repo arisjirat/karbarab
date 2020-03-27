@@ -18,6 +18,7 @@ class CardGame extends StatefulWidget {
   final Function getHint;
   final bool adsLoaded;
   final Function giveFeedback;
+  final Widget speech;
   CardGame({
     this.correct,
     this.point,
@@ -28,6 +29,7 @@ class CardGame extends StatefulWidget {
     @required this.quiz,
     @required this.mode,
     @required this.adsLoaded,
+    @required this.speech,
   });
 
   @override
@@ -92,6 +94,7 @@ class _CardGameState extends State<CardGame>
       );
       case GameMode.ArabGambar:
         return CardText(
+        speech: widget.speech,
         loading: widget.loading,
         text: widget.quiz.arab,
         voice: widget.quiz.voice,
@@ -105,6 +108,7 @@ class _CardGameState extends State<CardGame>
       );
       case GameMode.ArabKata:
         return CardText(
+        speech: widget.speech,
         loading: widget.loading,
         text: widget.quiz.arab,
         voice: widget.quiz.voice,
@@ -118,6 +122,7 @@ class _CardGameState extends State<CardGame>
       );
       case GameMode.KataArab:
         return CardText(
+        speech: widget.speech,
         loading: widget.loading,
         text: widget.quiz.bahasa,
         height: widget.height,
@@ -136,6 +141,7 @@ class _CardGameState extends State<CardGame>
     switch (widget.mode) {
       case GameMode.GambarArab:
         return CardText(
+        speech: widget.speech,
         loading: widget.loading,
         text: widget.quiz.arab,
         voice: widget.quiz.voice,
@@ -160,6 +166,7 @@ class _CardGameState extends State<CardGame>
       );
       case GameMode.ArabKata:
         return CardText(
+        speech: widget.speech,
         loading: widget.loading,
         text: widget.quiz.bahasa,
         height: widget.height,
@@ -172,6 +179,7 @@ class _CardGameState extends State<CardGame>
       );
       case GameMode.KataArab:
         return CardText(
+        speech: widget.speech,
         loading: widget.loading,
         text: widget.quiz.arab,
         voice: widget.quiz.voice,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:karbarab/core/config/game_mode.dart';
@@ -16,6 +17,7 @@ import 'package:karbarab/features/auth/view/profile_screen.dart';
 import 'package:karbarab/core/helper/bloc_delegate.dart';
 import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
+import 'package:karbarab/features/voices/bloc/voices_bloc.dart';
 import 'package:karbarab/repository/quiz_repository.dart';
 import 'package:karbarab/repository/user_repository.dart';
 import 'package:karbarab/features/home/view/splash_screen.dart';
@@ -29,6 +31,10 @@ void main() {
   final QuizRepository quizRepository = QuizRepository();
   Crashlytics.instance.enableInDevMode = true;
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
 
   runApp(
     MultiBlocProvider(
@@ -54,6 +60,9 @@ void main() {
         ),
         BlocProvider(
           create: (BuildContext context) => FeedbackBloc(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => VoicesBloc(),
         ),
       ],
       child: App(userRepository: userRepository),

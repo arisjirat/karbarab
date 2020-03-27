@@ -1,24 +1,10 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/ui/cards/point.dart';
-import 'package:flutter/services.dart';
 
-class AudioPlayer {
-  static const MethodChannel _channel = MethodChannel('audio_player');
-
-  static Future addSound(String path) async {
-    return await _channel.invokeMethod('addSound', path);
-  }
-
-  static Future removeAllSound() async {
-    return await _channel.invokeMethod('removeAllSound');
-  }
-}
-
-class CardText extends StatefulWidget {
+class CardText extends StatelessWidget {
   final int point;
   final String text;
   final String voice;
@@ -29,8 +15,10 @@ class CardText extends StatefulWidget {
   final CardAnswerMode answerMode;
   final bool adsLoaded;
   final Function giveFeedback;
+  final Widget speech;
 
   CardText({
+    Key key,
     @required this.point,
     @required this.text,
     @required this.height,
@@ -40,40 +28,19 @@ class CardText extends StatefulWidget {
     @required this.getHint,
     @required this.adsLoaded,
     @required this.giveFeedback,
+    @required this.speech,
     this.voice = '',
-  });
-
-  @override
-  _CardTextState createState() => _CardTextState();
-}
-
-class _CardTextState extends State<CardText> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void _play() {
-    if (!widget.loading) {
-      SoundPlayerUtil.addSoundName(widget.voice);
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    SoundPlayerUtil.removeAllSound();
-  }
+  }) : super(key: key);
 
   Widget _buildText() {
-    if (widget.answerMode == CardAnswerMode.Arab) {
+    if (answerMode == CardAnswerMode.Arab) {
       return BiggerArabicText(
-        text: widget.text,
+        text: text,
         dark: true,
       );
     }
     return LargerText(
-      text: widget.text,
+      text: text,
       dark: true,
       bold: true,
     );
@@ -84,43 +51,35 @@ class _CardTextState extends State<CardText> {
     return Stack(
       children: [
         Container(
-          height: widget.height - 80,
+          height: height - 80,
           padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 20),
           width: MediaQuery.of(context).size.width,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              widget.loading
+              loading
                   ? RegularText(text: 'Loading', dark: true)
                   : _buildText()
             ],
           ),
         ),
-        PointCard(widget.point),
+        PointCard(point),
         Positioned(
           top: 10.0,
           right: 10.0,
-          child: widget.answerMode == CardAnswerMode.Arab
-              ? GestureDetector(
-                  onTap: _play,
-                  child: Icon(
-                    Icons.volume_up,
-                    color: greyColor,
-                    size: 40.0,
-                  ),
-                )
-              : const Text(''),
+          child: answerMode == CardAnswerMode.Arab
+              ? speech : Container(width: 0, height: 0,)
         ),
-        (widget.isCorrect) 
-          ? Positioned(
+        isCorrect
+            ? Positioned(
                 bottom: 10.0,
                 left: 10.0,
                 child: GestureDetector(
                   onTap: () {
-                    widget.giveFeedback();
+                    giveFeedback();
                   },
                   onLongPress: () {
-                    widget.giveFeedback();
+                    giveFeedback();
                   },
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -132,7 +91,7 @@ class _CardTextState extends State<CardText> {
                     ),
                     child: Row(
                       children: <Widget>[
-                         Icon(Icons.report, size: 20, color: whiteColor),
+                        Icon(Icons.report, size: 20, color: whiteColor),
                         SmallerText(
                           text: 'Soal Salah?',
                           dark: false,
@@ -143,17 +102,19 @@ class _CardTextState extends State<CardText> {
                   ),
                 ),
               )
-          : const SizedBox(width: 0,),
-        (!widget.isCorrect && widget.adsLoaded)
+            : const SizedBox(
+                width: 0,
+              ),
+        (!isCorrect && adsLoaded)
             ? Positioned(
                 bottom: 10.0,
                 left: 10.0,
                 child: GestureDetector(
                   onTap: () {
-                    widget.getHint();
+                    getHint();
                   },
                   onLongPress: () {
-                    widget.getHint();
+                    getHint();
                   },
                   child: Container(
                     padding: const EdgeInsets.only(right: 10),
@@ -173,7 +134,8 @@ class _CardTextState extends State<CardText> {
                             color: whiteColor,
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(Icons.vpn_key, size: 20, color: greenColor),
+                          child:
+                              Icon(Icons.vpn_key, size: 20, color: greenColor),
                         ),
                         SmallerText(
                           text: 'Jawaban',
@@ -188,17 +150,5 @@ class _CardTextState extends State<CardText> {
             : const SizedBox(width: 0)
       ],
     );
-  }
-}
-
-class SoundPlayerUtil {
-  static void addSoundName(String name, {int count = 1}) {
-    for (var i = 0; i < count; i++) {
-      AudioPlayer.addSound('assets/voices/' + name);
-    }
-  }
-
-  static void removeAllSound() {
-    AudioPlayer.removeAllSound();
   }
 }
