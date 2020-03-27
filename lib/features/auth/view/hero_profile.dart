@@ -65,7 +65,7 @@ class HeroProfile extends StatelessWidget {
                           onPressed: () {
                             popup(
                               context,
-                              text: 'Yakin logout?',
+                              text: 'Yakin Keluar Akun kamu?',
                               cancel: () {
                                 Navigator.of(context).pop();
                               },
@@ -88,7 +88,7 @@ class HeroProfile extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: SmallerText(
-                              text: 'Keluar',
+                              text: 'Keluar Akun',
                               dark: true,
                             ),
                           ),
@@ -97,11 +97,7 @@ class HeroProfile extends StatelessWidget {
                         const SizedBox(
                           width: 15,
                         ),
-                        RaisedButton(
-                          color: whiteColor,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
+                        FlatButton(
                           onPressed: () {
                             Navigator.of(context)
                                 .pushNamed(KarbarabScreen.routeName);
@@ -113,7 +109,6 @@ class HeroProfile extends StatelessWidget {
                               dark: true,
                             ),
                           ),
-                          elevation: 1,
                         ),
                       ],
                     )

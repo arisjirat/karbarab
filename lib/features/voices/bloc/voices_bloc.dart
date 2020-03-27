@@ -16,7 +16,7 @@ class VoicesBloc extends Bloc<VoicesEvent, VoicesState> {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final SpeechRepository _speechRepository = SpeechRepository();
   @override
-  VoicesState get initialState => VoicesInitial();
+  VoicesState get initialState => VoicesState.empty();
 
   @override
   Stream<VoicesState> mapEventToState(
@@ -30,6 +30,7 @@ class VoicesBloc extends Bloc<VoicesEvent, VoicesState> {
   }
 
   Stream<VoicesState> _mapGetSpeech(String quizId, String arab) async* {
+    yield VoicesState.loading();
     final SharedPreferences prefs = await _prefs;
     final List<String> _voices = prefs.getStringList(VOICES_PREFERENCES);
     if (_voices == null) {
@@ -40,16 +41,16 @@ class VoicesBloc extends Bloc<VoicesEvent, VoicesState> {
       try {
         final String _voice = _voices.firstWhere((v) => regExp.hasMatch(v));
         getLogger('VOICE FOUND').w('found');
-        yield HasSpeech(id: quizId, path: _voice);
+        yield VoicesState.success(quizId, _voice);
       } catch (e) {
         getLogger('VOICE NOT FOUND').e(e);
         final String speech = await _speechRepository.textToSpeech(quizId, arab);
         await prefs.setStringList(VOICES_PREFERENCES, [speech]);
-        yield HasSpeech(id: quizId, path: speech);
+        yield VoicesState.success(quizId, speech);
       }
     }
   }
   Stream<VoicesState> _mapStopSpeech() async* {
-    yield VoicesInitial();
+    yield VoicesState.empty();
   }
 }

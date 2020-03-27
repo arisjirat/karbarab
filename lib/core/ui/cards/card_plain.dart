@@ -44,7 +44,7 @@ class CardPlain extends StatelessWidget {
                   onPressed: () {
                     popup(
                       context,
-                      text: 'Yakin keluar game?',
+                      text: 'Yakin keluar dari quiz ini?',
                       cancel: () {
                         Navigator.of(context).pop();
                       },

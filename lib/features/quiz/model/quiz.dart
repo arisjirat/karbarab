@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:karbarab/core/helper/utils.dart';
 
 class QuizModel {
@@ -24,7 +23,6 @@ class QuizModel {
   });
 
   Map<String, dynamic> toJson() {
-    getLogger('cardCategory').e(cardCategory);
     final Map<String, dynamic> data = {};
     data['id'] = id;
     data['arab'] = arab;

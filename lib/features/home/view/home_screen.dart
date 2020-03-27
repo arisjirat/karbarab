@@ -32,70 +32,73 @@ class _HomeScreenState extends State<HomeScreen> {
     final double padding = MediaQuery.of(context).padding.top +
         MediaQuery.of(context).padding.bottom;
     final double _deviceHeight = MediaQuery.of(context).size.height - padding;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
-              if (state is Authenticated) {
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
+                if (state is Authenticated) {
+                  return Hero(
+                    deviceHeight: _deviceHeight,
+                    displayName: state.displayName,
+                  );
+                }
                 return Hero(
-                  deviceHeight: _deviceHeight,
-                  displayName: state.displayName,
-                );
-              }
-              return Hero(
                   deviceHeight: _deviceHeight,
                   displayName: '',
                 );
-            }),
-            BlocBuilder<ScoreBloc, ScoreState>(builder: (context, state) {
-              return Container(
-                height: 0.7 * _deviceHeight,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CardPlay(
-                      color: greenColor,
-                      secondaryColor: greenColorLight,
-                      title: 'Gambar Dalam Bahasa Arab',
-                      loadScore: state is HasScore && state.loadScore,
-                      score: state is HasScore ? state.scoreGambarArab : 0,
-                      mode: GameMode.GambarArab,
-                    ),
-                    Container(height: scaleCalculator(20.0, context)),
-                    CardPlay(
-                      color: blueColor,
-                      secondaryColor: blueColorLight,
-                      title: 'Bahasa Arab Dalam Gambar',
-                      loadScore: state is HasScore && state.loadScore,
-                      score: state is HasScore ? state.scoreArabGambar : 0,
-                      mode: GameMode.ArabGambar,
-                    ),
-                    Container(height: scaleCalculator(20.0, context)),
-                    CardPlay(
-                      color: redColor,
-                      secondaryColor: redColorLight,
-                      title: 'Kata Dalam Bahasa Arab',
-                      loadScore: state is HasScore && state.loadScore,
-                      score: state is HasScore ? state.scoreKataArab : 0,
-                      mode: GameMode.KataArab,
-                    ),
-                    Container(height: scaleCalculator(20.0, context)),
-                    CardPlay(
-                      color: yellowColor,
-                      secondaryColor: yellowColorDark,
-                      title: 'Bahasa Arab dalam kata',
-                      loadScore: state is HasScore && state.loadScore,
-                      score: state is HasScore ? state.scoreArabKata : 0,
-                      mode: GameMode.ArabKata,
-                    ),
-                  ],
-                ),
-              );
-            }),
-          ],
+              }),
+              BlocBuilder<ScoreBloc, ScoreState>(builder: (context, state) {
+                return Container(
+                  height: 0.7 * _deviceHeight,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CardPlay(
+                        color: greenColor,
+                        secondaryColor: greenColorLight,
+                        title: 'Gambar Dalam Bahasa Arab',
+                        loadScore: state is HasScore && state.loadScore,
+                        score: state is HasScore ? state.scoreGambarArab : 0,
+                        mode: GameMode.GambarArab,
+                      ),
+                      Container(height: scaleCalculator(20.0, context)),
+                      CardPlay(
+                        color: blueColor,
+                        secondaryColor: blueColorLight,
+                        title: 'Bahasa Arab Dalam Gambar',
+                        loadScore: state is HasScore && state.loadScore,
+                        score: state is HasScore ? state.scoreArabGambar : 0,
+                        mode: GameMode.ArabGambar,
+                      ),
+                      Container(height: scaleCalculator(20.0, context)),
+                      CardPlay(
+                        color: redColor,
+                        secondaryColor: redColorLight,
+                        title: 'Kata Dalam Bahasa Arab',
+                        loadScore: state is HasScore && state.loadScore,
+                        score: state is HasScore ? state.scoreKataArab : 0,
+                        mode: GameMode.KataArab,
+                      ),
+                      Container(height: scaleCalculator(20.0, context)),
+                      CardPlay(
+                        color: yellowColor,
+                        secondaryColor: yellowColorDark,
+                        title: 'Bahasa Arab dalam kata',
+                        loadScore: state is HasScore && state.loadScore,
+                        score: state is HasScore ? state.scoreArabKata : 0,
+                        mode: GameMode.ArabKata,
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            ],
+          ),
         ),
       ),
     );
