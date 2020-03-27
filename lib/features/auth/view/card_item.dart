@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/helper/utils.dart';
-import 'package:karbarab/core/ui/cards/card_text.dart';
 import 'package:karbarab/core/ui/typography.dart';
+import 'package:karbarab/features/voices/view/speech.dart';
 
 class CardItem extends StatelessWidget {
   final String bahasa;
@@ -28,10 +28,6 @@ class CardItem extends StatelessWidget {
     @required this.gameMode,
   }) : super(key: key);
 
-  void _play() {
-    SoundPlayerUtil.addSoundName(voice);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -47,16 +43,16 @@ class CardItem extends StatelessWidget {
               children: [
                 image == ''
                     ? Column(
-                      children: <Widget>[
-                        const Image(
-                        image: AssetImage('assets/images/no-photo.jpg'),
-                        height: 30,
-                      ),
-                      TinyText(text: 'tidak ada gambar', dark: true)
-                      ],
-                    )
-                    : Image.network(
-                        image,
+                        children: <Widget>[
+                          const Image(
+                            image: AssetImage('assets/images/no-photo.jpg'),
+                            height: 30,
+                          ),
+                          TinyText(text: 'tidak ada gambar', dark: true)
+                        ],
+                      )
+                    : Image(
+                        image: AssetImage('assets/quiz/$image'),
                         height: 60,
                         fit: BoxFit.fill,
                       ),
@@ -68,13 +64,9 @@ class CardItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                GestureDetector(
-                  onTap: _play,
-                  child: Icon(
-                    Icons.volume_up,
-                    color: textColor,
-                    size: 40.0,
-                  ),
+                Speech(
+                  id: id,
+                  arab: arab,
                 ),
                 const SizedBox(height: 5),
                 BoldRegularText(text: arab, dark: true),

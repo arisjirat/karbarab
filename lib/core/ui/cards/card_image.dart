@@ -38,11 +38,11 @@ class CardImage extends StatelessWidget {
             children: [
               loading || quiz == null
                   ? RegularText(text: 'Loading', dark: true)
-                  : Image.network(
-                      quiz.image,
-                      height: height - 120,
-                      fit: BoxFit.fill,
-                    )
+                  : Image(
+                          image: AssetImage('assets/quiz/${quiz.image}'),
+                          height: height - 120,
+                          fit: BoxFit.fill,
+                        ),
             ],
           ),
         ),
@@ -68,7 +68,7 @@ class CardImage extends StatelessWidget {
                     ),
                     child: Row(
                       children: <Widget>[
-                         Icon(Icons.report, size: 20, color: whiteColor),
+                        Icon(Icons.report, size: 20, color: whiteColor),
                         SmallerText(
                           text: 'Soal Salah?',
                           dark: false,
@@ -93,9 +93,9 @@ class CardImage extends StatelessWidget {
                   },
                   child: Container(
                     padding: const EdgeInsets.only(right: 10),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: greenColor,
-                      borderRadius: const BorderRadius.all(
+                      borderRadius: BorderRadius.all(
                         Radius.circular(20),
                       ),
                     ),
