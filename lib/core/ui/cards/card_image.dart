@@ -93,9 +93,9 @@ class CardImage extends StatelessWidget {
                   },
                   child: Container(
                     padding: const EdgeInsets.only(right: 10),
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: greenColor,
-                      borderRadius: const BorderRadius.all(
+                      borderRadius: BorderRadius.all(
                         Radius.circular(20),
                       ),
                     ),
