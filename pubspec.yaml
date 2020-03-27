@@ -51,7 +51,7 @@ flutter:
     - assets/images/google_logo.png
     - assets/images/congratulation_character.png
     - assets/images/neutral_triangle_right.png
-    - assets/voices/
+    - assets/quiz/
   fonts:
     - family: Proxima
       fonts:
