@@ -16,6 +16,7 @@ import 'package:karbarab/features/auth/view/profile_screen.dart';
 import 'package:karbarab/core/helper/bloc_delegate.dart';
 import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
+import 'package:karbarab/features/voices/bloc/voices_bloc.dart';
 import 'package:karbarab/repository/quiz_repository.dart';
 import 'package:karbarab/repository/user_repository.dart';
 import 'package:karbarab/features/home/view/splash_screen.dart';
@@ -54,6 +55,9 @@ void main() {
         ),
         BlocProvider(
           create: (BuildContext context) => FeedbackBloc(),
+        ),
+        BlocProvider(
+          create: (BuildContext context) => VoicesBloc(),
         ),
       ],
       child: App(userRepository: userRepository),
