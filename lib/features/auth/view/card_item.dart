@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/helper/utils.dart';
-import 'package:karbarab/core/ui/cards/card_text.dart';
 import 'package:karbarab/core/ui/typography.dart';
+import 'package:karbarab/features/voices/view/speech.dart';
 
 class CardItem extends StatelessWidget {
   final String bahasa;
@@ -27,10 +27,6 @@ class CardItem extends StatelessWidget {
     @required this.averageScore,
     @required this.gameMode,
   }) : super(key: key);
-
-  void _play() {
-    SoundPlayerUtil.addSoundName(voice);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,14 +64,7 @@ class CardItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                GestureDetector(
-                  onTap: _play,
-                  child: Icon(
-                    Icons.volume_up,
-                    color: textColor,
-                    size: 40.0,
-                  ),
-                ),
+                Speech(id: id, arab: arab,),
                 const SizedBox(height: 5),
                 BoldRegularText(text: arab, dark: true),
                 const SizedBox(height: 5),
