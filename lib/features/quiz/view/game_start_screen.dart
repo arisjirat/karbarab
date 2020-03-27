@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:io';
-
-import 'package:android_intent/android_intent.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +9,6 @@ import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/config/keywords_ads.dart';
 import 'package:karbarab/core/config/score_value.dart';
 import 'package:karbarab/core/helper/hasInternet.dart';
-import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:karbarab/core/ui/feedback_form.dart';
 import 'package:karbarab/core/ui/popup.dart';
 import 'package:karbarab/core/ui/typography.dart';
@@ -25,6 +21,7 @@ import 'package:karbarab/core/ui/cards/card_answer.dart';
 import 'package:karbarab/core/ui/cards/card_quiz.dart';
 import 'package:karbarab/core/ui/congratulation.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
+import 'package:karbarab/features/voices/view/speech.dart';
 
 String _getAnswerIndex(index) {
   const answer = ['A', 'B', 'C', 'D'];
@@ -214,6 +211,12 @@ class _GameQuizState extends State<GameQuiz> with WidgetsBindingObserver {
         quizId: widget.correct.id,
       ));
     } else if (_recentAnswers.length > 1) {
+      widget.scoreBloc.add(AddScoreUser(
+        mode: widget.mode,
+        metaQuiz: widget.correct,
+        score: _currentPoint.round(),
+        quizId: widget.correct.id,
+      ));
       popup(
         context,
         text: 'Kesempatan Kamu habis',
@@ -223,12 +226,6 @@ class _GameQuizState extends State<GameQuiz> with WidgetsBindingObserver {
         },
         confirm: () {
           _getQuiz();
-          widget.scoreBloc.add(AddScoreUser(
-            mode: widget.mode,
-            metaQuiz: widget.correct,
-            score: _currentPoint.round(),
-            quizId: widget.correct.id,
-          ));
           Navigator.of(context).pop();
         },
         confirmColor: greenColor,
@@ -366,6 +363,7 @@ class _GameQuizState extends State<GameQuiz> with WidgetsBindingObserver {
               adsLoaded: _adsLoaded,
               getHint: _getHint,
               giveFeedback: _giveFeedback,
+              speech: Speech(id: widget.correct.id, arab: widget.correct.arab),
             ),
             _isCorrect
                 ? Congratulation(
