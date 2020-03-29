@@ -8,6 +8,7 @@ import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
 import 'package:karbarab/features/feedback/bloc/feedback_bloc.dart';
 import 'package:karbarab/features/global_scores/bloc/global_scores_bloc.dart';
 import 'package:karbarab/features/karbarab/view/karbarab.dart';
+import 'package:karbarab/features/notification/view/notification.dart';
 import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
 import 'package:karbarab/features/quiz/view/game_start_screen.dart';
 import 'package:karbarab/features/login/view/login_screen.dart';
@@ -90,7 +91,8 @@ class App extends StatelessWidget {
             return LoginScreen(userRepository: userRepository);
           }
           if (state is Authenticated) {
-            return HomeScreen();
+            return NotificationFCM();
+            // return HomeScreen();
           }
           if (state is Uninitialized) {
             return SplashLoginScreen();
