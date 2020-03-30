@@ -189,6 +189,11 @@ class UserRepository {
     return email;
   }
 
+  Future<String> getFullnameFirebase() async {
+    final email = (await _firebaseAuth.currentUser()).displayName;
+    return email;
+  }
+
   Future<String> getAvatarFirebase() async {
     final avatar = (await _firebaseAuth.currentUser()).photoUrl;
     return avatar;

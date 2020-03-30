@@ -57,7 +57,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     yield LoginState.loading();
     try {
       await _userRepository.signInWithGoogle();
-      final username = (await _userRepository.getEmailFirebase()).split('@')[0];
+      final fullname = await _userRepository.getFullnameFirebase();
+      final email = await _userRepository.getEmailFirebase();
+      final username = email.split('@')[0];
       final user = await _userRepository.getUserFromUsername(username);
       if (!user.exists) {
         final tokenFCM = await _firebaseMessaging.getToken();
@@ -74,6 +76,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           username,
           true,
           avatar: await _userRepository.getAvatarFirebase(),
+          email: email,
+          fullname: fullname,
         );
       } else {
         await _userRepository.saveUserToLocal(
@@ -82,6 +86,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           user.data['username'],
           true,
           avatar: user.data['avatar'],
+          email: email,
+          fullname: fullname,
         );
       }
       yield LoginState.success();
