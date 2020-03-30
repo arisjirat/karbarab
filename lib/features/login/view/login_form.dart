@@ -45,8 +45,15 @@ class _LoginFormState extends State<LoginForm>
     super.didUpdateWidget(oldWidget);
   }
 
+  void _prev() {
+    _animationController.forward(from: 0);
+    setState(() {
+      passwordState = false;
+    });
+  }
+
   void _next() {
-     if (!passwordState) {
+     if (!passwordState && controllerUsername.text.length >= 3) {
       passwordFocusNode = FocusNode();
       _animationController.reverse();
       setState(() {
@@ -87,10 +94,11 @@ class _LoginFormState extends State<LoginForm>
     final String modeString = widget.mode == CredentialsMode.LOGIN ? 'Login' : 'Signup';
     return Container(
       height: 110,
-      width: 250,
+      width: 300,
       child: Form(
         key: _formKey,
         child: Stack(
+          overflow: Overflow.visible,
           children: [
             Transform.translate(
               offset: Offset(-_curvedAnimation.value.toDouble(), 0),
@@ -112,6 +120,7 @@ class _LoginFormState extends State<LoginForm>
                   _next();
                 },
                 decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.fromLTRB(20, 20, 75, 20),
                   labelText: '$modeString Username',
                   labelStyle: const TextStyle(
                     color: whiteColor,
@@ -173,6 +182,7 @@ class _LoginFormState extends State<LoginForm>
                   _next();
                 },
                 decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.fromLTRB(75, 20, 75, 20),
                   labelText: '$modeString Password',
                   labelStyle: const TextStyle(
                     color: whiteColor,
@@ -211,18 +221,34 @@ class _LoginFormState extends State<LoginForm>
               ),
             ),
             !widget.loading ? Positioned(
-              right: 1,
-              top: 5,
+              right: 2,
+              top: 2,
               child: MaterialButton(
-                padding: const EdgeInsets.all(10),
+                color: whiteColor,
+                padding: const EdgeInsets.all(15.5),
                 minWidth: 0,
                 shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(50)),
-                  side: BorderSide(color: greenColor, width: 2),
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
                 ),
-                child: Icon(Icons.arrow_forward, color: whiteColor),
+                child: Icon(Icons.arrow_forward, color: greenColor),
                 onPressed: () {
                   _next();
+                },
+              ),
+            ) : const SizedBox(width: 0),
+            passwordState ? Positioned(
+              left: 2,
+              top: 2,
+              child: MaterialButton(
+                padding: const EdgeInsets.all(15.5),
+                minWidth: 0,
+                color: redColor,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                ),
+                child: Icon(Icons.arrow_back, color: whiteColor),
+                onPressed: () {
+                  _prev();
                 },
               ),
             ) : const SizedBox(width: 0),
