@@ -4,7 +4,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/features/login/bloc/bloc.dart';
-import 'package:karbarab/core/helper/greetings.dart';
+// import 'package:karbarab/core/helper/greetings.dart';
+import 'package:karbarab/features/login/view/form_container.dart';
+import 'package:karbarab/features/login/view/signup_form.dart';
+// import 'package:karbarab/features/login/view/signup_form.dart';
 import 'package:karbarab/repository/user_repository.dart';
 import 'package:karbarab/features/home/view/home_screen.dart';
 import 'package:karbarab/core/ui/typography.dart';
@@ -38,52 +41,57 @@ class Login extends StatelessWidget {
       },
       child: Scaffold(
         backgroundColor: greenColor,
-        body: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    const Image(
-                      image: AssetImage('assets/images/card_logo.png'),
-                    ),
-                    ArabicText(
-                      text: 'مرحبا مساء الخير',
-                      dark: false,
-                    ),
-                    BiggerText(
-                      text: 'Hai, Selamat ${greeting()}',
-                      dark: false,
-                    ),
-                    LogoText(
-                      text: 'Karbarab',
-                      dark: false,
-                    ),
-                    const Image(
-                      image: AssetImage('assets/images/character.png'),
-                      height: 120,
-                    ),
-                    BlocBuilder<LoginBloc, LoginState>(
-                      builder: (context, state) {
-                        if (state is LoginState) {
-                          if (state.isLoading) {
-                            return const Padding(
-                              padding: EdgeInsets.all(20),
-                              child: SpinKitDoubleBounce(color: whiteColor),
-                            );
+        body: SingleChildScrollView(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      const SizedBox(height: 60),
+                      const Image(
+                        image: AssetImage('assets/images/card_logo.png'),
+                      ),
+                      // ArabicText(
+                      //   text: 'مرحبا مساء الخير',
+                      //   dark: false,
+                      // ),
+                      // BiggerText(
+                      //   text: 'Hai, Selamat ${greeting()}',
+                      //   dark: false,
+                      // ),
+                      LogoText(
+                        text: 'Karbarab',
+                        dark: false,
+                      ),
+                      const Image(
+                        image: AssetImage('assets/images/character.png'),
+                        height: 120,
+                      ),
+                      FormContainer(),
+                      // SignupForm(loginHandler: () {},),
+                      BlocBuilder<LoginBloc, LoginState>(
+                        builder: (context, state) {
+                          if (state is LoginState) {
+                            if (state.isLoading) {
+                              return const Padding(
+                                padding: EdgeInsets.all(20),
+                                child: SpinKitDoubleBounce(color: whiteColor),
+                              );
+                            }
                           }
-                        }
-                        return GoogleSignInButton();
-                      },
-                    ),
-                  ],
-                )
-              ],
-            )
-          ],
+                          return GoogleSignInButton();
+                        },
+                      ),
+                    ],
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -1,10 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:karbarab/features/auth/model/user_model.dart';
+import 'package:meta/meta.dart';
+import 'package:password/password.dart';
 
 class UserRepository {
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
+  final CollectionReference _usersCollection =
+      Firestore.instance.collection('users');
 
   UserRepository({FirebaseAuth firebaseAuth, GoogleSignIn googleSignin})
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
@@ -20,6 +25,47 @@ class UserRepository {
     );
     await _firebaseAuth.signInWithCredential(credential);
     return _firebaseAuth.currentUser();
+  }
+
+  Future<void> saveUser({
+    @required String id,
+    @required String username,
+    @required bool isGoogleAuth,
+    @required String tokenFCM,
+    String password,
+  }) async {
+    if (isGoogleAuth) {
+      final email = (await _firebaseAuth.currentUser()).email;
+      final avatar = (await _firebaseAuth.currentUser()).photoUrl;
+      final displayName = (await _firebaseAuth.currentUser()).displayName;
+      return _usersCollection.document(username).setData(
+        UserModel(
+          id: id,
+          username: username,
+          isGoogleAuth: isGoogleAuth,
+          tokenFCM: tokenFCM,
+          avatar: avatar,
+          email: email,
+          name: displayName..split(' ')[0],
+          fullname: displayName,
+        ).toJson(),
+      );
+    }
+    // either signup with username password
+    final passwordHash = Password.hash(password, PBKDF2());
+    return _usersCollection.document(username).setData(
+          UserModel(
+            id: id,
+            username: username,
+            isGoogleAuth: isGoogleAuth,
+            tokenFCM: tokenFCM,
+            password: passwordHash,
+          ).toJson(),
+        );
+  }
+
+  Future<DocumentSnapshot> getUserFromUsername(username) {
+    return _usersCollection.document(username).get();
   }
 
   Future<void> signInWithCredentials(String email, String password) {
@@ -60,13 +106,17 @@ class UserRepository {
   }
 
   Future<UserModel> getUserMeta() async {
-    final user = await _firebaseAuth.currentUser();
+    final email = (await _firebaseAuth.currentUser()).email.split('@')[0];
+    final userCollection = await getUserFromUsername(email);
     return UserModel(
-      id: user.uid,
-      email: user.email,
-      name: user.displayName.split(' ')[0],
-      fullname: user.displayName,
-      avatar: user.photoUrl,
+      id: userCollection['uid'],
+      username: userCollection['username'],
+      tokenFCM: userCollection['tokenFCM'],
+      isGoogleAuth: userCollection['isGoogleAuth'],
+      email: userCollection['email'],
+      name: userCollection['name'],
+      fullname: userCollection['displayName'],
+      avatar: userCollection['photoUrl'],
     );
   }
 
