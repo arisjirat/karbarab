@@ -6,6 +6,7 @@ import 'package:karbarab/core/ui/typography.dart';
 Future<void> popup(
   context, {
   text = '',
+  paragraph = '',
   cancelLabel = 'Tidak',
   cancelAble = false,
   confirmLabel = 'Ok!',
@@ -25,42 +26,60 @@ Future<void> popup(
             color: whiteColor,
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
           ),
-          height: 70,
+          height: 100,
           child: Stack(
             overflow: Overflow.visible,
             children: <Widget>[
               const Positioned(
                 top: -100,
-                left: 105,
+                left: 115,
                 child: Image(
                   image: AssetImage('assets/images/character.png'),
                   height: 130,
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 30,),
-                child: Align(alignment: Alignment.center, child: BoldRegularText(text: text, dark: true),),
-              )
+                padding: const EdgeInsets.only(
+                  top: 15,
+                ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: BoldRegularText(text: text, dark: true),
+                ),
+              ),
+              paragraph != ''
+                  ? Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 70, 10, 10),
+                      child: RegularText(text: paragraph),
+                    )
+                  : const SizedBox(width: 0),
             ],
           ),
         ),
         actions: <Widget>[
-          cancelAble ? RaisedButton(
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              side: BorderSide(color: greenColor, width: 2),
-            ),
-            color: whiteColor,
-            child: RegularText(
-              text: cancelLabel,
-              color: greenColor,
-            ),
-            onPressed: () {
-              cancel();
-            },
-          ) : Container(width: 0, height: 0,),
+          cancelAble
+              ? RaisedButton(
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    side: BorderSide(color: greenColor, width: 2),
+                  ),
+                  color: whiteColor,
+                  child: RegularText(
+                    text: cancelLabel,
+                    color: greenColor,
+                  ),
+                  onPressed: () {
+                    cancel();
+                  },
+                )
+              : Container(
+                  width: 0,
+                  height: 0,
+                ),
           RaisedButton(
-            padding: cancelAble ? const EdgeInsets.symmetric(horizontal: 10) : const EdgeInsets.all(5),
+            padding: cancelAble
+                ? const EdgeInsets.symmetric(horizontal: 10)
+                : const EdgeInsets.all(5),
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10))),
             child: RegularText(text: confirmLabel, dark: false),

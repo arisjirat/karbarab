@@ -62,7 +62,9 @@ class ScoreRepository {
         email: metaUser['email'],
         avatar: metaUser['avatar'],
         fullname: metaUser['fullname'],
-        name: metaUser['name'],
+        username: metaUser['username'],
+        isGoogleAuth: metaUser['isGoogleAuth'],
+        tokenFCM: metaUser['tokenFCM'],
       );
       if (found >= 0) {
         acc[found] = ScoreGlobalModel(

@@ -3,29 +3,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:karbarab/core/ui/popup.dart';
 import 'package:karbarab/features/login/bloc/bloc.dart';
 import 'package:karbarab/features/login/view/login_form.dart';
+import 'package:karbarab/features/login/view/login_screen.dart';
 
-enum CredentialsMode { LOGIN, SIGNUP }
+
 
 class FormContainer extends StatefulWidget {
-  FormContainer({Key key}) : super(key: key);
+  final CredentialsMode mode;
+  final Function(CredentialsMode) onModeChange;
+  FormContainer({Key key, @required this.mode,@required this.onModeChange}) : super(key: key);
 
   @override
   _FormContainerState createState() => _FormContainerState();
 }
 
 class _FormContainerState extends State<FormContainer> {
-  String username;
-  CredentialsMode mode = CredentialsMode.LOGIN;
   bool loading = false;
-
-  _usernameChange() {}
-
-  _passwordChange() {}
 
   void _userExist() {
     popup(
       context,
-      text: 'Akun ini sudah ada, ingin login?',
+      text: 'Akun sudah terdaftar',
+      paragraph: 'akun sudah ada mau login?',
       cancel: () {
         BlocProvider.of<LoginBloc>(context)
           .add(LoginReset());
@@ -34,9 +32,7 @@ class _FormContainerState extends State<FormContainer> {
       confirm: () {
         BlocProvider.of<LoginBloc>(context)
           .add(LoginReset());
-        setState(() {
-          mode = CredentialsMode.LOGIN;
-        });
+        widget.onModeChange(CredentialsMode.LOGIN);
         Navigator.of(context).pop();
       },
       cancelAble: false,
@@ -48,7 +44,8 @@ class _FormContainerState extends State<FormContainer> {
   void _userError() {
     popup(
       context,
-      text: 'Username dan password kamu salah?',
+      text: 'Gagal',
+      paragraph: 'Pastikan anda sudah mendaftar',
       cancel: () {
         BlocProvider.of<LoginBloc>(context)
           .add(LoginReset());
@@ -57,9 +54,7 @@ class _FormContainerState extends State<FormContainer> {
       confirm: () {
         BlocProvider.of<LoginBloc>(context)
           .add(LoginReset());
-        setState(() {
-          mode = CredentialsMode.SIGNUP;
-        });
+        widget.onModeChange(CredentialsMode.SIGNUP);
         Navigator.of(context).pop();
       },
       cancelAble: true,
@@ -71,7 +66,8 @@ class _FormContainerState extends State<FormContainer> {
   void _userExistInGoogleAuth() {
     popup(
       context,
-      text: 'Akun ini sudah terdaftar melalui google auth?',
+      text: 'Akun sudah terdaftar',
+      paragraph: 'Sudah terdaftar melalui google akun, masuk melalui akun google?',
       cancel: () {
         BlocProvider.of<LoginBloc>(context)
           .add(LoginReset());
@@ -91,10 +87,10 @@ class _FormContainerState extends State<FormContainer> {
   }
 
   void _loginHandler(String username, String password) async {
-    if (mode == CredentialsMode.LOGIN) {
+    if (widget.mode == CredentialsMode.LOGIN) {
       BlocProvider.of<LoginBloc>(context)
         .add(LoginWithUsernamePassword(username, password));
-    } else if (mode == CredentialsMode.SIGNUP) {
+    } else if (widget.mode == CredentialsMode.SIGNUP) {
       BlocProvider.of<LoginBloc>(context)
         .add(SignupWithUsername(username, password));
     }
@@ -117,7 +113,7 @@ class _FormContainerState extends State<FormContainer> {
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
           return LoginForm(
-            mode: mode,
+            mode: widget.mode,
             loginHandler: _loginHandler,
             loading: state is LoginState && state.isLoading,
           );

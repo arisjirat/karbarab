@@ -9,7 +9,7 @@ class UserModel {
   final String email;
   final String avatar;
   final String fullname;
-  final String name;
+  // final String name;
 
   UserModel({
     @required this.id,
@@ -20,7 +20,7 @@ class UserModel {
     this.email,
     this.avatar,
     this.fullname,
-    this.name,
+    // this.name,
   });
 
   Map<String, dynamic> toJson() {
@@ -33,7 +33,7 @@ class UserModel {
     data['password'] = password;
     data['avatar'] = avatar;
     data['fullname'] = fullname;
-    data['name'] = name;
+    // data['name'] = name;
     return data;
   }
 }

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:meta/meta.dart';
 import 'package:karbarab/features/login/bloc/bloc.dart';
 import 'package:karbarab/repository/user_repository.dart';
@@ -26,14 +25,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield* _mapLoginWithGooglePressedToState();
     } else if (event is LoginWithUsernamePassword) {
       yield* _mapLoginWithCredentials(event.username, event.password);
-    } else if (event is SignupWithUsername) { 
+    } else if (event is SignupWithUsername) {
       yield* _mapSignupWithUsernameToState(event.username, event.password);
     } else if (event is LoginReset) {
       yield LoginState.empty();
     }
   }
 
-  Stream<LoginState> _mapSignupWithUsernameToState(String username, String password) async* {
+  Stream<LoginState> _mapSignupWithUsernameToState(
+      String username, String password) async* {
     yield LoginState.loading();
     final exist = (await _userRepository.getUserFromUsername(username)).exists;
     if (exist) {
@@ -41,7 +41,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       return;
     }
     final tokenFCM = await _firebaseMessaging.getToken();
-    await _userRepository.saveUser(id: Uuid().v4(), username: username, password: password, isGoogleAuth: false, tokenFCM: tokenFCM);
+    final id = Uuid().v4();
+    await _userRepository.saveUser(
+      id: id,
+      username: username,
+      password: password,
+      isGoogleAuth: false,
+      tokenFCM: tokenFCM,
+    );
+    await _userRepository.saveUserToLocal(id, tokenFCM, username, false);
     yield LoginState.success();
   }
 
@@ -50,10 +58,31 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     try {
       await _userRepository.signInWithGoogle();
       final username = (await _userRepository.getEmail()).split('@')[0];
-      final exist = (await _userRepository.getUserFromUsername(username)).exists;
-      if (!exist) {
+      final user = await _userRepository.getUserFromUsername(username);
+      if (!user.exists) {
         final tokenFCM = await _firebaseMessaging.getToken();
-        await _userRepository.saveUser(id: Uuid().v4(), username: username, isGoogleAuth: true, tokenFCM: tokenFCM);
+        final id = Uuid().v4();
+        await _userRepository.saveUser(
+          id: id,
+          username: username,
+          isGoogleAuth: true,
+          tokenFCM: tokenFCM,
+        );
+        await _userRepository.saveUserToLocal(
+          id,
+          tokenFCM,
+          username,
+          true,
+          avatar: await _userRepository.getAvatarFirebase(),
+        );
+      } else {
+        await _userRepository.saveUserToLocal(
+          user.data['id'],
+          user.data['tokenFCM'],
+          user.data['username'],
+          true,
+          avatar: user.data['avatar'],
+        );
       }
       yield LoginState.success();
     } catch (err) {
@@ -62,7 +91,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
   }
 
-  Stream<LoginState> _mapLoginWithCredentials(String username, String password) async* {
+  Stream<LoginState> _mapLoginWithCredentials(
+      String username, String password) async* {
     yield LoginState.loading();
     final user = await _userRepository.getUserFromUsername(username);
     if (!user.exists) {
@@ -74,11 +104,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       return;
     }
     if (Password.verify(password, user['password'])) {
+      await _userRepository.saveUserToLocal(
+        user.data['id'],
+        user.data['tokenFCM'],
+        user.data['username'],
+        user.data['isGoogleAuth'],
+        avatar: user.data['avatar'],
+      );
       yield LoginState.success();
       return;
     }
     yield LoginState.failure();
     return;
   }
-  
 }
