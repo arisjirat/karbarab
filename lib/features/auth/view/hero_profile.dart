@@ -37,13 +37,13 @@ class HeroProfile extends StatelessWidget {
           if (state is Authenticated) {
             return Row(
               children: <Widget>[
-                CircleAvatar(
+                state.avatar != null ? CircleAvatar(
                   backgroundImage: NetworkImage(
                     state.avatar,
                   ),
                   radius: 45,
                   backgroundColor: Colors.transparent,
-                ),
+                ) : Text('kosong'),
                 const SizedBox(
                   width: 20,
                 ),
@@ -51,7 +51,7 @@ class HeroProfile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    RegularText(text: state.fullname, dark: true),
+                    RegularText(text: state.displayName, dark: true),
                     BoldRegularText(
                         text: state.totalPoints.toString(), dark: true),
                     Row(

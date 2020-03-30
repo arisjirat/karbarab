@@ -32,7 +32,7 @@ class CardScoreItem extends StatelessWidget {
           title: Align(
             alignment: Alignment.center,
             child: BoldRegularText(
-              text: score.userMail,
+              text: score.userId,
             ),
           ),
           contentPadding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
@@ -100,13 +100,13 @@ class CardScoreItem extends StatelessWidget {
                 children: [
                   BoldRegularText(text: tier.toString(),),
                   const SizedBox(width: 15,),
-                  CircleAvatar(
+                  score.metaUser.avatar != null ? CircleAvatar(
                     backgroundImage: NetworkImage(
                       score.metaUser.avatar,
                     ),
                     radius: 20,
                     backgroundColor: Colors.transparent,
-                  ),
+                  ) : Text('kosong'),
                   const SizedBox(
                     width: 20,
                   ),
@@ -114,7 +114,7 @@ class CardScoreItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       RegularText(
-                        text: score.metaUser.fullname,
+                        text: score.metaUser.username,
                         dark: true,
                       ),
                       BoldRegularText(

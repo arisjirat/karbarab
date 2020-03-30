@@ -98,8 +98,8 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
   }
 
   Stream<ScoreState> _mapGetSummaryUserQuizScore() async* {
-    final _email = await _userRepository.getEmail();
-    final _userScores = await _scoreRepository.getUserScore(_email);
+    final _id = await _userRepository.getUserId();
+    final _userScores = await _scoreRepository.getUserScore(_id);
     final List<ScoreQuizModel> summaryQuiz = _userScores.fold(
       [],
       (acc, cur) {
@@ -178,8 +178,8 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       scoreKataArab: 0,
       loadScore: true,
     );
-    final _email = await _userRepository.getEmail();
-    final _userScores = await _scoreRepository.getUserScore(_email);
+    final _userId = await _userRepository.getUserId();
+    final _userScores = await _scoreRepository.getUserScore(_userId);
     yield HasScore(
       scoreArabGambar: ListScore(
         mode: GameMode.ArabGambar,
@@ -206,7 +206,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     
     final UserModel user = await _userRepository.getUserMeta();
     try {
-      _scoreRepository.addScoreUser(user.email, quizMode, quizId, score, metaQuiz, user);
+      _scoreRepository.addScoreUser(user.id, quizMode, quizId, score, metaQuiz, user);
     } catch (e) {
       getLogger('AddUserScore').e(e);
     }

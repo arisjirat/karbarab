@@ -57,7 +57,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     yield LoginState.loading();
     try {
       await _userRepository.signInWithGoogle();
-      final username = (await _userRepository.getEmail()).split('@')[0];
+      final username = (await _userRepository.getEmailFirebase()).split('@')[0];
       final user = await _userRepository.getUserFromUsername(username);
       if (!user.exists) {
         final tokenFCM = await _firebaseMessaging.getToken();

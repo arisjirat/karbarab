@@ -113,7 +113,16 @@ class UserRepository {
   }
 
   Future<void> signOut() async {
+    final SharedPreferences prefs = await _prefs;
+    prefs.remove(USER_ID_PREFERENCES);
+    prefs.remove(USER_FCMTOKEN_PREFERENCES);
+    prefs.remove(USER_NAME_PREFERENCES);
+    prefs.remove(USER_AVATAR_PREFERENCES);
+    prefs.remove(USER_IS_GOOGLEAUTH);
+    prefs.remove(USER_MAIL_PREFERENCES);
+    prefs.remove(USER_FULLNAME_PREFERENCES);
     return Future.wait([
+      prefs.clear(),
       _firebaseAuth.signOut(),
       _googleSignIn.signOut(),
     ]);
@@ -122,7 +131,6 @@ class UserRepository {
   Future<bool> isSignedIn() async {
     final SharedPreferences prefs = await _prefs;
     final currentUser = prefs.getString(USER_ID_PREFERENCES);
-    // final currentUser = await _firebaseAuth.currentUser();
     return currentUser != null;
   }
 
@@ -130,6 +138,12 @@ class UserRepository {
     final SharedPreferences prefs = await _prefs;
     final username = prefs.getString(USER_NAME_PREFERENCES);
     return username;
+  }
+
+  Future<String> getUserId() async {
+    final SharedPreferences prefs = await _prefs;
+    final userId = prefs.getString(USER_ID_PREFERENCES);
+    return userId;
   }
 
   Future<UserModel> getUserMeta() async {

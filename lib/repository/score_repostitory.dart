@@ -14,7 +14,7 @@ class ScoreRepository {
   ScoreRepository();
 
   Future addScoreUser(
-    String email,
+    String userId,
     GameMode quizMode,
     String quizId,
     int score,
@@ -23,7 +23,7 @@ class ScoreRepository {
   ) async {
     try {
       return await scoreCollection.document(Uuid().v4()).setData({
-        'userEmail': email,
+        'userId': userId,
         'quizId': quizId,
         'quizMode': gameModeToString(quizMode),
         'score': score,
@@ -36,9 +36,9 @@ class ScoreRepository {
     }
   }
 
-  Future<Iterable<DocumentSnapshot>> getUserScore(String email) async {
+  Future<Iterable<DocumentSnapshot>> getUserScore(String id) async {
     final QuerySnapshot scores = await scoreCollection
-        .where('userEmail', isEqualTo: email)
+        .where('userId', isEqualTo: id)
         .limit(10000)
         .getDocuments();
     return scores.documents;
@@ -49,7 +49,7 @@ class ScoreRepository {
         await scoreCollection.limit(10000).getDocuments();
     final List<ScoreGlobalModel> grouped =
         scores.documents.fold([], (acc, cur) {
-      final found = acc.indexWhere((e) => e.userMail == cur['userEmail']);
+      final found = acc.indexWhere((e) => e.userId == cur['userId']);
       final metaUser = cur['metaUser'];
       final Timestamp timestamp = cur['createdAt'];
       final DateTime createdAt =
@@ -68,9 +68,9 @@ class ScoreRepository {
       );
       if (found >= 0) {
         acc[found] = ScoreGlobalModel(
+          userId: user.id,
           metaUser: user,
           score: acc[found].score + cur['score'],
-          userMail: user.email,
           scoreHistory: acc[found].scoreHistory,
         );
         acc[found].scoreHistory.add(ScoreItem(
@@ -82,8 +82,8 @@ class ScoreRepository {
         return acc;
       }
       acc.add(ScoreGlobalModel(
+        userId: user.id,
         metaUser: user,
-        userMail: user.email,
         score: cur['score'],
         scoreHistory: [ScoreItem(
               bahasa: bahasa,
