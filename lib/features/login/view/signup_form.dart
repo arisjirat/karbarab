@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:karbarab/core/config/colors.dart';
-import 'package:karbarab/core/ui/typography.dart';
 
 class SignupForm extends StatefulWidget {
   final Function loginHandler;
@@ -24,12 +23,6 @@ class _SignupFormState extends State<SignupForm>
   Animation<int> _curvedAnimation;
 
   bool passwordState = false;
-
-  bool get _isUserFilled {
-    return controllerUsername.value != null ||
-        controllerUsername.value != '' ||
-        controllerUsername.value.text.length > 3;
-  }
 
   @override
   void initState() {

@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:meta/meta.dart';
 import 'package:karbarab/features/login/bloc/bloc.dart';
 import 'package:karbarab/repository/user_repository.dart';
