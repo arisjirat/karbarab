@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:meta/meta.dart';
 import 'package:karbarab/features/login/bloc/bloc.dart';
 import 'package:karbarab/repository/user_repository.dart';
@@ -59,7 +60,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await _userRepository.signInWithGoogle();
       final fullname = await _userRepository.getFullnameFirebase();
       final email = await _userRepository.getEmailFirebase();
-      final username = email.split('@')[0];
+      final username = email.split(RegExp(r'(\.|@)'))[0];
       final user = await _userRepository.getUserFromUsername(username);
       if (!user.exists) {
         final tokenFCM = await _firebaseMessaging.getToken();
