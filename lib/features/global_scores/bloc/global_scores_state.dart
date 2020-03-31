@@ -19,12 +19,12 @@ class GlobalHasScores extends GlobalScoresState {
 
 class ScoreGlobalModel {
   final int score;
-  final String userMail;
+  final String userId;
   final UserModel metaUser;
   final List<ScoreItem> scoreHistory;
 
   ScoreGlobalModel({
-    @required this.userMail,
+    @required this.userId,
     @required this.score,
     @required this.metaUser,
     @required this.scoreHistory,

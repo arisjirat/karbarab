@@ -2,6 +2,7 @@ import 'dart:convert' as convert;
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
+import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:path_provider/path_provider.dart';
 
 const KEY = 'AIzaSyDCHHs-nQ2pNZw2j9Lgx2x1Y0zDOUqfmm4';
@@ -10,6 +11,7 @@ const URL = '$BASE_URL/v1/text:synthesize?key=$KEY';
 
 
 class SpeechRepository {
+  final client = http.Client();
   Future<String> textToSpeech(id, arab) async {
     final Map<String, String> headers = {
       'Content-type': 'application/json',
@@ -28,7 +30,7 @@ class SpeechRepository {
       },
     });
     try {
-      final http.Response response = await http.post(
+      final http.Response response = await client.post(
         URL,
         headers: headers,
         body: body,
@@ -44,10 +46,19 @@ class SpeechRepository {
         await file.writeAsBytes(bytes);
         return file.path;
       } else {
-        return throw Error();
+        throw VoiceException('Should contact developer', response);
       }
+    } on VoiceException {
+      return throw Error();
     } catch (e) {
+      getLogger('Get Voice').e(e);
       return throw Error();
     }
   }
+}
+
+class VoiceException implements Exception {
+  String cause;
+  http.Response response;
+  VoiceException(this.cause, this.response);
 }

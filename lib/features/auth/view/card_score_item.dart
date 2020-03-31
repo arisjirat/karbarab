@@ -32,7 +32,7 @@ class CardScoreItem extends StatelessWidget {
           title: Align(
             alignment: Alignment.center,
             child: BoldRegularText(
-              text: score.userMail,
+              text: score.metaUser.username,
             ),
           ),
           contentPadding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
@@ -98,15 +98,26 @@ class CardScoreItem extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  BoldRegularText(text: tier.toString(),),
-                  const SizedBox(width: 15,),
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(
-                      score.metaUser.avatar,
-                    ),
-                    radius: 20,
-                    backgroundColor: Colors.transparent,
+                  BoldRegularText(
+                    text: tier.toString(),
                   ),
+                  const SizedBox(
+                    width: 15,
+                  ),
+                  score.metaUser.avatar != null
+                      ? CircleAvatar(
+                          backgroundImage: NetworkImage(
+                            score.metaUser.avatar,
+                          ),
+                          radius: 20,
+                          backgroundColor: Colors.transparent,
+                        )
+                      : const CircleAvatar(
+                          radius: 20,
+                          backgroundColor: greenColor,
+                          backgroundImage:
+                              AssetImage('assets/images/character.png'),
+                        ),
                   const SizedBox(
                     width: 20,
                   ),
@@ -114,7 +125,7 @@ class CardScoreItem extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       RegularText(
-                        text: score.metaUser.fullname,
+                        text: score.metaUser.username,
                         dark: true,
                       ),
                       BoldRegularText(

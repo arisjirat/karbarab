@@ -27,14 +27,64 @@ class _HomeScreenState extends State<HomeScreen> {
     BlocProvider.of<ScoreBloc>(context).add(GetScoreUserByMode());
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  DateTime currentBackPressTime;
+
+  Future<bool> onWillPop() {
+    SnackBar(
+      content: RegularText(
+        text: 'Tekan 2 kali untuk keluar',
+      ),
+    );
+    final DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > const Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        duration: const Duration(milliseconds: 3000),
+        content: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 35),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  color: whiteColor.withOpacity(0.8),
+                ),
+                padding: const EdgeInsets.all(10),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: SmallerText(
+                    dark: true,
+                    text: 'Tekan 2 kali untuk keluar',
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ));
+      // Fluttertoast.showToast(msg: exit_warning);
+      return Future.value(false);
+    }
+    return Future.value(true);
+  }
+
   @override
   Widget build(BuildContext context) {
     final double padding = MediaQuery.of(context).padding.top +
         MediaQuery.of(context).padding.bottom;
     final double _deviceHeight = MediaQuery.of(context).size.height - padding;
     return WillPopScope(
-      onWillPop: () async => false,
+      onWillPop: onWillPop,
       child: Scaffold(
+        key: _scaffoldKey,
         backgroundColor: Colors.white,
         body: SafeArea(
           child: Column(
