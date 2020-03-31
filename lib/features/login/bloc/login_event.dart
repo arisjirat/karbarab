@@ -11,6 +11,8 @@ class LoginReset extends LoginEvent {}
 
 class ClearGoogle extends LoginEvent {}
 
+class GoogleSync extends LoginEvent {}
+
 class LoginWithGooglePressed extends LoginEvent {}
 class SignupUsernameWithGoogle extends LoginEvent {
   final String username;

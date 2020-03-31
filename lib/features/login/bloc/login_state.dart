@@ -56,17 +56,6 @@ class LoginState {
     );
   }
 
-  // factory LoginState.failureGoogleAuthExist() {
-  //   return LoginState(
-  //     isSuccess: false,
-  //     isFailure: false,
-  //     isLoading: false,
-  //     needUsername: true,
-  //     isUserExist: false,
-  //   );
-  // }
-
-
   factory LoginState.successNeedUsername() {
     return LoginState(
       isSuccess: false,

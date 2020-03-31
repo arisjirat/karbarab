@@ -202,6 +202,5 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     } catch (e) {
       getLogger('AddUserScore').e(e);
     }
-    // yield ScoreAdded();
   }
 }

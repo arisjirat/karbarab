@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
+import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:karbarab/features/auth/model/user_model.dart';
 import 'package:meta/meta.dart';
 import 'package:karbarab/features/login/bloc/bloc.dart';
@@ -26,10 +27,32 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       yield* _mapSignupUsernameGoogleToState(event.username);
     } else if (event is LoginReset) {
       yield LoginState.empty();
+    } else if (event is GoogleSync) {
+      yield* _mapSyncGoogleToState();
     } else if (event is ClearGoogle) {
-      yield LoginState.loading();
       await _userRepository.signOutGoogleOnly();
-      yield LoginState.empty();
+      yield state;
+    }
+  }
+
+  Stream<LoginState> _mapSyncGoogleToState() async* {
+    yield LoginState.loading();
+    try {
+      await _userRepository.signInWithGoogle();
+      final email = await _userRepository.getEmailFirebase();
+      final username = await _userRepository.getUser();
+      final user = await _userRepository.getUserFromEmail(email);
+
+      if (user.isEmpty) {
+        final UserModel userData = await _userRepository.updateUserWithGoogle(username);
+        await _userRepository.saveUserToLocal(userData);
+        yield LoginState.success();
+        return;
+      }
+      yield LoginState.failureUserExist();
+    } catch (err) {
+      getLogger('log sync').e(err);
+      yield LoginState.failure();
     }
   }
 

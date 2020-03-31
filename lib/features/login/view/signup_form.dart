@@ -192,7 +192,6 @@ class _SignupFormState extends State<SignupForm>
                   setState(() {
                     passwordState = !passwordState;
                   });
-                  // if (_formKey.currentState.validate()) {}
                 },
               ),
             ),

@@ -51,6 +51,26 @@ class UserRepository {
     return _firebaseAuth.currentUser();
   }
 
+  Future<UserModel> updateUserWithGoogle(String username) async {
+    final updateData = _usersCollection.document(username).updateData;
+    final email = await getEmailFirebase();
+    final avatar = await getAvatarFirebase();
+    final displayName = (await _firebaseAuth.currentUser()).displayName;
+    final id = await getUserId();
+    final tokenFCM = await getUserTokenFCM();
+    final UserModel userData = UserModel(
+      id: id,
+      username: username,
+      isGoogleAuth: true,
+      tokenFCM: tokenFCM,
+      avatar: avatar,
+      email: email,
+      fullname: displayName,
+    );
+    await updateData(userData.toJson());
+    return userData;
+  }
+
   Future<void> saveUser({
     @required String username,
     @required bool isGoogleAuth,
@@ -140,6 +160,12 @@ class UserRepository {
     return currentUser != null;
   }
 
+  Future<bool> isUserGoogleAuth() async {
+    final SharedPreferences prefs = await _prefs;
+    final isGoogle = prefs.getBool(USER_IS_GOOGLEAUTH);
+    return isGoogle;
+  }
+
   Future<String> getUser() async {
     final SharedPreferences prefs = await _prefs;
     final username = prefs.getString(USER_NAME_PREFERENCES);
@@ -150,6 +176,12 @@ class UserRepository {
     final SharedPreferences prefs = await _prefs;
     final userId = prefs.getString(USER_ID_PREFERENCES);
     return userId;
+  }
+
+  Future<String> getUserTokenFCM() async {
+    final SharedPreferences prefs = await _prefs;
+    final token = prefs.getString(USER_FCMTOKEN_PREFERENCES);
+    return token;
   }
 
   Future<String> getUserFullname() async {

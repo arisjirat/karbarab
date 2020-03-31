@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:karbarab/core/helper/device_height.dart';
 import 'package:karbarab/core/ui/popup.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/features/karbarab/view/karbarab.dart';
+import 'package:karbarab/features/login/bloc/bloc.dart';
 import 'package:karbarab/features/login/view/login_screen.dart';
 import 'package:karbarab/repository/user_repository.dart';
 import 'package:karbarab/core/config/colors.dart';
@@ -12,6 +14,127 @@ import 'package:karbarab/core/config/colors.dart';
 class HeroProfile extends StatelessWidget {
   final UserRepository userRepository;
   const HeroProfile({Key key, @required this.userRepository}) : super(key: key);
+
+  void _googleSync(ctx) {
+    showDialog(
+      barrierDismissible: false,
+      context: ctx,
+      builder: (BuildContext context) {
+        return BlocBuilder<LoginBloc, LoginState>(
+          builder: (context, state) {
+            return BlocListener<LoginBloc, LoginState>(
+              listener: (c, state) {
+                if (state.isSuccess) {
+                  BlocProvider.of<AuthBloc>(context).add(LoggedIn());
+                  Navigator.of(context).pop();
+                }
+                if (state.isUserExist) {
+                  BlocProvider.of<LoginBloc>(context).add(ClearGoogle());
+                }
+                if (state.isFailure) {
+                  BlocProvider.of<LoginBloc>(context).add(ClearGoogle());
+                }
+              },
+              child: AlertDialog(
+                title: Align(
+                  alignment: Alignment.center,
+                  child: BoldRegularText(
+                    text: 'Koneksi Akun Google',
+                  ),
+                ),
+                contentPadding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(15),
+                  ),
+                  side: BorderSide(color: greenColor, width: 2),
+                ),
+                titlePadding: const EdgeInsets.symmetric(vertical: 20),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    state is LoginState && state.isLoading
+                        ? const SpinKitDoubleBounce(color: greenColor)
+                        : const SizedBox(width: 0),
+                    state is LoginState && state.isFailure
+                        ? Align(
+                            alignment: Alignment.center,
+                            child: RegularText(
+                              color: redColor,
+                              text: 'Gagal, coba periksa koneksi kamu',
+                            ),
+                          )
+                        : const SizedBox(width: 0),
+                    state is LoginState && state.isUserExist
+                        ? Align(
+                            alignment: Alignment.center,
+                            child: RegularText(
+                              color: redColor,
+                              text: 'Gagal, google kamu sudah terdaftar',
+                            ),
+                          )
+                        : const SizedBox(width: 0),
+                    const SizedBox(height: 20),
+                    state is LoginState && state.isLoading
+                        ? const SizedBox(width: 0)
+                        : Align(
+                            alignment: Alignment.center,
+                            child: RegularText(
+                              text:
+                                  'Koneksikan supaya kamu bisa login di lain device',
+                            ),
+                          ),
+                  ],
+                ),
+                actions: <Widget>[
+                  state is LoginState && state.isLoading
+                      ? const SpinKitDoubleBounce(color: greenColor)
+                      : RaisedButton(
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            side: BorderSide(color: greenColor, width: 2),
+                          ),
+                          color: whiteColor,
+                          child: RegularText(
+                            text: 'Jangan!',
+                            color: greenColor,
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                  state is LoginState && state.isLoading
+                      ? const SizedBox(
+                          width: 0,
+                        )
+                      : RaisedButton(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10))),
+                          child: RegularText(
+                              text: state is LoginState && state.isUserExist
+                                  ? 'Coba dengan akun lain'
+                                  : 'Ya, gabungkan dengan google',
+                              dark: false),
+                          color: greenColor,
+                          onPressed: () {
+                            if (state is LoginState && state.isFailure) {
+                              BlocProvider.of<LoginBloc>(context)
+                                  .add(ClearGoogle());
+                            }
+                            BlocProvider.of<LoginBloc>(ctx).add(GoogleSync());
+                          },
+                        ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,44 +186,75 @@ class HeroProfile extends StatelessWidget {
                         text: state.totalPoints.toString(), dark: true),
                     Row(
                       children: <Widget>[
-                        RaisedButton(
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                          ),
-                          onPressed: () {
-                            popup(
-                              context,
-                              text: 'Yakin Keluar Akun kamu?',
-                              cancel: () {
-                                Navigator.of(context).pop();
-                              },
-                              confirm: () {
-                                BlocProvider.of<AuthBloc>(context).add(
-                                  LoggedOut(),
-                                );
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(builder: (context) {
-                                  return LoginScreen(
-                                      userRepository: userRepository);
-                                }), ModalRoute.withName('/'));
-                              },
-                              cancelAble: true,
-                              cancelLabel: 'Jangan!',
-                              confirmLabel: 'Ya, saya yakin',
-                            );
-                          },
-                          color: secondaryColor,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: SmallerText(
-                              text: 'Keluar Akun',
-                              dark: true,
-                            ),
-                          ),
-                          elevation: 5,
-                        ),
+                        state.isGoogleAuth
+                            ? RaisedButton(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  popup(
+                                    context,
+                                    text: 'Yakin Keluar Akun kamu?',
+                                    cancel: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    confirm: () {
+                                      BlocProvider.of<AuthBloc>(context).add(
+                                        LoggedOut(),
+                                      );
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(builder: (context) {
+                                        return LoginScreen(
+                                            userRepository: userRepository);
+                                      }), ModalRoute.withName('/'));
+                                    },
+                                    cancelAble: true,
+                                    cancelLabel: 'Jangan!',
+                                    confirmLabel: 'Ya, saya yakin',
+                                  );
+                                },
+                                color: whiteColor,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: SmallerText(
+                                    text: 'Keluar Akun',
+                                    dark: true,
+                                  ),
+                                ),
+                                elevation: 5,
+                              )
+                            : RaisedButton(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(10),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  _googleSync(context);
+                                },
+                                color: whiteColor,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      const Image(
+                                        image: AssetImage(
+                                          'assets/images/google_logo.png',
+                                        ),
+                                        height: 20.0,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      SmallerText(
+                                        text: 'Konek Google',
+                                        dark: true,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                                elevation: 5,
+                              ),
                         const SizedBox(
                           width: 15,
                         ),
@@ -110,9 +264,9 @@ class HeroProfile extends StatelessWidget {
                                 .pushNamed(KarbarabScreen.routeName);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(2.0),
                             child: SmallerText(
-                              text: 'Karbarab v1.0.0',
+                              text: 'v0.0.1',
                               dark: true,
                             ),
                           ),

@@ -8,8 +8,7 @@ import 'package:karbarab/repository/user_repository.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
-class AuthBloc
-    extends Bloc<AuthEvent, AuthState> {
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserRepository _userRepository;
   final ScoreRepository _scoreRepository = ScoreRepository();
 
@@ -40,11 +39,18 @@ class AuthBloc
         final name = await _userRepository.getUser();
         final avatar = await _userRepository.getAvatar();
         final fullname = await _userRepository.getUserFullname();
+        final isGoogleAuth = await _userRepository.isUserGoogleAuth();
         final userId = await _userRepository.getUserId();
         final scores = await _scoreRepository.getUserScore(userId);
         final totalScore = await scores.fold(0, (t, e) => e['score'] + t);
 
-        yield Authenticated(displayName: name, avatar: avatar, fullname: fullname, totalPoints: totalScore);
+        yield Authenticated(
+          displayName: name,
+          avatar: avatar,
+          fullname: fullname,
+          totalPoints: totalScore,
+          isGoogleAuth: isGoogleAuth,
+        );
       } else {
         yield Unauthenticated();
       }
@@ -58,9 +64,15 @@ class AuthBloc
     final avatar = await _userRepository.getAvatar();
     final fullname = await _userRepository.getUserFullname();
     final userId = await _userRepository.getUserId();
+    final isGoogleAuth = await _userRepository.isUserGoogleAuth();
     final scores = await _scoreRepository.getUserScore(userId);
     final totalScore = await scores.fold(0, (t, e) => e['score'] + t);
-    yield Authenticated(displayName: name, avatar: avatar, fullname: fullname, totalPoints: totalScore);
+    yield Authenticated(
+        displayName: name,
+        avatar: avatar,
+        isGoogleAuth: isGoogleAuth,
+        fullname: fullname,
+        totalPoints: totalScore);
   }
 
   Stream<AuthState> _mapLoggedOutToState() async* {

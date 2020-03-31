@@ -9,6 +9,8 @@ Future<void> popup(
   paragraph = '',
   cancelLabel = 'Tidak',
   cancelAble = false,
+  bool customContainer = false,
+  Widget container,
   confirmLabel = 'Ok!',
   Color confirmColor = secondaryColor,
   Function cancel,
@@ -20,13 +22,13 @@ Future<void> popup(
     builder: (BuildContext context) {
       return CustomAlertDialog(
         contentPadding: const EdgeInsets.all(0),
-        content: Container(
+        content: !customContainer ? Container(
           decoration: const BoxDecoration(
             shape: BoxShape.rectangle,
             color: whiteColor,
             borderRadius: BorderRadius.all(Radius.circular(10.0)),
           ),
-          height: 100,
+          height: 110,
           child: Stack(
             overflow: Overflow.visible,
             children: <Widget>[
@@ -50,12 +52,15 @@ Future<void> popup(
               paragraph != ''
                   ? Padding(
                       padding: const EdgeInsets.fromLTRB(10, 70, 10, 10),
-                      child: RegularText(text: paragraph),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: RegularText(text: paragraph),
+                      ),
                     )
                   : const SizedBox(width: 0),
             ],
           ),
-        ),
+        ) : container,
         actions: <Widget>[
           cancelAble
               ? RaisedButton(
