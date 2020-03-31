@@ -1,15 +1,12 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:karbarab/features/auth/model/user_model.dart';
 import 'package:meta/meta.dart';
 import 'package:karbarab/features/login/bloc/bloc.dart';
 import 'package:karbarab/repository/user_repository.dart';
-import 'package:password/password.dart';
-import 'package:uuid/uuid.dart';
 
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final UserRepository _userRepository;
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   LoginBloc({
     @required UserRepository userRepository,
@@ -23,33 +20,48 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> mapEventToState(LoginEvent event) async* {
     if (event is LoginWithGooglePressed) {
       yield* _mapLoginWithGooglePressedToState();
-    } else if (event is LoginWithUsernamePassword) {
-      yield* _mapLoginWithCredentials(event.username, event.password);
     } else if (event is SignupWithUsername) {
-      yield* _mapSignupWithUsernameToState(event.username, event.password);
+      yield* _mapSignupUsernameToState(event.username);
+    } else if (event is SignupUsernameWithGoogle) {
+      yield* _mapSignupUsernameGoogleToState(event.username);
     } else if (event is LoginReset) {
+      yield LoginState.empty();
+    } else if (event is ClearGoogle) {
+      yield LoginState.loading();
+      await _userRepository.signOutGoogleOnly();
       yield LoginState.empty();
     }
   }
 
-  Stream<LoginState> _mapSignupWithUsernameToState(
-      String username, String password) async* {
+  Stream<LoginState> _mapSignupUsernameToState(
+    String username,
+  ) async* {
     yield LoginState.loading();
     final exist = (await _userRepository.getUserFromUsername(username)).exists;
     if (exist) {
       yield LoginState.failureUserExist();
       return;
     }
-    final tokenFCM = await _firebaseMessaging.getToken();
-    final id = Uuid().v4();
     await _userRepository.saveUser(
-      id: id,
       username: username,
-      password: password,
       isGoogleAuth: false,
-      tokenFCM: tokenFCM,
     );
-    await _userRepository.saveUserToLocal(id, tokenFCM, username, false);
+    yield LoginState.success();
+  }
+
+  Stream<LoginState> _mapSignupUsernameGoogleToState(
+    String username,
+  ) async* {
+    yield LoginState.loading();
+    final exist = (await _userRepository.getUserFromUsername(username)).exists;
+    if (exist) {
+      yield LoginState.failureUserExist();
+      return;
+    }
+    await _userRepository.saveUser(
+      username: username,
+      isGoogleAuth: true,
+    );
     yield LoginState.success();
   }
 
@@ -57,70 +69,27 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     yield LoginState.loading();
     try {
       await _userRepository.signInWithGoogle();
-      final fullname = await _userRepository.getFullnameFirebase();
       final email = await _userRepository.getEmailFirebase();
-      final username = email.split(RegExp(r'(\.|@)'))[0];
-      final user = await _userRepository.getUserFromUsername(username);
-      if (!user.exists) {
-        final tokenFCM = await _firebaseMessaging.getToken();
-        final id = Uuid().v4();
-        await _userRepository.saveUser(
-          id: id,
-          username: username,
-          isGoogleAuth: true,
-          tokenFCM: tokenFCM,
-        );
-        await _userRepository.saveUserToLocal(
-          id,
-          tokenFCM,
-          username,
-          true,
-          avatar: await _userRepository.getAvatarFirebase(),
-          email: email,
-          fullname: fullname,
-        );
-      } else {
-        await _userRepository.saveUserToLocal(
-          user.data['id'],
-          user.data['tokenFCM'],
-          user.data['username'],
-          true,
-          avatar: user.data['avatar'],
-          email: email,
-          fullname: fullname,
-        );
-      }
-      yield LoginState.success();
-    } catch (err) {
-      print(err);
-      yield LoginState.failure();
-    }
-  }
+      final user = await _userRepository.getUserFromEmail(email);
 
-  Stream<LoginState> _mapLoginWithCredentials(
-      String username, String password) async* {
-    yield LoginState.loading();
-    final user = await _userRepository.getUserFromUsername(username);
-    if (!user.exists) {
+      if (user.isNotEmpty) {
+        final singleUser = user.toList()[0];
+        final UserModel userData = UserModel(
+          id: singleUser['id'],
+          email: singleUser['email'],
+          username: singleUser['username'],
+          isGoogleAuth: singleUser['isGoogleAuth'],
+          tokenFCM: singleUser['tokenFCM'],
+          fullname: singleUser['fullname'],
+          avatar: singleUser['avatar'],
+        );
+        await _userRepository.saveUserToLocal(userData);
+        yield LoginState.success();
+        return;
+      }
+      yield LoginState.successNeedUsername();
+    } catch (err) {
       yield LoginState.failure();
-      return;
     }
-    if (user['isGoogleAuth']) {
-      yield LoginState.failureGoogleAuthExist();
-      return;
-    }
-    if (Password.verify(password, user['password'])) {
-      await _userRepository.saveUserToLocal(
-        user.data['id'],
-        user.data['tokenFCM'],
-        user.data['username'],
-        user.data['isGoogleAuth'],
-        avatar: user.data['avatar'],
-      );
-      yield LoginState.success();
-      return;
-    }
-    yield LoginState.failure();
-    return;
   }
 }

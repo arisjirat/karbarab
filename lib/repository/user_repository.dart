@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:karbarab/features/auth/model/user_model.dart';
 import 'package:meta/meta.dart';
-import 'package:password/password.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 const USER_ID_PREFERENCES = 'users_id';
 const USER_FCMTOKEN_PREFERENCES = 'users_fcmtoken';
@@ -18,6 +20,7 @@ class UserRepository {
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final CollectionReference _usersCollection =
       Firestore.instance.collection('users');
 
@@ -25,25 +28,15 @@ class UserRepository {
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _googleSignIn = googleSignin ?? GoogleSignIn();
 
-  Future<void> saveUserToLocal(
-      String id,
-      String fcmtoken,
-      String username,
-      bool isGoogleAuth,
-      {
-        String avatar,
-        String email,
-        String fullname,
-      }
-    ) async {
+  Future<void> saveUserToLocal(UserModel user) async {
     final SharedPreferences prefs = await _prefs;
-    await prefs.setString(USER_ID_PREFERENCES, id);
-    await prefs.setString(USER_FCMTOKEN_PREFERENCES, fcmtoken);
-    await prefs.setString(USER_NAME_PREFERENCES, username);
-    await prefs.setString(USER_AVATAR_PREFERENCES, avatar);
-    await prefs.setBool(USER_IS_GOOGLEAUTH, isGoogleAuth);
-    await prefs.setString(USER_MAIL_PREFERENCES, email);
-    await prefs.setString(USER_FULLNAME_PREFERENCES, fullname);
+    await prefs.setString(USER_ID_PREFERENCES, user.id);
+    await prefs.setString(USER_FCMTOKEN_PREFERENCES, user.tokenFCM);
+    await prefs.setString(USER_NAME_PREFERENCES, user.username);
+    await prefs.setString(USER_AVATAR_PREFERENCES, user.avatar);
+    await prefs.setBool(USER_IS_GOOGLEAUTH, user.isGoogleAuth);
+    await prefs.setString(USER_MAIL_PREFERENCES, user.email);
+    await prefs.setString(USER_FULLNAME_PREFERENCES, user.fullname);
   }
 
   Future<FirebaseUser> signInWithGoogle() async {
@@ -59,43 +52,49 @@ class UserRepository {
   }
 
   Future<void> saveUser({
-    @required String id,
     @required String username,
     @required bool isGoogleAuth,
-    @required String tokenFCM,
-    String password,
   }) async {
+    final save = _usersCollection.document(username).setData;
+    final tokenFCM = await _firebaseMessaging.getToken();
+    final id = Uuid().v4();
     if (isGoogleAuth) {
       final email = await getEmailFirebase();
       final avatar = await getAvatarFirebase();
       final displayName = (await _firebaseAuth.currentUser()).displayName;
-      return await _usersCollection.document(username).setData(
-            UserModel(
-              id: id,
-              username: username,
-              isGoogleAuth: isGoogleAuth,
-              tokenFCM: tokenFCM,
-              avatar: avatar,
-              email: email,
-              fullname: displayName,
-            ).toJson(),
-          );
+      final UserModel userData = UserModel(
+        id: id,
+        username: username,
+        isGoogleAuth: isGoogleAuth,
+        tokenFCM: tokenFCM,
+        avatar: avatar,
+        email: email,
+        fullname: displayName,
+      );
+      await save(userData.toJson());
+      return saveUserToLocal(userData);
     }
-    // either signup with username password
-    final passwordHash = Password.hash(password, PBKDF2());
-    return await _usersCollection.document(username).setData(
-          UserModel(
-            id: id,
-            username: username,
-            isGoogleAuth: isGoogleAuth,
-            tokenFCM: tokenFCM,
-            password: passwordHash,
-          ).toJson(),
-        );
+    final UserModel userData = UserModel(
+      id: id,
+      username: username,
+      isGoogleAuth: isGoogleAuth,
+      tokenFCM: tokenFCM,
+    );
+    await save(userData.toJson());
+    return saveUserToLocal(userData);
   }
 
   Future<DocumentSnapshot> getUserFromUsername(username) {
     return _usersCollection.document(username).get();
+  }
+
+  Future<Iterable<DocumentSnapshot>> getUserFromEmail(String email) async {
+    final QuerySnapshot user = await _usersCollection
+        .where('isGoogleAuth', isEqualTo: true)
+        .where('email', isEqualTo: email)
+        .getDocuments();
+
+    return user.documents;
   }
 
   Future<void> signInWithCredentials(String email, String password) {
@@ -114,15 +113,22 @@ class UserRepository {
 
   Future<void> signOut() async {
     final SharedPreferences prefs = await _prefs;
-    prefs.remove(USER_ID_PREFERENCES);
-    prefs.remove(USER_FCMTOKEN_PREFERENCES);
-    prefs.remove(USER_NAME_PREFERENCES);
-    prefs.remove(USER_AVATAR_PREFERENCES);
-    prefs.remove(USER_IS_GOOGLEAUTH);
-    prefs.remove(USER_MAIL_PREFERENCES);
-    prefs.remove(USER_FULLNAME_PREFERENCES);
+    await prefs.remove(USER_ID_PREFERENCES);
+    await prefs.remove(USER_FCMTOKEN_PREFERENCES);
+    await prefs.remove(USER_NAME_PREFERENCES);
+    await prefs.remove(USER_AVATAR_PREFERENCES);
+    await prefs.remove(USER_IS_GOOGLEAUTH);
+    await prefs.remove(USER_MAIL_PREFERENCES);
+    await prefs.remove(USER_FULLNAME_PREFERENCES);
     return Future.wait([
       prefs.clear(),
+      _firebaseAuth.signOut(),
+      _googleSignIn.signOut(),
+    ]);
+  }
+
+  Future<void> signOutGoogleOnly() async {
+    return Future.wait([
       _firebaseAuth.signOut(),
       _googleSignIn.signOut(),
     ]);
@@ -146,6 +152,24 @@ class UserRepository {
     return userId;
   }
 
+  Future<String> getUserFullname() async {
+    final SharedPreferences prefs = await _prefs;
+    final String fullname = prefs.getString(USER_FULLNAME_PREFERENCES);
+    return fullname;
+  }
+
+  Future<String> getAvatar() async {
+    final SharedPreferences prefs = await _prefs;
+    final String avatar = prefs.getString(USER_AVATAR_PREFERENCES);
+    return avatar;
+  }
+
+  Future<String> getEmail() async {
+    final SharedPreferences prefs = await _prefs;
+    final String email = prefs.getString(USER_AVATAR_PREFERENCES);
+    return email;
+  }
+
   Future<UserModel> getUserMeta() async {
     final SharedPreferences prefs = await _prefs;
     final String id = prefs.getString(USER_ID_PREFERENCES);
@@ -166,23 +190,7 @@ class UserRepository {
     );
   }
 
-  Future<String> getUserFullname() async {
-    final SharedPreferences prefs = await _prefs;
-    final String fullname = prefs.getString(USER_FULLNAME_PREFERENCES);
-    return fullname;
-  }
-
-  Future<String> getAvatar() async {
-    final SharedPreferences prefs = await _prefs;
-    final String avatar = prefs.getString(USER_AVATAR_PREFERENCES);
-    return avatar;
-  }
-
-  Future<String> getEmail() async {
-    final SharedPreferences prefs = await _prefs;
-    final String email = prefs.getString(USER_AVATAR_PREFERENCES);
-    return email;
-  }
+  // firebase account data
 
   Future<String> getEmailFirebase() async {
     final email = (await _firebaseAuth.currentUser()).email;

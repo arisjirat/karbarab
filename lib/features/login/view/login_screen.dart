@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/features/login/bloc/bloc.dart';
-import 'package:karbarab/features/login/view/form_container.dart';
+import 'package:karbarab/features/login/view/login_field.dart';
 import 'package:karbarab/repository/user_repository.dart';
 import 'package:karbarab/features/home/view/home_screen.dart';
 import 'package:karbarab/core/ui/typography.dart';
@@ -22,49 +22,159 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  CredentialsMode mode = CredentialsMode.LOGIN;
-  String asdsa;
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider<LoginBloc>(
+        create: (context) => LoginBloc(userRepository: widget.userRepository),
+        child: Login(
+          userRepository: widget.userRepository,
+        ));
+  }
+}
 
-  void _changeCredentialMode(CredentialsMode credmode) {
-    setState(() {
-      mode = credmode;
-    });
+class Login extends StatefulWidget {
+  final UserRepository userRepository;
+  Login({this.userRepository});
+
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
+  AnimationController _animationController;
+  Animation<int> _curvedAnimation;
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
   void initState() {
-    setState(() {
-      mode = CredentialsMode.LOGIN;
-    });
     super.initState();
+    _animationController = AnimationController(
+      duration: const Duration(milliseconds: 500),
+      vsync: this,
+    );
+    final Animation curve = CurvedAnimation(
+        parent: _animationController, curve: Curves.easeInOutQuart);
+    _curvedAnimation = IntTween(
+      begin: 900,
+      end: 0,
+    ).animate(curve)
+      ..addListener(() {
+        setState(() {});
+      });
+    _animationController.forward(from: 0.0);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider<LoginBloc>(
-      create: (context) => LoginBloc(userRepository: widget.userRepository),
-      child: Login(
-          userRepository: widget.userRepository,
-          mode: mode,
-          onModeChange: _changeCredentialMode),
+  void _inputUsername() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Align(
+            alignment: Alignment.center,
+            child: BoldRegularText(
+              text: 'Masukan username kamu',
+            ),
+          ),
+          contentPadding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(15),
+            ),
+            side: BorderSide(color: greenColor, width: 2),
+          ),
+          titlePadding: const EdgeInsets.symmetric(vertical: 20),
+          content: BlocBuilder<LoginBloc, LoginState>(
+            builder: (context, state) {
+              return BlocListener<LoginBloc, LoginState>(
+                listener: (c, state) {
+                  if (state.isSuccess) {
+                    BlocProvider.of<AuthBloc>(context).add(LoggedIn());
+                    Navigator.of(context).pushNamed(HomeScreen.routeName);
+                  }
+                  if (state.isUserExist) {
+                    _usernameExist();
+                  }
+                },
+                child: LoginField(
+                  animation: _curvedAnimation.value,
+                  loading: state is LoginState && state.isLoading,
+                  next: (String username) {
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    BlocProvider.of<LoginBloc>(context)
+                        .add(SignupUsernameWithGoogle(username));
+                  },
+                  dark: true,
+                ),
+              );
+            },
+          ),
+        );
+      },
+    ).then((d) {
+      BlocProvider.of<LoginBloc>(context).add(ClearGoogle());
+    });
+  }
+
+  void _usernameExist() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          actions: <Widget>[
+            RaisedButton(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                side: BorderSide(color: greenColor, width: 2),
+              ),
+              color: whiteColor,
+              child: RegularText(
+                text: 'Ok',
+                color: greenColor,
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            )
+          ],
+          contentPadding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(15),
+            ),
+            side: BorderSide(color: greenColor, width: 2),
+          ),
+          titlePadding: const EdgeInsets.symmetric(vertical: 20),
+          content: RegularText(
+            text: 'Username sudah ada, silahkan pilih dengan yang lain',
+          ),
+        );
+      },
     );
   }
-}
 
-class Login extends StatelessWidget {
-  final UserRepository userRepository;
-  final CredentialsMode mode;
-  final Function(CredentialsMode) onModeChange;
-  Login(
-      {this.userRepository, @required this.mode, @required this.onModeChange});
+  void _actionSingup(String username) {
+    FocusScope.of(context).requestFocus(FocusNode());
+    BlocProvider.of<LoginBloc>(context).add(SignupWithUsername(username));
+  }
+
   @override
   Widget build(BuildContext context) {
-    print(mode);
     return BlocListener<LoginBloc, LoginState>(
-      listener: (context, state) {
+      listener: (c, state) {
         if (state.isSuccess) {
           BlocProvider.of<AuthBloc>(context).add(LoggedIn());
           Navigator.of(context).pushNamed(HomeScreen.routeName);
+        }
+        if (state.needUsername) {
+          _inputUsername();
+        }
+        if (state.isUserExist) {
+          _usernameExist();
         }
       },
       child: Scaffold(
@@ -91,7 +201,15 @@ class Login extends StatelessWidget {
                         image: AssetImage('assets/images/character.png'),
                         height: 120,
                       ),
-                      FormContainer(mode: mode, onModeChange: onModeChange),
+                      BlocBuilder<LoginBloc, LoginState>(
+                        builder: (context, state) {
+                          return LoginField(
+                            animation: _curvedAnimation.value,
+                            loading: state is LoginState && state.isLoading,
+                            next: _actionSingup,
+                          );
+                        },
+                      ),
                       const SizedBox(height: 60),
                       BlocBuilder<LoginBloc, LoginState>(
                         builder: (context, state) {
@@ -103,33 +221,12 @@ class Login extends StatelessWidget {
                               );
                             }
                           }
-                          return Row(
+                          return Column(
                             children: <Widget>[
-                              MaterialButton(
-                                padding: const EdgeInsets.all(10),
-                                minWidth: 100,
-                                shape: const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(5),
-                                  ),
-                                  side: BorderSide(color: whiteColor, width: 2),
-                                ),
-                                color: whiteColor,
-                                child: SmallerText(
-                                  dark: true,
-                                  text: mode == CredentialsMode.LOGIN
-                                      ? 'Buat Akun'
-                                      : 'Login',
-                                ),
-                                onPressed: () {
-                                  if (mode == CredentialsMode.LOGIN) {
-                                    onModeChange(CredentialsMode.SIGNUP);
-                                  } else {
-                                    onModeChange(CredentialsMode.LOGIN);
-                                  }
-                                },
+                              SmallerText(
+                                text: 'Disaran kan untuk gunakan akun google',
+                                dark: false,
                               ),
-                              const SizedBox(width: 10),
                               GoogleSignInButton(),
                             ],
                           );

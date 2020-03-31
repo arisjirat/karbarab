@@ -9,22 +9,19 @@ abstract class LoginEvent extends Equatable {
 
 class LoginReset extends LoginEvent {}
 
-class LoginWithGooglePressed extends LoginEvent {}
+class ClearGoogle extends LoginEvent {}
 
-class LoginWithUsernamePassword extends LoginEvent {
+class LoginWithGooglePressed extends LoginEvent {}
+class SignupUsernameWithGoogle extends LoginEvent {
   final String username;
-  final String password;
-  LoginWithUsernamePassword(
+  SignupUsernameWithGoogle(
     this.username,
-    this.password,
   );
 }
 
 class SignupWithUsername extends LoginEvent {
   final String username;
-  final String password;
   SignupWithUsername(
     this.username,
-    this.password,
   );
 }

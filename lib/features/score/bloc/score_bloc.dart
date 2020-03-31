@@ -116,6 +116,16 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
         final String voice = cur['metaQuiz']['voice'];
         final GameMode quizMode = stringToGameMode(cur['quizMode']);
         final DateTime date = Timestamp(timestamp.seconds, timestamp.nanoseconds).toDate();
+        final QuizModel quizModel = QuizModel(
+          id: id,
+          arab: arab,
+          bahasa: bahasa,
+          image: image,
+          level: level,
+          cardCategory: cardCategory,
+          voice: voice,
+          date: date,
+        );
         final int totalScore = cur['score'];
         final List<int> scores = [cur['score']];
         if (found >= 0) {
@@ -125,16 +135,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
             quizId: quizId,
             totalAttempt: totalAttempt + 1,
             averageScore: totalScoreSum / (SCORE_BASE * acc[found].scores.length),
-            quiz: QuizModel(
-              id: id,
-              arab: arab,
-              bahasa: bahasa,
-              image: image,
-              level: level,
-              cardCategory: cardCategory,
-              voice: voice,
-              date: date,
-            ),
+            quiz: quizModel,
             quizMode: quizMode,
             totalScore: totalScoreSum,
             scores: acc[found].scores,
@@ -144,16 +145,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
         acc.add(ScoreQuizModel(
           quizId: quizId,
           totalAttempt: totalAttempt,
-          quiz: QuizModel(
-            id: id,
-            arab: arab,
-            bahasa: bahasa,
-            image: image,
-            voice: voice,
-            date: date,
-            level: level,
-            cardCategory: cardCategory,
-          ),
+          quiz: quizModel,
           quizMode: quizMode,
           averageScore: totalScore / (SCORE_BASE * 1),
           totalScore: totalScore,

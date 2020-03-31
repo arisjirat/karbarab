@@ -5,14 +5,14 @@ class LoginState {
   final bool isSuccess;
   final bool isFailure;
   final bool isLoading;
-  final bool errorIsGoogleAccountExist;
+  final bool needUsername;
   final bool isUserExist;
 
   LoginState({
     @required this.isSuccess,
     @required this.isFailure,
     @required this.isLoading,
-    this.errorIsGoogleAccountExist,
+    this.needUsername,
     this.isUserExist,
   });
 
@@ -21,7 +21,7 @@ class LoginState {
       isSuccess: false,
       isFailure: false,
       isLoading: false,
-      errorIsGoogleAccountExist: false,
+      needUsername: false,
       isUserExist: false,
     );
   }
@@ -31,7 +31,7 @@ class LoginState {
       isSuccess: false,
       isFailure: false,
       isLoading: true,
-      errorIsGoogleAccountExist: false,
+      needUsername: false,
       isUserExist: false,
     );
   }
@@ -41,7 +41,7 @@ class LoginState {
       isSuccess: false,
       isFailure: true,
       isLoading: false,
-      errorIsGoogleAccountExist: false,
+      needUsername: false,
       isUserExist: false,
     );
   }
@@ -51,17 +51,28 @@ class LoginState {
       isSuccess: false,
       isFailure: false,
       isLoading: false,
-      errorIsGoogleAccountExist: false,
+      needUsername: false,
       isUserExist: true,
     );
   }
 
-  factory LoginState.failureGoogleAuthExist() {
+  // factory LoginState.failureGoogleAuthExist() {
+  //   return LoginState(
+  //     isSuccess: false,
+  //     isFailure: false,
+  //     isLoading: false,
+  //     needUsername: true,
+  //     isUserExist: false,
+  //   );
+  // }
+
+
+  factory LoginState.successNeedUsername() {
     return LoginState(
       isSuccess: false,
       isFailure: false,
       isLoading: false,
-      errorIsGoogleAccountExist: true,
+      needUsername: true,
       isUserExist: false,
     );
   }
@@ -71,7 +82,7 @@ class LoginState {
       isSuccess: true,
       isFailure: false,
       isLoading: false,
-      errorIsGoogleAccountExist: false,
+      needUsername: false,
       isUserExist: false,
     );
   }
@@ -90,11 +101,13 @@ class LoginState {
     bool isSuccess,
     bool isFailure,
     bool isLoading,
+    bool isUserExist,
   }) {
     return LoginState(
       isSuccess: isSuccess ?? this.isSuccess,
       isFailure: isFailure ?? this.isFailure,
       isLoading: isLoading ?? this.isLoading,
+      isUserExist: isUserExist ?? this.isUserExist,
     );
   }
 
@@ -104,7 +117,7 @@ class LoginState {
       isSuccess: $isSuccess,
       isFailure: $isFailure,
       isLoading: $isLoading,
-      errorIsGoogleAccountExist: $errorIsGoogleAccountExist,
+      needUsername: $needUsername,
       isUserExist: $isUserExist,
     }''';
   }
