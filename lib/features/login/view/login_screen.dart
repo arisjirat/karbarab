@@ -224,9 +224,10 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
                           return Column(
                             children: <Widget>[
                               SmallerText(
-                                text: 'Disaran kan untuk gunakan akun google',
+                                text: 'Disarankan untuk gunakan akun google',
                                 dark: false,
                               ),
+                              const SizedBox(height: 15),
                               GoogleSignInButton(),
                             ],
                           );
@@ -259,19 +260,19 @@ class GoogleSignInButton extends StatelessWidget {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+        padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             const Image(
               image: AssetImage('assets/images/google_logo.png'),
-              height: 15.0,
+              height: 20.0,
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10),
               child: SmallerText(
-                text: 'Masuk Akun Google',
+                text: 'Login melalui Google',
                 dark: true,
               ),
             )

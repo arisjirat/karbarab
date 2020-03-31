@@ -37,13 +37,20 @@ class HeroProfile extends StatelessWidget {
           if (state is Authenticated) {
             return Row(
               children: <Widget>[
-                state.avatar != null ? CircleAvatar(
-                  backgroundImage: NetworkImage(
-                    state.avatar,
-                  ),
-                  radius: 45,
-                  backgroundColor: Colors.transparent,
-                ) : Text('kosong'),
+                state.avatar != null
+                    ? CircleAvatar(
+                        backgroundImage: NetworkImage(
+                          state.avatar,
+                        ),
+                        radius: 45,
+                        backgroundColor: Colors.transparent,
+                      )
+                    : const CircleAvatar(
+                        radius: 45,
+                        backgroundColor: whiteColor,
+                        backgroundImage:
+                            AssetImage('assets/images/character.png'),
+                      ),
                 const SizedBox(
                   width: 20,
                 ),
