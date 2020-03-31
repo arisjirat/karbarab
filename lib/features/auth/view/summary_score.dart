@@ -89,7 +89,8 @@ class _SummaryScoreState extends State<SummaryScore>
                                               dark: true,
                                             ),
                                           ),
-                                          Icon(Icons.videogame_asset, color: textColor),
+                                          Icon(Icons.videogame_asset,
+                                              color: textColor),
                                         ],
                                       ),
                                       elevation: 5,
@@ -147,7 +148,8 @@ class _SummaryScoreState extends State<SummaryScore>
                                               dark: true,
                                             ),
                                           ),
-                                          Icon(Icons.videogame_asset, color: textColor),
+                                          Icon(Icons.videogame_asset,
+                                              color: textColor),
                                         ],
                                       ),
                                       elevation: 5,
@@ -227,6 +229,25 @@ class _SummaryScoreState extends State<SummaryScore>
             ),
           ),
         ),
+        Positioned(
+          top: 0.25 * deviceHeight(context) - 25,
+          left: 15,
+          child: MaterialButton(
+            padding: const EdgeInsets.all(10),
+            minWidth: 0,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(50)),
+            ),
+            color: secondaryColor,
+            onPressed: () {
+              Navigator.of(context).pushNamed(HomeScreen.routeName);
+            },
+            child: Icon(
+              Icons.arrow_back,
+              color: whiteColor,
+            ),
+          ),
+        )
       ],
     );
   }
