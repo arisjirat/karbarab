@@ -25,7 +25,7 @@ class VoicesBloc extends Bloc<VoicesEvent, VoicesState> {
     if (event is GetSpeech) {
       yield* _mapGetSpeech(event.quizId, event.arab);
     } else if (event is StopSpeech) {
-      yield* _mapStopSpeech();
+      yield VoicesState.empty();
     }
   }
 
@@ -33,15 +33,19 @@ class VoicesBloc extends Bloc<VoicesEvent, VoicesState> {
     yield VoicesState.loading();
     final SharedPreferences prefs = await _prefs;
     final List<String> _voices = prefs.getStringList(VOICES_PREFERENCES);
+    getLogger('New Speech').w(_voices);
     if (_voices == null) {
       final String speech = await _speechRepository.textToSpeech(quizId, arab);
+      getLogger('New Speech').i(speech);
       await prefs.setStringList(VOICES_PREFERENCES, [speech]);
+      yield VoicesState.success(quizId, speech);
     } else {
       final RegExp regExp = RegExp('/($quizId.mp3)');
       try {
-        final String _voice = _voices.firstWhere((v) => regExp.hasMatch(v));
+        final String voice = _voices.firstWhere((v) => regExp.hasMatch(v));
         getLogger('VOICE FOUND').w('found');
-        yield VoicesState.success(quizId, _voice);
+        getLogger('New Speech').i(voice);
+        yield VoicesState.success(quizId, voice);
       } catch (e) {
         getLogger('VOICE NOT FOUND').e(e);
         final String speech = await _speechRepository.textToSpeech(quizId, arab);
@@ -49,8 +53,5 @@ class VoicesBloc extends Bloc<VoicesEvent, VoicesState> {
         yield VoicesState.success(quizId, speech);
       }
     }
-  }
-  Stream<VoicesState> _mapStopSpeech() async* {
-    yield VoicesState.empty();
   }
 }

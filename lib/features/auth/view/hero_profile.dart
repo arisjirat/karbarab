@@ -38,18 +38,30 @@ class HeroProfile extends StatelessWidget {
               child: AlertDialog(
                 title: Align(
                   alignment: Alignment.center,
-                  child: BoldRegularText(
-                    text: 'Koneksi Akun Google',
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const Image(
+                        image: AssetImage(
+                          'assets/images/google_logo.png',
+                        ),
+                        height: 20.0,
+                      ),
+                      const SizedBox(width: 20),
+                      BoldRegularText(
+                        text: 'Akun Google',
+                      )
+                    ],
                   ),
                 ),
-                contentPadding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
+                contentPadding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(
                     Radius.circular(15),
                   ),
                   side: BorderSide(color: greenColor, width: 2),
                 ),
-                titlePadding: const EdgeInsets.symmetric(vertical: 20),
+                titlePadding: const EdgeInsets.only(top: 20),
                 content: Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -81,8 +93,7 @@ class HeroProfile extends StatelessWidget {
                         : Align(
                             alignment: Alignment.center,
                             child: RegularText(
-                              text:
-                                  'Koneksikan supaya kamu bisa login di lain device',
+                              text: 'Koneksikan! supaya kamu bisa login kembali',
                             ),
                           ),
                   ],
@@ -116,7 +127,7 @@ class HeroProfile extends StatelessWidget {
                           child: RegularText(
                               text: state is LoginState && state.isUserExist
                                   ? 'Coba dengan akun lain'
-                                  : 'Ya, gabungkan dengan google',
+                                  : 'Ya, sambungkan google',
                               dark: false),
                           color: greenColor,
                           onPressed: () {
@@ -247,7 +258,7 @@ class HeroProfile extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 10),
                                       SmallerText(
-                                        text: 'Konek Google',
+                                        text: 'Sambungkan',
                                         dark: true,
                                       )
                                     ],
