@@ -74,7 +74,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ));
-      // Fluttertoast.showToast(msg: exit_warning);
       return Future.value(false);
     }
     exit(0);
