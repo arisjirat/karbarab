@@ -9,6 +9,18 @@ abstract class QuizState extends Equatable {
 
 class EmptyQuiz extends QuizState {}
 
+class AllQuiz extends QuizState {
+  final List<QuizModel> list;
+
+  AllQuiz(this.list);
+  @override
+  List<Object> get props => [list];
+
+  @override
+  String toString() => 'AllQuiz { list: $list,';
+  
+}
+
 class HasQuiz extends QuizState {
   final List<QuizModel> list;
   final QuizModel correct;
@@ -19,5 +31,5 @@ class HasQuiz extends QuizState {
   List<Object> get props => [list, correct];
 
   @override
-  String toString() => 'HasQuiz { displayName: $list, avatar: $correct }';
+  String toString() => 'HasQuiz { list: $list, correct: $correct }';
 }

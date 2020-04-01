@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
+import 'package:karbarab/features/battle/view/battle.dart';
 import 'package:karbarab/features/feedback/bloc/feedback_bloc.dart';
 import 'package:karbarab/features/global_scores/bloc/global_scores_bloc.dart';
 import 'package:karbarab/features/karbarab/view/karbarab.dart';
@@ -18,6 +19,7 @@ import 'package:karbarab/features/auth/view/profile_screen.dart';
 import 'package:karbarab/core/helper/bloc_delegate.dart';
 import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
+import 'package:karbarab/features/users/bloc/users_bloc.dart';
 import 'package:karbarab/features/voices/bloc/voices_bloc.dart';
 import 'package:karbarab/repository/quiz_repository.dart';
 import 'package:karbarab/repository/user_repository.dart';
@@ -57,6 +59,9 @@ void main() {
           create: (BuildContext context) => GlobalScoresBloc(),
         ),
         BlocProvider(
+          create: (BuildContext context) => UsersBloc(),
+        ),
+        BlocProvider(
           create: (BuildContext context) => AdmobBloc(),
         ),
         BlocProvider(
@@ -94,7 +99,8 @@ class App extends StatelessWidget {
             return LoginScreen(userRepository: userRepository);
           }
           if (state is Authenticated) {
-            return HomeScreen();
+            return BattleScreen();
+            // return HomeScreen();
           }
           if (state is Uninitialized) {
             return SplashLoginScreen();
@@ -106,6 +112,7 @@ class App extends StatelessWidget {
         LoginScreen.routeName: (_) => LoginScreen(userRepository: userRepository),
         HomeScreen.routeName: (_) => HomeScreen(),
         ProfileScreen.routeName: (_) => ProfileScreen(),
+        BattleScreen.routeName: (_) => BattleScreen(),
         GameStartScreen.routeName: (_) => GameStartScreen(mode: GameMode.GambarArab),
         KarbarabScreen.routeName: (_) => KarbarabScreen(),
       },

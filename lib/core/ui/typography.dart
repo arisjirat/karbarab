@@ -64,15 +64,17 @@ class BiggerArabicText extends StatelessWidget {
 class RegularText extends StatelessWidget {
   final String text;
   final bool dark;
+  final bool bold;
   final Color color;
 
-  RegularText({@required this.text, this.dark = true, this.color});
+  RegularText({@required this.text, this.dark = true, this.color, this.bold = false});
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
       style: TextStyle(
         color: color == null ? dark ? textColor : whiteColor : color,
+        fontWeight: bold ? FontWeight.bold : FontWeight.normal,
         // fontSize: 20.0,
         fontSize: scaleCalculator(20, context),
       ),
@@ -158,13 +160,14 @@ class BiggerText extends StatelessWidget {
   final String text;
   final bool dark;
   final bool bold;
-  BiggerText({@required this.text, this.dark, this.bold = false});
+  final Color color;
+  BiggerText({@required this.text, this.dark, this.bold = false, this.color});
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
       style: TextStyle(
-        color: dark ? textColor : whiteColor,
+        color: color != null ? color : dark ? textColor : whiteColor,
         fontWeight: bold ? FontWeight.bold : FontWeight.normal,
         fontSize: scaleCalculator(25, context),
       ),

@@ -15,4 +15,6 @@ class GetQuiz extends QuizEvent {
   GetQuiz({ this.image = true });
 }
 
+class GetAllQuiz extends QuizEvent {}
+
 class DestroyQuiz extends QuizEvent {}

@@ -12,6 +12,7 @@ import 'package:karbarab/core/ui/cards/card_play.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/helper/scale_calculator.dart';
+import 'package:karbarab/features/battle/view/battle.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -40,10 +41,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
     final DateTime now = DateTime.now();
-    if (
-      currentBackPressTime == null
-      || now.difference(currentBackPressTime) > const Duration(seconds: 2)) 
-    {
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > const Duration(seconds: 2)) {
       currentBackPressTime = now;
       _scaffoldKey.currentState.showSnackBar(SnackBar(
         backgroundColor: Colors.transparent,
@@ -203,6 +202,26 @@ class Hero extends StatelessWidget {
                         dark: true),
                     ArabicText(text: 'مرحبا مساء الخير', dark: true),
                   ],
+                ),
+              ),
+              Positioned(
+                top: 15,
+                left: 8,
+                child: MaterialButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(BattleScreen.routeName);
+                  },
+                  minWidth: 0,
+                  child: Icon(
+                    // local_activity
+                    // local_play
+                    // offline_bolt
+                    // style ..like card
+                    // card_giftcard
+                    Icons.card_giftcard,
+                    size: 35,
+                    color: greenColor,
+                  ),
                 ),
               ),
               Positioned(

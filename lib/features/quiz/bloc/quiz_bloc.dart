@@ -29,6 +29,9 @@ class QuizBloc extends Bloc<QuizEvent, QuizState> {
       yield* _mapGetQuizToState(event.image);
     } else if (event is DestroyQuiz) {
       yield* _mapResetQuizToState();
+    } else if (event is GetAllQuiz) {
+      final quiz = _quizRepository.allQuiz();
+      yield AllQuiz(quiz);
     }
   }
 

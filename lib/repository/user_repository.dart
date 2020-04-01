@@ -104,6 +104,10 @@ class UserRepository {
     return saveUserToLocal(userData);
   }
 
+  Future<List<DocumentSnapshot>> getAllUsers() async {
+    return (await _usersCollection.limit(10000).getDocuments()).documents;
+  }
+
   Future<DocumentSnapshot> getUserFromUsername(username) {
     return _usersCollection.document(username).get();
   }

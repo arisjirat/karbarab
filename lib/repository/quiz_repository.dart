@@ -14,6 +14,10 @@ class Quiz {
 class QuizRepository {
   QuizRepository();
 
+  List<QuizModel> allQuiz() {
+    return getQuizData();
+  }
+
   Quiz getQuiz(bool image) {
     List<QuizModel> listQuiz = getQuizData();
     if (image) {
