@@ -118,7 +118,6 @@ class _GameQuizState extends State<GameQuiz> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-    _getQuiz();
     FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
     RewardedVideoAd.instance.listener =
         (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
@@ -140,6 +139,7 @@ class _GameQuizState extends State<GameQuiz> with WidgetsBindingObserver {
         _loadRewardHint();
       }
     };
+    _loadRewardHint();
   }
 
   void _getHint() async {
