@@ -34,7 +34,7 @@ class VoicesBloc extends Bloc<VoicesEvent, VoicesState> {
     final SharedPreferences prefs = await _prefs;
     final List<String> _voices = prefs.getStringList(VOICES_PREFERENCES);
     getLogger('New Speech').w(_voices);
-    if (_voices.isEmpty) {
+    if (_voices == null) {
       final String speech = await _speechRepository.textToSpeech(quizId, arab);
       getLogger('New Speech').i(speech);
       await prefs.setStringList(VOICES_PREFERENCES, [speech]);

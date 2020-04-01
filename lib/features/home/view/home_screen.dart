@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,8 +40,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
     final DateTime now = DateTime.now();
-    if (currentBackPressTime == null ||
-        now.difference(currentBackPressTime) > const Duration(seconds: 2)) {
+    if (
+      currentBackPressTime == null
+      || now.difference(currentBackPressTime) > const Duration(seconds: 2)) 
+    {
       currentBackPressTime = now;
       _scaffoldKey.currentState.showSnackBar(SnackBar(
         backgroundColor: Colors.transparent,
@@ -73,7 +77,8 @@ class _HomeScreenState extends State<HomeScreen> {
       // Fluttertoast.showToast(msg: exit_warning);
       return Future.value(false);
     }
-    return Future.value(true);
+    exit(0);
+    return Future.value(false);
   }
 
   @override
