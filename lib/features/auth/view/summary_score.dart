@@ -102,12 +102,8 @@ class _SummaryScoreState extends State<SummaryScore>
                                   itemBuilder: (context, position) {
                                     return CardItem(
                                       positive: false,
-                                      bahasa:
-                                          state.badQuiz[position].quiz.bahasa,
-                                      id: state.badQuiz[position].quizId,
-                                      arab: state.badQuiz[position].quiz.arab,
-                                      voice: state.badQuiz[position].quiz.voice,
-                                      image: state.badQuiz[position].quiz.image,
+                                      quiz:
+                                          state.badQuiz[position].quiz,
                                       totalScore:
                                           state.badQuiz[position].totalScore,
                                       averageScore:
@@ -161,14 +157,8 @@ class _SummaryScoreState extends State<SummaryScore>
                                   itemBuilder: (context, position) {
                                     return CardItem(
                                       positive: true,
-                                      bahasa:
-                                          state.goodQuiz[position].quiz.bahasa,
-                                      id: state.goodQuiz[position].quizId,
-                                      arab: state.goodQuiz[position].quiz.arab,
-                                      voice:
-                                          state.goodQuiz[position].quiz.voice,
-                                      image:
-                                          state.goodQuiz[position].quiz.image,
+                                      quiz:
+                                          state.goodQuiz[position].quiz,
                                       totalScore:
                                           state.goodQuiz[position].totalScore,
                                       averageScore:

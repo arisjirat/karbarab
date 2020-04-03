@@ -11,6 +11,12 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   NotificationState get initialState => NotificationInitial();
 
   @override
+  void initState() {
+    // super.initState();
+    
+  }
+
+  @override
   Stream<NotificationState> mapEventToState(
     NotificationEvent event,
   ) async* {

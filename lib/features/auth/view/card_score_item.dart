@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/helper/device_height.dart';
 import 'package:karbarab/core/ui/typography.dart';
+import 'package:karbarab/features/auth/model/user_model.dart';
 import 'package:karbarab/features/global_scores/bloc/global_scores_bloc.dart';
 
 class CardScoreItem extends StatelessWidget {
@@ -144,6 +145,60 @@ class CardScoreItem extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class CardUserAction extends StatelessWidget {
+  final UserModel users;
+  final Function(UserModel) onTap;
+  const CardUserAction({Key key, @required this.users, @required this.onTap})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      onPressed: () {
+        onTap(users);
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              const SizedBox(
+                width: 15,
+              ),
+              users.avatar != null
+                  ? CircleAvatar(
+                      backgroundImage: NetworkImage(
+                        users.avatar,
+                      ),
+                      radius: 20,
+                      backgroundColor: Colors.transparent,
+                    )
+                  : const CircleAvatar(
+                      radius: 20,
+                      backgroundColor: greenColor,
+                      backgroundImage:
+                          AssetImage('assets/images/character.png'),
+                    ),
+              const SizedBox(
+                width: 20,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RegularText(
+                    text: users.username,
+                    dark: true,
+                  ),
+                ],
+              )
+            ],
+          ),
+        ],
       ),
     );
   }

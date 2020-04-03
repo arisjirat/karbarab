@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/core/helper/device_height.dart';
 import 'package:karbarab/core/helper/utils.dart';
 import 'package:karbarab/core/ui/button.dart';
 import 'package:karbarab/core/ui/typography.dart';
@@ -28,11 +29,15 @@ class _BattleScreenState extends State<BattleScreen> {
 
   SelectedType mode;
 
-  void _onChangeMode(SelectedType type) {
+  void _onChangeMode(SelectedType type, context) {
     setState(() {
       mode = type;
     });
-    _choose();
+    _choose(context);
+  }
+
+  void _send() {
+
   }
 
   void _setSelected(SelectedType type, dynamic value) {
@@ -56,37 +61,33 @@ class _BattleScreenState extends State<BattleScreen> {
     }
   }
 
+  bool get _isCompleteField {
+    return quizSelected is QuizModel && userSelected is UserModel && gameModeSelected is GameMode;
+  }
+
   Widget get _buildContent {
     switch (mode) {
       case SelectedType.Mode:
-        return GameModeChooser();
+        return GameModeChooser(onSelect: (GameMode gameMode) {
+          _setSelected(SelectedType.Mode, gameMode);
+        },);
       case SelectedType.Quiz:
-        return QuizChooser();
+        return QuizChooser(onSelect: (QuizModel quiz) {
+          _setSelected(SelectedType.Quiz, quiz);
+        },);
       case SelectedType.User:
-        return UserChooser();
+        return UserChooser(onSelect: (UserModel user) {
+      _setSelected(SelectedType.User, user);
+        },);
       default:
     }
-    return GameModeChooser();
+    return GameModeChooser(onSelect: (GameMode gameMode) {
+      _setSelected(SelectedType.Mode, gameMode);
+        },);
   }
 
-  void _choose() {
-    showDialog(
-      // barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(15),
-            ),
-          ),
-          titlePadding: const EdgeInsets.all(0),
-          content: _buildContent,
-          actions: <Widget>[],
-        );
-      },
-    );
+  void _choose(BuildContext _) {
+    Navigator.of(_).push(FullScreenModal(_buildContent));
   }
 
   @override
@@ -139,7 +140,7 @@ class _BattleScreenState extends State<BattleScreen> {
                           color: secondaryColor,
                         ),
                         onPressed: () {
-                          _onChangeMode(SelectedType.Quiz);
+                          _onChangeMode(SelectedType.Quiz, context);
                         },
                       )
                     ],
@@ -165,7 +166,7 @@ class _BattleScreenState extends State<BattleScreen> {
                           color: secondaryColor,
                         ),
                         onPressed: () {
-                          _onChangeMode(SelectedType.User);
+                          _onChangeMode(SelectedType.User, context);
                         },
                       )
                     ],
@@ -191,7 +192,7 @@ class _BattleScreenState extends State<BattleScreen> {
                           color: secondaryColor,
                         ),
                         onPressed: () {
-                          _onChangeMode(SelectedType.Mode);
+                          _onChangeMode(SelectedType.Mode, context);
                         },
                       )
                     ],
@@ -202,8 +203,8 @@ class _BattleScreenState extends State<BattleScreen> {
                 elevation: 0,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 90, vertical: 15),
-                onPressed: () {},
-                color: greenColor,
+                onPressed: _isCompleteField ? _send : null,
+                color: _isCompleteField ? greenColor : greenColor.withOpacity(0.6),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   // side: BorderSide(color: greenColor, width: 2),
@@ -213,6 +214,7 @@ class _BattleScreenState extends State<BattleScreen> {
                   bold: true,
                   dark: false,
                 ),
+
                 // disabled: false,
               ),
             ],
@@ -261,6 +263,75 @@ class RowContainer extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+
+class FullScreenModal extends ModalRoute<void> {
+  final Widget modal;
+  FullScreenModal(this.modal);
+  @override
+  Duration get transitionDuration => const Duration(milliseconds: 100);
+
+  @override
+  bool get opaque => false;
+
+  @override
+  bool get barrierDismissible => false;
+
+  @override
+  Color get barrierColor => Colors.white;
+
+  @override
+  String get barrierLabel => null;
+
+  @override
+  bool get maintainState => true;
+
+  @override
+  Widget buildPage(
+      BuildContext context,
+      Animation<double> animation,
+      Animation<double> secondaryAnimation,
+      ) {
+    // This makes sure that text and other content follows the material style
+    return Material(
+      type: MaterialType.transparency,
+      child: _buildOverlayContent(context),
+      // make sure that the overlay content is not cut off
+      // child: SafeArea(
+      //   child: _buildOverlayContent(context),
+      // ),
+    );
+  }
+
+  Widget _buildOverlayContent(BuildContext context) {
+    return modal;
+    // return Center(
+    //   child: Column(
+    //     mainAxisSize: MainAxisSize.min,
+    //     children: <Widget>[
+    //       modal,
+    //       // RaisedButton(
+    //       //   onPressed: () => Navigator.pop(context),
+    //       //   child: Text('Dismiss'),
+    //       // )
+    //     ],
+    //   ),
+    // );
+  }
+
+  @override
+  Widget buildTransitions(
+      BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+    // You can add your own animations for the overlay content
+    return FadeTransition(
+      opacity: animation,
+      child: ScaleTransition(
+        scale: animation,
+        child: child,
       ),
     );
   }
