@@ -41,10 +41,10 @@ class VoicesBloc extends Bloc<VoicesEvent, VoicesState> {
       final RegExp regExp = RegExp('/($quizId.mp3)');
       try {
         final String voice = _voices.firstWhere((v) => regExp.hasMatch(v));
-        Logger.e('VOICE FOUND', e: voice);
+        Logger.e('VOICE FOUND', e: voice, s: StackTrace.current);
         yield VoicesState.success(quizId, voice);
       } catch (e) {
-        Logger.e('VOICE NOT FOUND', e: e);
+        Logger.e('VOICE NOT FOUND', e: e, s: StackTrace.current);
         final String speech = await _speechRepository.textToSpeech(quizId, arab);
         await prefs.setStringList(VOICES_PREFERENCES, [speech]);
         yield VoicesState.success(quizId, speech);

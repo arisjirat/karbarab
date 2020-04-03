@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:karbarab/features/auth/model/user_model.dart';
+import 'package:karbarab/utils/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -40,15 +41,20 @@ class UserRepository {
   }
 
   Future<FirebaseUser> signInWithGoogle() async {
-    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    await _firebaseAuth.signInWithCredential(credential);
-    return _firebaseAuth.currentUser();
+    try {
+      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      await _firebaseAuth.signInWithCredential(credential);
+      return _firebaseAuth.currentUser();
+    } catch (e) {
+      Logger.e('Sign in With Google', e: e, s: StackTrace.current);
+      throw Exception;
+    }
   }
 
   Future<UserModel> updateUserWithGoogle(String username) async {

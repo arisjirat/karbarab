@@ -1,19 +1,36 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-// import 'package:redux/redux.dart';
-// import 'package:intl/intl.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+
+import 'package:logger/logger.dart' as logprint;
+
+class _SimpleLogPrinter extends logprint.LogPrinter {
+  final String className;
+  _SimpleLogPrinter(this.className);  
+
+  @override
+  void log(logprint.Level level, message, error, StackTrace stackTrace) {
+    final color = logprint.PrettyPrinter.levelColors[level];
+    final emoji = logprint.PrettyPrinter.levelEmojis[level];
+    println(color('$emoji $className - $message'));
+  }
+}
+
+logprint.Logger getLogger(String className) {
+  return logprint.Logger(printer: _SimpleLogPrinter(className));
+}
 
 /// Run this before starting app
 void configureLogger() {
-  if (!kReleaseMode) {
-    // Add standard log output only on debug builds
-    Logger.addClient(DebugLoggerClient());
-  } else {
+  Crashlytics.instance.enableInDevMode = true;
+  // if (!kReleaseMode) {
+  //   // Add standard log output only on debug builds
+  //   Logger.addClient(DebugLoggerClient());
+  // } else {
     // Pass all uncaught errors from the framework to Crashlytics.
     FlutterError.onError = Crashlytics.instance.recordFlutterError;
     Logger.addClient(CrashlyticsLoggerClient());
-  }
+  // }
 }
 
 void testsLogger() {
@@ -72,16 +89,6 @@ class Logger {
   }
 }
 
-/// Custom Middleware logger class
-// class LoggerMiddleware<State> implements MiddlewareClass<State> {
-//   @override
-//   void call(Store<State> store, action, NextDispatcher next) {
-//     next(action);
-
-//     Logger.d('Middleware: { ${action.runtimeType} }');
-//   }
-// }
-
 enum LogLevel { debug, warning, error }
 
 abstract class LoggerClient {
@@ -110,26 +117,27 @@ class DebugLoggerClient implements LoggerClient {
   }) {
     switch (level) {
       case LogLevel.debug:
-        debugPrint('${_timestamp()} [DEBUG]  $message');
+        getLogger('${_timestamp()}').d('[DEBUG]  $message');
         if (e != null) {
-          debugPrint(e.toString());
-          debugPrint(s.toString() ?? StackTrace.current);
+          getLogger('[DEBUG]').d(e);
+          getLogger('🤪🤪').d(e);
+          getLogger('🤪🤪').d(s.toString() ?? StackTrace.current);
         }
         break;
       case LogLevel.warning:
-        debugPrint('${_timestamp()} [WARNING]  $message');
+        getLogger('${_timestamp()} ').w('[WARNING]  $message');
         if (e != null) {
-          debugPrint(e.toString());
-          debugPrint(s.toString() ?? StackTrace.current.toString());
+          getLogger('😭😭').d('$e.toString()');
+          getLogger('😭😭').d(s.toString() ?? StackTrace.current.toString());
         }
         break;
       case LogLevel.error:
-        debugPrint('${_timestamp()} [ERROR]  $message');
+        getLogger('${_timestamp()} ').e('[ERROR]  $message');
         if (e != null) {
-          debugPrint(e.toString());
+          getLogger('🤬😡').e(e.toString());
         }
         // Errors always show a StackTrace
-        debugPrint(s.toString() ?? StackTrace.current.toString());
+        getLogger('🤬😡').e(e);
         break;
     }
   }

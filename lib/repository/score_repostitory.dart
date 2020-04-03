@@ -33,16 +33,21 @@ class ScoreRepository {
         'createdAt': FieldValue.serverTimestamp()
       });
     } catch (e) {
-      Logger.d(e);
+      Logger.e('AddUserScore', e: e, s: StackTrace.current);
     }
   }
 
   Future<Iterable<DocumentSnapshot>> getUserScore(String id) async {
-    final QuerySnapshot scores = await scoreCollection
+    try {
+      final QuerySnapshot scores = await scoreCollection
         .where('userId', isEqualTo: id)
         .limit(10000)
         .getDocuments();
     return scores.documents;
+    } catch (e) {
+      Logger.e('GetUserScore', e: e, s: StackTrace.current);
+      throw Exception;
+    }
   }
 
   Future<List<ScoreGlobalModel>> getAllScore() async {

@@ -110,6 +110,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
       yield LoginState.successNeedUsername();
     } catch (err) {
+      
       yield LoginState.failure();
     }
   }

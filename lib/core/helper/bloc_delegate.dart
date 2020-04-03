@@ -5,7 +5,7 @@ class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onEvent(Bloc bloc, Object event) {
     super.onEvent(bloc, event);
-    Logger.d(event);
+    Logger.w('Event:', e: event.toString());
   }
 
   @override
@@ -17,6 +17,6 @@ class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    Logger.w('Trans', e: '');
+    Logger.d('Trans');
   }
 }
