@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:karbarab/core/config/game_mode.dart';
-import 'package:karbarab/core/helper/log_printer.dart';
+// import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:karbarab/core/helper/utils.dart';
 import 'package:karbarab/features/auth/model/user_model.dart';
 import 'package:karbarab/features/global_scores/bloc/global_scores_bloc.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
+import 'package:karbarab/utils/logger.dart';
 import 'package:uuid/uuid.dart';
 
 class ScoreRepository {
@@ -32,7 +33,7 @@ class ScoreRepository {
         'createdAt': FieldValue.serverTimestamp()
       });
     } catch (e) {
-      getLogger('AddUserScore').e(e);
+      Logger.d(e);
     }
   }
 

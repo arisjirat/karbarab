@@ -4,10 +4,10 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/config/score_value.dart';
-import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:karbarab/core/helper/utils.dart';
 import 'package:karbarab/features/auth/model/user_model.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
+import 'package:karbarab/utils/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:karbarab/repository/score_repostitory.dart';
@@ -200,7 +200,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     try {
       _scoreRepository.addScoreUser(user.id, quizMode, quizId, score, metaQuiz, user);
     } catch (e) {
-      getLogger('AddUserScore').e(e);
+      Logger.e('AddUserScore', e:e);
     }
   }
 }

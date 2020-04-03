@@ -2,7 +2,7 @@ import 'dart:convert' as convert;
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:http/http.dart' as http;
-import 'package:karbarab/core/helper/log_printer.dart';
+import 'package:karbarab/utils/logger.dart';
 import 'package:path_provider/path_provider.dart';
 
 const KEY = 'AIzaSyDCHHs-nQ2pNZw2j9Lgx2x1Y0zDOUqfmm4';
@@ -51,7 +51,7 @@ class SpeechRepository {
     } on VoiceException {
       return throw Error();
     } catch (e) {
-      getLogger('Get Voice').e(e);
+      Logger.w('Get Voice', e: e);
       return throw Error();
     }
   }

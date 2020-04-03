@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/helper/log_printer.dart';
+import 'package:karbarab/utils/logger.dart';
 
 class NotificationFCM extends StatefulWidget {
   @override
@@ -18,14 +19,14 @@ class _NotificationFCMState extends State<NotificationFCM> {
   void initState() {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        getLogger('FCM').e('onMessage');
+        Logger.w('onMessage');
         try {
           final data = message['data'];
           final String name = data['name'];
           final String age = data['age'];
-          getLogger('FCM').e('name: $name & age: $age');
+          // getLogger('FCM').e('name: $name & age: $age');
         } catch (error) {
-          getLogger('FCM').e('error: $error');
+          // getLogger('FCM').e('error: $error');
         }
         return true;
       },
@@ -43,7 +44,7 @@ class _NotificationFCMState extends State<NotificationFCM> {
   Widget build(BuildContext context) {
     final MediaQueryData mediaQueryData = MediaQuery.of(context);
     final double widthScreen = mediaQueryData.size.width;
-    getLogger('FCM').e('token: $token');
+    // getLogger('FCM').e('token: $token');
 
     return Scaffold(
       key: _scaffoldState,

@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:karbarab/features/auth/model/user_model.dart';
 import 'package:meta/meta.dart';
 import 'package:karbarab/features/login/bloc/bloc.dart';
@@ -51,7 +50,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
       yield LoginState.failureUserExist();
     } catch (err) {
-      getLogger('log sync').e(err);
       yield LoginState.failure();
     }
   }

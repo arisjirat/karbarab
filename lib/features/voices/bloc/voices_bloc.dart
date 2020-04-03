@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:karbarab/repository/speech_repository.dart';
+import 'package:karbarab/utils/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -33,21 +33,18 @@ class VoicesBloc extends Bloc<VoicesEvent, VoicesState> {
     yield VoicesState.loading();
     final SharedPreferences prefs = await _prefs;
     final List<String> _voices = prefs.getStringList(VOICES_PREFERENCES);
-    getLogger('New Speech').w(_voices);
     if (_voices == null) {
       final String speech = await _speechRepository.textToSpeech(quizId, arab);
-      getLogger('New Speech').i(speech);
       await prefs.setStringList(VOICES_PREFERENCES, [speech]);
       yield VoicesState.success(quizId, speech);
     } else {
       final RegExp regExp = RegExp('/($quizId.mp3)');
       try {
         final String voice = _voices.firstWhere((v) => regExp.hasMatch(v));
-        getLogger('VOICE FOUND').w('found');
-        getLogger('New Speech').i(voice);
+        Logger.e('VOICE FOUND', e: voice);
         yield VoicesState.success(quizId, voice);
       } catch (e) {
-        getLogger('VOICE NOT FOUND').e(e);
+        Logger.e('VOICE NOT FOUND', e: e);
         final String speech = await _speechRepository.textToSpeech(quizId, arab);
         await prefs.setStringList(VOICES_PREFERENCES, [speech]);
         yield VoicesState.success(quizId, speech);
