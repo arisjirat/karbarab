@@ -22,15 +22,15 @@ logprint.Logger getLogger(String className) {
 
 /// Run this before starting app
 void configureLogger() {
-  Crashlytics.instance.enableInDevMode = true;
-  // if (!kReleaseMode) {
-  //   // Add standard log output only on debug builds
-  //   Logger.addClient(DebugLoggerClient());
-  // } else {
+  // Crashlytics.instance.enableInDevMode = true;
+  if (!kReleaseMode) {
+  // //   // Add standard log output only on debug builds
+    Logger.addClient(DebugLoggerClient());
+  } else {
     // Pass all uncaught errors from the framework to Crashlytics.
     FlutterError.onError = Crashlytics.instance.recordFlutterError;
     Logger.addClient(CrashlyticsLoggerClient());
-  // }
+  }
 }
 
 void testsLogger() {
@@ -171,9 +171,9 @@ class CrashlyticsLoggerClient implements LoggerClient {
       case LogLevel.error:
         instance.log('[ERROR] $message');
         // Always report a non-fatal for errors
-        if (e != null) {
+        if (e != null && !kReleaseMode) {
           instance.recordError(e, s);
-        } else {
+        } else if(!kReleaseMode) {
           instance.recordError(Exception(message), s);
         }
         break;
