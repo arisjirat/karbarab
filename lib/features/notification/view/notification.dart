@@ -1,6 +1,5 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:karbarab/utils/logger.dart';
 
 class NotificationFCM extends StatefulWidget {
