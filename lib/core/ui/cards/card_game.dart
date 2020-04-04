@@ -15,8 +15,7 @@ class CardGame extends StatefulWidget {
   final bool loading;
   final QuizModel quiz;
   final GameMode mode;
-  final Function getHint;
-  final bool adsLoaded;
+  final Widget adsHint;
   final Function giveFeedback;
   final Widget speech;
   CardGame({
@@ -25,10 +24,9 @@ class CardGame extends StatefulWidget {
     this.height = 200,
     this.loading = false,
     @required this.giveFeedback,
-    @required this.getHint,
     @required this.quiz,
     @required this.mode,
-    @required this.adsLoaded,
+    @required this.adsHint,
     @required this.speech,
   });
 
@@ -86,8 +84,7 @@ class _CardGameState extends State<CardGame>
         loading: widget.loading,
         quiz: widget.quiz,
         isCorrect: widget.correct,
-        getHint: widget.getHint,
-        adsLoaded: widget.adsLoaded,
+        adsHint: widget.adsHint,
         giveFeedback: widget.giveFeedback,
         height: widget.height,
         point: widget.point,
@@ -101,8 +98,7 @@ class _CardGameState extends State<CardGame>
         height: widget.height,
         point: widget.point,
         isCorrect: widget.correct,
-        getHint: widget.getHint,
-        adsLoaded: widget.adsLoaded,
+        adsHint: widget.adsHint,
         giveFeedback: widget.giveFeedback,
         answerMode: _getMode(widget.mode),
       );
@@ -114,9 +110,8 @@ class _CardGameState extends State<CardGame>
         voice: widget.quiz.voice,
         height: widget.height,
         isCorrect: widget.correct,
-        getHint: widget.getHint,
-        adsLoaded: widget.adsLoaded,
-        giveFeedback: widget.giveFeedback,
+
+        adsHint: widget.adsHint,        giveFeedback: widget.giveFeedback,
         point: widget.point,
         answerMode: _getMode(widget.mode),
       );
@@ -127,10 +122,9 @@ class _CardGameState extends State<CardGame>
         text: widget.quiz.bahasa,
         height: widget.height,
         isCorrect: widget.correct,
-        getHint: widget.getHint,
-        adsLoaded: widget.adsLoaded,
-        giveFeedback: widget.giveFeedback,
-        point: widget.point,
+
+        adsHint: widget.adsHint,
+        giveFeedback: widget.giveFeedback,        point: widget.point,
         answerMode: _getMode(widget.mode),
       );
     }
@@ -147,22 +141,20 @@ class _CardGameState extends State<CardGame>
         voice: widget.quiz.voice,
         height: widget.height,
         isCorrect: widget.correct,
-        getHint: widget.getHint,
-        adsLoaded: widget.adsLoaded,
+
+        adsHint: widget.adsHint,
         giveFeedback: widget.giveFeedback,
-        point: widget.point,
-        answerMode: _getMode(widget.mode, flip: true),
+        point: widget.point,        answerMode: _getMode(widget.mode, flip: true),
       );
       case GameMode.ArabGambar:
         return CardImage(
         loading: widget.loading,
         isCorrect: widget.correct,
-        getHint: widget.getHint,
-        adsLoaded: widget.adsLoaded,
+
+        adsHint: widget.adsHint,
         giveFeedback: widget.giveFeedback,
         quiz: widget.quiz,
-        height: widget.height,
-        point: widget.point,
+        height: widget.height,        point: widget.point,
       );
       case GameMode.ArabKata:
         return CardText(
@@ -172,27 +164,25 @@ class _CardGameState extends State<CardGame>
         height: widget.height,
         point: widget.point,
         isCorrect: widget.correct,
-        getHint: widget.getHint,
-        adsLoaded: widget.adsLoaded,
+
+        adsHint: widget.adsHint,
         giveFeedback: widget.giveFeedback,
         answerMode: _getMode(widget.mode, flip: true),
       );
-      case GameMode.KataArab:
-        return CardText(
+      case GameMode.KataArab:        return CardText(
         speech: widget.speech,
         loading: widget.loading,
         text: widget.quiz.arab,
         voice: widget.quiz.voice,
         height: widget.height,
         isCorrect: widget.correct,
-        getHint: widget.getHint,
-        adsLoaded: widget.adsLoaded,
+
+        adsHint: widget.adsHint,
         giveFeedback: widget.giveFeedback,
         point: widget.point,
         answerMode: _getMode(widget.mode, flip: true),
       );
-    }
-    return const Text('warn back');
+    }    return const Text('warn back');
   }
 
   Widget _buildFront(context) {

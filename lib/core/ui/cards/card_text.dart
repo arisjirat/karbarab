@@ -11,9 +11,8 @@ class CardText extends StatelessWidget {
   final double height;
   final bool loading;
   final bool isCorrect;
-  final Function getHint;
+  final Widget adsHint;
   final CardAnswerMode answerMode;
-  final bool adsLoaded;
   final Function giveFeedback;
   final Widget speech;
 
@@ -25,8 +24,7 @@ class CardText extends StatelessWidget {
     @required this.loading,
     @required this.answerMode,
     @required this.isCorrect,
-    @required this.getHint,
-    @required this.adsLoaded,
+    @required this.adsHint,
     @required this.giveFeedback,
     @required this.speech,
     this.voice = '',
@@ -105,47 +103,11 @@ class CardText extends StatelessWidget {
             : const SizedBox(
                 width: 0,
               ),
-        (!isCorrect && adsLoaded)
+        !isCorrect
             ? Positioned(
                 bottom: 10.0,
                 left: 10.0,
-                child: GestureDetector(
-                  onTap: () {
-                    getHint();
-                  },
-                  onLongPress: () {
-                    getHint();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.only(right: 10),
-                    decoration: BoxDecoration(
-                      color: greenColor,
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          margin: const EdgeInsets.all(3.0),
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: whiteColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child:
-                              Icon(Icons.vpn_key, size: 20, color: greenColor),
-                        ),
-                        SmallerText(
-                          text: 'Jawaban',
-                          dark: false,
-                          bold: true,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                child: adsHint,
               )
             : const SizedBox(width: 0)
       ],

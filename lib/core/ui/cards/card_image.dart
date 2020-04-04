@@ -10,8 +10,7 @@ class CardImage extends StatelessWidget {
   final double height;
   final bool loading;
   final bool isCorrect;
-  final bool adsLoaded;
-  final Function getHint;
+  final Widget adsHint;
   final Function giveFeedback;
 
   CardImage({
@@ -20,8 +19,7 @@ class CardImage extends StatelessWidget {
     @required this.height,
     @required this.loading,
     @required this.isCorrect,
-    @required this.adsLoaded,
-    @required this.getHint,
+    @required this.adsHint,
     @required this.giveFeedback
   });
 
@@ -80,46 +78,11 @@ class CardImage extends StatelessWidget {
                 ),
               )
           : const SizedBox(width: 0,),
-        (!isCorrect && adsLoaded)
+        !isCorrect
             ? Positioned(
                 bottom: 10.0,
                 left: 10.0,
-                child: GestureDetector(
-                  onTap: () {
-                    getHint();
-                  },
-                  onLongPress: () {
-                    getHint();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.only(right: 10),
-                    decoration: const BoxDecoration(
-                      color: greenColor,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(20),
-                      ),
-                    ),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          margin: const EdgeInsets.all(3.0),
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: whiteColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(Icons.vpn_key, size: 20, color: greenColor),
-                        ),
-                        SmallerText(
-                          text: 'Jawaban',
-                          dark: false,
-                          bold: true,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                child: adsHint,
               )
             : Container(
                 width: 0,

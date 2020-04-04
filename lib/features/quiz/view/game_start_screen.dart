@@ -1,18 +1,16 @@
 import 'dart:async';
-import 'package:firebase_admob/firebase_admob.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:karbarab/core/config/ads.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/config/game_mode.dart';
-import 'package:karbarab/core/config/keywords_ads.dart';
 import 'package:karbarab/core/config/score_value.dart';
-import 'package:karbarab/core/helper/hasInternet.dart';
+import 'package:karbarab/core/helper/device_height.dart';
+import 'package:karbarab/core/ui/button_ads_hint.dart';
 import 'package:karbarab/core/ui/feedback_form.dart';
 import 'package:karbarab/core/ui/popup.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
+import 'package:karbarab/features/admob/view/ads.dart';
 import 'package:karbarab/features/feedback/bloc/feedback_bloc.dart';
 import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
@@ -41,17 +39,16 @@ class _GameStartScreenState extends State<GameStartScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<QuizBloc>(context).add(GetQuiz(image: widget.mode == GameMode.ArabGambar || widget.mode == GameMode.GambarArab));
+    BlocProvider.of<QuizBloc>(context).add(GetQuiz(
+        image: widget.mode == GameMode.ArabGambar ||
+            widget.mode == GameMode.GambarArab));
   }
 
   @override
   Widget build(BuildContext context) {
     final QuizBloc quizBloc = BlocProvider.of<QuizBloc>(context);
     final ScoreBloc scoreBloc = BlocProvider.of<ScoreBloc>(context);
-    final MediaQueryData mediaContext = MediaQuery.of(context);
-    final double padding =
-        mediaContext.padding.top + mediaContext.padding.bottom;
-    final double _deviceHeight = mediaContext.size.height - padding;
+    final double _deviceHeight = deviceHeight(context);
     return Scaffold(
       body: BlocBuilder<QuizBloc, QuizState>(builder: (context, state) {
         if (state is HasQuiz) {
@@ -94,19 +91,13 @@ class GameQuiz extends StatefulWidget {
   _GameQuizState createState() => _GameQuizState();
 }
 
-class _GameQuizState extends State<GameQuiz> with WidgetsBindingObserver {
+class _GameQuizState extends State<GameQuiz> {
   List<String> _recentAnswers = [];
   bool _isCorrect = false;
   bool _loading = false;
   String _currentAnswer = '';
   double _currentPoint = SCORE_BASE;
   bool _hint = false;
-  bool _adsLoaded = false;
-
-  static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-    testDevices: APP_ID != null ? <String>[APP_ID] : null,
-    keywords: KEYWORDS,
-  );
 
   String get _rightAnswer =>
       _getAnswerIndex(widget.list.indexOf(widget.correct));
@@ -115,60 +106,10 @@ class _GameQuizState extends State<GameQuiz> with WidgetsBindingObserver {
     return _recentAnswers.contains(key);
   }
 
-  @override
-  void initState() {
-    super.initState();
-    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
-    RewardedVideoAd.instance.listener =
-        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
-      print('RewardedVideoAd event $event');
-      if (event == RewardedVideoAdEvent.rewarded) {
-        BlocProvider.of<AdmobBloc>(context)
-            .add(UserAdsrewards(adsMode: 'hint', quizId: widget.correct.id));
-        setState(() {
-          _hint = true;
-          _adsLoaded = false;
-        });
-      }
-      if (event == RewardedVideoAdEvent.loaded) {
-        setState(() {
-          _adsLoaded = true;
-        });
-      }
-      if (event == RewardedVideoAdEvent.closed && _adsLoaded) {
-        _loadRewardHint();
-      }
-    };
-    _loadRewardHint();
-  }
-
-  void _getHint() async {
-    checkConnectionFirst(RewardedVideoAd.instance.show, context);
-  }
-
-  void _loadRewardHint() {
+  void _handleRewardedHint() {
     setState(() {
-      _adsLoaded = false;
+      _hint = true;
     });
-    RewardedVideoAd.instance
-        .load(
-      adUnitId: 'ca-app-pub-8844883376001707/4243991756',
-      // adUnitId: RewardedVideoAd.testAdUnitId,
-      targetingInfo: targetingInfo,
-    )
-        .then((e) {
-      setState(() {
-        _adsLoaded = e;
-      });
-    });
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.resumed) {
-      checkConnectionFirst(_loadRewardHint, context);
-    }
   }
 
   void _getQuiz() {
@@ -178,13 +119,13 @@ class _GameQuizState extends State<GameQuiz> with WidgetsBindingObserver {
       _loading = true;
       _isCorrect = false;
       _currentAnswer = '';
-      _adsLoaded = false;
       _recentAnswers = [];
       _hint = false;
     });
-    _loadRewardHint();
     Timer(const Duration(milliseconds: 500), () {
-      widget.quizBloc.add(GetQuiz(image: widget.mode == GameMode.ArabGambar || widget.mode == GameMode.GambarArab));
+      widget.quizBloc.add(GetQuiz(
+          image: widget.mode == GameMode.ArabGambar ||
+              widget.mode == GameMode.GambarArab));
       setState(() {
         _loading = false;
       });
@@ -199,7 +140,6 @@ class _GameQuizState extends State<GameQuiz> with WidgetsBindingObserver {
 
   void _applyAnswer() {
     if (_currentAnswer == '') {
-
     } else if (_rightAnswer == _currentAnswer && _currentAnswer != '') {
       setState(() {
         _isCorrect = true;
@@ -360,8 +300,11 @@ class _GameQuizState extends State<GameQuiz> with WidgetsBindingObserver {
               deviceHeight: widget.deviceHeight,
               quiz: widget.correct,
               mode: widget.mode,
-              adsLoaded: _adsLoaded,
-              getHint: _getHint,
+              adsHint: AdsScreen(
+                adsMode: AdsMode.HINT,
+                onReward: _handleRewardedHint,
+                buttonShow: const ButtonAdsHint(),
+              ),
               giveFeedback: _giveFeedback,
               speech: Speech(id: widget.correct.id, arab: widget.correct.arab),
             ),
