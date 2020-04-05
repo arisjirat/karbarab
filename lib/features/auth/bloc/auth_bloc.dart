@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:karbarab/repository/score_repostitory.dart';
+import 'package:karbarab/utils/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:karbarab/repository/user_repository.dart';
 
@@ -9,6 +11,7 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final UserRepository _userRepository;
   final ScoreRepository _scoreRepository = ScoreRepository();
 
@@ -42,6 +45,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final isGoogleAuth = await _userRepository.isUserGoogleAuth();
         final userId = await _userRepository.getUserId();
         final scores = await _scoreRepository.getUserScore(userId);
+        final tokenFCM = await _userRepository.getUserTokenFCM();
         final totalScore = await scores.fold(0, (t, e) => e['score'] + t);
 
         yield Authenticated(
@@ -50,6 +54,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           fullname: fullname,
           totalPoints: totalScore,
           isGoogleAuth: isGoogleAuth,
+          tokenFCM: tokenFCM
         );
       } else {
         yield Unauthenticated();
@@ -67,11 +72,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final isGoogleAuth = await _userRepository.isUserGoogleAuth();
     final scores = await _scoreRepository.getUserScore(userId);
     final totalScore = await scores.fold(0, (t, e) => e['score'] + t);
+    final tokenFCM = await _userRepository.getUserTokenFCM();
+
+    final newToken = await _firebaseMessaging.getToken();
+
+    if (newToken != tokenFCM) {
+      _userRepository.updateUserTokenFCM(name, newToken);
+    }
+
     yield Authenticated(
         displayName: name,
         avatar: avatar,
         isGoogleAuth: isGoogleAuth,
         fullname: fullname,
+        tokenFCM: newToken != tokenFCM ? newToken : tokenFCM,
         totalPoints: totalScore);
   }
 

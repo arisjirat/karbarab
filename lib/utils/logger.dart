@@ -23,9 +23,9 @@ logprint.Logger getLogger(String className) {
 /// Run this before starting app
 void configureLogger() {
   // Crashlytics.instance.enableInDevMode = true;
+    Logger.addClient(DebugLoggerClient());
   if (!kReleaseMode) {
   // //   // Add standard log output only on debug builds
-    Logger.addClient(DebugLoggerClient());
   } else {
     // Pass all uncaught errors from the framework to Crashlytics.
     FlutterError.onError = Crashlytics.instance.recordFlutterError;

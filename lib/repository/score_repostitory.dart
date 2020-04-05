@@ -1,12 +1,38 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:meta/meta.dart';
 import 'package:karbarab/core/config/game_mode.dart';
-// import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:karbarab/core/helper/utils.dart';
 import 'package:karbarab/features/auth/model/user_model.dart';
 import 'package:karbarab/features/global_scores/bloc/global_scores_bloc.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/utils/logger.dart';
 import 'package:uuid/uuid.dart';
+
+class BattleCardModel {
+  final String scoreId;
+  final String userId;
+  final String userIdSender;
+  final GameMode quizMode;
+  final String quizId;
+  final int targetScore;
+  final int score;
+  final QuizModel metaQuiz;
+  final UserModel metaUser;
+  DateTime createdAt;
+
+  BattleCardModel({
+    @required this.userId,
+    @required this.userIdSender,
+    @required this.quizMode,
+    @required this.quizId,
+    @required this.targetScore,
+    @required this.score,
+    @required this.metaQuiz,
+    @required this.metaUser,
+    this.scoreId,
+    this.createdAt,
+  });
+}
 
 class ScoreRepository {
   final CollectionReference scoreCollection =
@@ -23,17 +49,54 @@ class ScoreRepository {
     UserModel metaUser,
   ) async {
     try {
-      return await scoreCollection.document(Uuid().v4()).setData({
+      final scoreId = Uuid().v4();
+      return await scoreCollection.document(scoreId).setData({
+        'scoreId': scoreId,
         'userId': userId,
         'quizId': quizId,
         'quizMode': gameModeToString(quizMode),
         'score': score,
         'metaUser': metaUser.toJson(),
         'metaQuiz': metaQuiz.toJson(),
-        'createdAt': FieldValue.serverTimestamp()
+        'createdAt': FieldValue.serverTimestamp(),
       });
     } catch (e) {
       Logger.e('AddUserScore', e: e, s: StackTrace.current);
+    }
+  }
+
+  Future addBattleCard(BattleCardModel battleCard) async {
+    try {
+      final scoreId = Uuid().v4();
+      return await scoreCollection.document(scoreId).setData({
+        'scoreId': scoreId,
+        'isBattle': true,
+        'isSolved': false,
+        'userIdSender': battleCard.userIdSender,
+        'userId': battleCard.userId,
+        'quizId': battleCard.quizId,
+        'quizMode': gameModeToString(battleCard.quizMode),
+        'score': 0,
+        'targetScore': battleCard.targetScore,
+        'metaUser': battleCard.metaUser.toJson(),
+        'metaQuiz': battleCard.metaQuiz.toJson(),
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      Logger.e('AddBattleCard', e: e, s: StackTrace.current);
+    }
+  }
+
+  Future updateBattleCard(String scoreId, score) async {
+    try {
+      final updateData = scoreCollection.document(scoreId).updateData;
+      return await updateData({
+        'isSolved': true,
+        'score': score,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      Logger.e('AddBattleCard', e: e, s: StackTrace.current);
     }
   }
 

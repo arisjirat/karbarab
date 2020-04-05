@@ -7,6 +7,7 @@ import 'package:karbarab/core/helper/utils.dart';
 import 'package:karbarab/core/ui/button.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/features/auth/model/user_model.dart';
+import 'package:karbarab/features/battle/bloc/battle_bloc.dart';
 import 'package:karbarab/features/battle/view/gamemode_chooser.dart';
 import 'package:karbarab/features/battle/view/quiz_chooser.dart';
 import 'package:karbarab/features/battle/view/user_chooser.dart';
@@ -37,7 +38,11 @@ class _BattleScreenState extends State<BattleScreen> {
   }
 
   void _send() {
-
+    BlocProvider.of<BattleBloc>(context).add(SendCard(
+      gameMode: gameModeSelected,
+      quiz: quizSelected,
+      userReciever: userSelected,
+    ));
   }
 
   void _setSelected(SelectedType type, dynamic value) {
@@ -62,28 +67,38 @@ class _BattleScreenState extends State<BattleScreen> {
   }
 
   bool get _isCompleteField {
-    return quizSelected is QuizModel && userSelected is UserModel && gameModeSelected is GameMode;
+    return quizSelected is QuizModel &&
+        userSelected is UserModel &&
+        gameModeSelected is GameMode;
   }
 
   Widget get _buildContent {
     switch (mode) {
       case SelectedType.Mode:
-        return GameModeChooser(onSelect: (GameMode gameMode) {
-          _setSelected(SelectedType.Mode, gameMode);
-        },);
+        return GameModeChooser(
+          onSelect: (GameMode gameMode) {
+            _setSelected(SelectedType.Mode, gameMode);
+          },
+        );
       case SelectedType.Quiz:
-        return QuizChooser(onSelect: (QuizModel quiz) {
-          _setSelected(SelectedType.Quiz, quiz);
-        },);
+        return QuizChooser(
+          onSelect: (QuizModel quiz) {
+            _setSelected(SelectedType.Quiz, quiz);
+          },
+        );
       case SelectedType.User:
-        return UserChooser(onSelect: (UserModel user) {
-      _setSelected(SelectedType.User, user);
-        },);
+        return UserChooser(
+          onSelect: (UserModel user) {
+            _setSelected(SelectedType.User, user);
+          },
+        );
       default:
     }
-    return GameModeChooser(onSelect: (GameMode gameMode) {
-      _setSelected(SelectedType.Mode, gameMode);
-        },);
+    return GameModeChooser(
+      onSelect: (GameMode gameMode) {
+        _setSelected(SelectedType.Mode, gameMode);
+      },
+    );
   }
 
   void _choose(BuildContext _) {
@@ -96,6 +111,20 @@ class _BattleScreenState extends State<BattleScreen> {
       backgroundColor: whiteColor,
       body: Column(
         children: <Widget>[
+          BlocBuilder<BattleBloc, BattleState>(
+            builder: (c, s) {
+              if (s is SendCardState && s.isLoading) {
+                return const Text('wait..');
+              }
+              if (s is SendCardState && s.isFailure) {
+                return const Text('gagal..');
+              }
+              if (s is SendCardState && s.isSuccess) {
+                return const Text('success..');
+              }
+              return const SizedBox(width: 0);
+            },
+          ),
           const SizedBox(height: 30),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -132,7 +161,9 @@ class _BattleScreenState extends State<BattleScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       RegularText(
-                        text: quizSelected != null ? quizSelected.bahasa : 'Silahkan Pilih',
+                        text: quizSelected != null
+                            ? quizSelected.bahasa
+                            : 'Silahkan Pilih',
                       ),
                       FlatButton(
                         child: RegularText(
@@ -158,7 +189,9 @@ class _BattleScreenState extends State<BattleScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       RegularText(
-                        text: userSelected != null ? userSelected.username : 'Silahkan Pilih',
+                        text: userSelected != null
+                            ? userSelected.username
+                            : 'Silahkan Pilih',
                       ),
                       FlatButton(
                         child: RegularText(
@@ -184,7 +217,9 @@ class _BattleScreenState extends State<BattleScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       RegularText(
-                        text: gameModeSelected != null ? gameModeToString(gameModeSelected) : 'Silahkan Pilih',
+                        text: gameModeSelected != null
+                            ? gameModeToString(gameModeSelected)
+                            : 'Silahkan Pilih',
                       ),
                       FlatButton(
                         child: RegularText(
@@ -204,7 +239,8 @@ class _BattleScreenState extends State<BattleScreen> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 90, vertical: 15),
                 onPressed: _isCompleteField ? _send : null,
-                color: _isCompleteField ? greenColor : greenColor.withOpacity(0.6),
+                color:
+                    _isCompleteField ? greenColor : greenColor.withOpacity(0.6),
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.all(Radius.circular(10)),
                   // side: BorderSide(color: greenColor, width: 2),
@@ -268,7 +304,6 @@ class RowContainer extends StatelessWidget {
   }
 }
 
-
 class FullScreenModal extends ModalRoute<void> {
   final Widget modal;
   FullScreenModal(this.modal);
@@ -292,10 +327,10 @@ class FullScreenModal extends ModalRoute<void> {
 
   @override
   Widget buildPage(
-      BuildContext context,
-      Animation<double> animation,
-      Animation<double> secondaryAnimation,
-      ) {
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
     // This makes sure that text and other content follows the material style
     return Material(
       type: MaterialType.transparency,
@@ -324,8 +359,8 @@ class FullScreenModal extends ModalRoute<void> {
   }
 
   @override
-  Widget buildTransitions(
-      BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
     // You can add your own animations for the overlay content
     return FadeTransition(
       opacity: animation,

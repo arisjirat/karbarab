@@ -62,7 +62,8 @@ class UserRepository {
     final avatar = await getAvatarFirebase();
     final displayName = (await _firebaseAuth.currentUser()).displayName;
     final id = await getUserId();
-    final tokenFCM = await getUserTokenFCM();
+    // final tokenFCM = await getUserTokenFCM();
+    final tokenFCM = await _firebaseMessaging.getToken();
     final UserModel userData = UserModel(
       id: id,
       username: username,
@@ -74,6 +75,13 @@ class UserRepository {
     );
     await updateData(userData.toJson());
     return userData;
+  }
+
+  Future<void> updateUserTokenFCM(username, newToken) async {
+    final updateData = _usersCollection.document(username).updateData;
+    final SharedPreferences prefs = await _prefs;
+    await prefs.setString(USER_FCMTOKEN_PREFERENCES, newToken);
+    return await updateData({'tokenFCM': newToken});
   }
 
   Future<void> saveUser({
@@ -106,7 +114,7 @@ class UserRepository {
       tokenFCM: tokenFCM,
     );
     await save(userData.toJson());
-    return saveUserToLocal(userData);
+    return await saveUserToLocal(userData);
   }
 
   Future<List<DocumentSnapshot>> getAllUsers() async {

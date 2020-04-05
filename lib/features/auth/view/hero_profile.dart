@@ -10,6 +10,7 @@ import 'package:karbarab/features/login/bloc/bloc.dart';
 import 'package:karbarab/features/login/view/login_screen.dart';
 import 'package:karbarab/repository/user_repository.dart';
 import 'package:karbarab/core/config/colors.dart';
+import 'package:karbarab/utils/logger.dart';
 
 class HeroProfile extends StatelessWidget {
   final UserRepository userRepository;
@@ -169,6 +170,7 @@ class HeroProfile extends StatelessWidget {
       child: BlocBuilder<AuthBloc, AuthState>(
         builder: (context, state) {
           if (state is Authenticated) {
+            Logger.w('Token old: ${state.tokenFCM}');
             return Row(
               children: <Widget>[
                 state.avatar != null

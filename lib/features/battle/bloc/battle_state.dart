@@ -8,3 +8,16 @@ class BattleInitial extends BattleState {
   @override
   List<Object> get props => [];
 }
+
+class SendCardState extends BattleState {
+  final bool isSuccess;
+  final bool isFailure;
+  final bool isLoading;
+  SendCardState(this.isSuccess, this.isFailure, this.isLoading);
+  @override
+  List<Object> get props => [
+    isSuccess,
+    isFailure,
+    isLoading,
+  ];
+}
