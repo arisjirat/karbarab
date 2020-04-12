@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
-import 'package:karbarab/features/auth/model/user_model.dart';
+
+import 'package:karbarab/model/user.dart';
 import 'package:meta/meta.dart';
 import 'package:karbarab/features/login/bloc/bloc.dart';
 import 'package:karbarab/repository/user_repository.dart';
@@ -43,7 +44,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       final user = await _userRepository.getUserFromEmail(email);
 
       if (user.isEmpty) {
-        final UserModel userData = await _userRepository.updateUserWithGoogle(username);
+        final User userData = await _userRepository.updateUserWithGoogle(username);
         await _userRepository.saveUserToLocal(userData);
         yield LoginState.success();
         return;
@@ -95,15 +96,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
       if (user.isNotEmpty) {
         final singleUser = user.toList()[0];
-        final UserModel userData = UserModel(
-          id: singleUser['id'],
-          email: singleUser['email'],
-          username: singleUser['username'],
-          isGoogleAuth: singleUser['isGoogleAuth'],
-          tokenFCM: singleUser['tokenFCM'],
-          fullname: singleUser['fullname'],
-          avatar: singleUser['avatar'],
-        );
+        final User userData = UserRepository.fromDoc(singleUser);
         await _userRepository.saveUserToLocal(userData);
         yield LoginState.success();
         return;

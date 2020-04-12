@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/ui/popup.dart';
-import 'package:karbarab/features/auth/model/user_model.dart';
+
 import 'package:karbarab/features/battle/view/answer_card.dart';
 import 'package:karbarab/features/notification/bloc/notification_bloc.dart';
 import 'package:karbarab/features/notification/model/notification.model.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
+import 'package:karbarab/model/user.dart';
 import 'package:karbarab/repository/quiz_repository.dart';
 import 'package:karbarab/repository/score_repostitory.dart';
 import 'package:karbarab/repository/user_repository.dart';
@@ -27,7 +28,7 @@ class NotificationScreenState extends State<NotificationScreen> {
 
   void _showModal(
     QuizModel quiz,
-    UserModel sender,
+    User sender,
     int targetScore,
     BattleCardModel battleCardModel,
   ) {

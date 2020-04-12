@@ -5,7 +5,7 @@ class UsersState {
   final bool isSuccess;
   final bool isFailure;
   final bool isLoading;
-  final List<UserModel> users;
+  final List<User> users;
 
   UsersState({
     @required this.isSuccess,
@@ -55,7 +55,7 @@ class UsersState {
     bool isFailure,
     bool isLoading,
     bool isUserExist,
-    List<UserModel> isUsers,
+    List<User> isUsers,
   }) {
     return UsersState(
       isSuccess: isSuccess ?? this.isSuccess,

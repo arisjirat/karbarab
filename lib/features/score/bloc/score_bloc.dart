@@ -5,8 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/config/score_value.dart';
 import 'package:karbarab/core/helper/utils.dart';
-import 'package:karbarab/features/auth/model/user_model.dart';
+
 import 'package:karbarab/features/quiz/model/quiz.dart';
+import 'package:karbarab/model/user.dart';
 import 'package:karbarab/utils/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
@@ -196,7 +197,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
   Stream<ScoreState> _mapAddUserScore(
       GameMode quizMode, String quizId, int score, QuizModel metaQuiz) async* {
     
-    final UserModel user = await _userRepository.getUserMeta();
+    final User user = await _userRepository.getUserMeta();
     try {
       _scoreRepository.addScoreUser(user.id, quizMode, quizId, score, metaQuiz, user);
     } catch (e) {

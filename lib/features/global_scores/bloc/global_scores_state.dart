@@ -20,7 +20,7 @@ class GlobalHasScores extends GlobalScoresState {
 class ScoreGlobalModel {
   final int score;
   final String userId;
-  final UserModel metaUser;
+  final User metaUser;
   final List<ScoreItem> scoreHistory;
 
   ScoreGlobalModel({

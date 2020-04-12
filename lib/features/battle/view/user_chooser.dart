@@ -3,12 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/ui/typography.dart';
-import 'package:karbarab/features/auth/model/user_model.dart';
 import 'package:karbarab/features/auth/view/card_score_item.dart';
 import 'package:karbarab/features/users/bloc/users_bloc.dart';
+import 'package:karbarab/model/user.dart';
 
 class UserChooser extends StatefulWidget {
-  final Function(UserModel) onSelect;
+  final Function(User) onSelect;
   UserChooser({Key key, @required this.onSelect}) : super(key: key);
 
   @override
@@ -17,7 +17,7 @@ class UserChooser extends StatefulWidget {
 
 class _UserChooserState extends State<UserChooser> {
   TextEditingController search = TextEditingController();
-  List<UserModel> filtered = [];
+  List<User> filtered = [];
 
   @override
   void initState() {
@@ -25,7 +25,7 @@ class _UserChooserState extends State<UserChooser> {
     super.initState();
   }
 
-  void filtering(List<UserModel> list, value) {
+  void filtering(List<User> list, value) {
     final RegExp reg = RegExp('${value.toLowerCase()}');
     setState(() {
       filtered =
@@ -134,7 +134,7 @@ class _UserChooserState extends State<UserChooser> {
                     itemBuilder: (_, id) {
                       return CardUserAction(
                         users: filtered[id],
-                        onTap: (UserModel quiz) {
+                        onTap: (User quiz) {
                           widget.onSelect(quiz);
                           Navigator.pop(context);
                         },

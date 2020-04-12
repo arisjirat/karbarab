@@ -11,7 +11,7 @@ class NotificationInitial extends NotificationState {
 
 class HaveNewBattleCard extends NotificationState {
   final QuizModel quiz;
-  final UserModel userSender;
+  final User userSender;
   final int targetScore;
   final GameMode gameMode;
   final BattleCardModel battleCard;

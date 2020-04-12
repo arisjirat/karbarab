@@ -1,7 +1,8 @@
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:karbarab/core/config/game_mode.dart';
-import 'package:karbarab/features/auth/model/user_model.dart';
+
+import 'package:karbarab/model/user.dart';
 import 'package:karbarab/utils/logger.dart';
 
 const BASE_URL = 'https://fcm.googleapis.com/fcm/send';
@@ -18,7 +19,7 @@ class NotificationRepository {
 
   Future<void> sendCardToUser(
     String userRecieverTokenId,
-    UserModel userSender,
+    User userSender,
     String quizId,
     int targetScore,
     GameMode gameMode,

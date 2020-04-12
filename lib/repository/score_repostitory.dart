@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:karbarab/model/user.dart';
+import 'package:karbarab/repository/user_repository.dart';
 import 'package:meta/meta.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/helper/utils.dart';
-import 'package:karbarab/features/auth/model/user_model.dart';
+
 import 'package:karbarab/features/global_scores/bloc/global_scores_bloc.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/utils/logger.dart';
@@ -17,7 +19,7 @@ class BattleCardModel {
   int targetScore;
   int score;
   QuizModel metaQuiz;
-  UserModel metaUser;
+  User metaUser;
   DateTime createdAt;
 
   BattleCardModel({
@@ -41,7 +43,7 @@ class BattleCardModel {
     targetScore = json['targetScore'];
     score = json['score'];
     metaQuiz = QuizModel.fromJson(json['metaQuiz']);
-    metaUser = UserModel.fromJson(json['metaUser']);
+    metaUser = UserRepository.fromDoc(json['metaUser']);
     scoreId = json['scoreId'];
     createdAt = DateTime.fromMicrosecondsSinceEpoch(json['createdAt'] * 1000);
   }
@@ -74,7 +76,7 @@ class ScoreRepository {
     String quizId,
     int score,
     QuizModel metaQuiz,
-    UserModel metaUser,
+    User metaUser,
   ) async {
     try {
       final scoreId = Uuid().v4();
@@ -84,7 +86,7 @@ class ScoreRepository {
         'quizId': quizId,
         'quizMode': gameModeToString(quizMode),
         'score': score,
-        'metaUser': metaUser.toJson(),
+        'metaUser': UserRepository.toMap(metaUser),
         'metaQuiz': metaQuiz.toJson(),
         'createdAt': FieldValue.serverTimestamp(),
       });
@@ -106,7 +108,7 @@ class ScoreRepository {
         'quizMode': gameModeToString(battleCard.quizMode),
         'score': 0,
         'targetScore': battleCard.targetScore,
-        'metaUser': battleCard.metaUser.toJson(),
+        'metaUser': UserRepository.toMap(battleCard.metaUser),
         'metaQuiz': battleCard.metaQuiz.toJson(),
         'createdAt': FieldValue.serverTimestamp(),
       });
@@ -192,15 +194,7 @@ class ScoreRepository {
       final String bahasa = cur['metaQuiz']['bahasa'];
       final GameMode quizMode = stringToGameMode(cur['quizMode']);
       final int score = cur['score'];
-      final UserModel user = UserModel(
-        id: metaUser['id'],
-        email: metaUser['email'],
-        avatar: metaUser['avatar'],
-        fullname: metaUser['fullname'],
-        username: metaUser['username'],
-        isGoogleAuth: metaUser['isGoogleAuth'],
-        tokenFCM: metaUser['tokenFCM'],
-      );
+      final User user = UserRepository.fromDoc(metaUser);
       if (found >= 0) {
         acc[found] = ScoreGlobalModel(
           userId: user.id,

@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:karbarab/features/auth/model/user_model.dart';
+
+import 'package:karbarab/model/user.dart';
 import 'package:karbarab/repository/user_repository.dart';
 import 'package:karbarab/utils/logger.dart';
 import 'package:meta/meta.dart';
@@ -39,9 +40,9 @@ class AdmobBloc extends Bloc<AdmobEvent, AdmobState> {
 
   Stream<AdmobState> _mapUserAdsrewards(AdsMode adsMode, int coin, { quizId = '' }) async* {
     try {
-      final UserModel user = await _userRepository.getUserMeta();
+      final User user = await _userRepository.getUserMeta();
       await adsRewardsCollection.document().setData({
-        'user': user.toJson(),
+        'user': UserRepository.toMap(user),
         'coin': coin.toString(),
         'quizId': quizId.toString(),
         'adsMode': adsMode.toString(),

@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/helper/device_height.dart';
 import 'package:karbarab/core/ui/typography.dart';
-import 'package:karbarab/features/auth/model/user_model.dart';
+
 import 'package:karbarab/features/global_scores/bloc/global_scores_bloc.dart';
+import 'package:karbarab/model/user.dart';
 
 class CardScoreItem extends StatelessWidget {
   final ScoreGlobalModel score;
@@ -151,8 +152,8 @@ class CardScoreItem extends StatelessWidget {
 }
 
 class CardUserAction extends StatelessWidget {
-  final UserModel users;
-  final Function(UserModel) onTap;
+  final User users;
+  final Function(User) onTap;
   const CardUserAction({Key key, @required this.users, @required this.onTap})
       : super(key: key);
 

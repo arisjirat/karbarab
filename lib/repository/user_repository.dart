@@ -2,21 +2,53 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:karbarab/features/auth/model/user_model.dart';
+import 'package:karbarab/model/user.dart';
 import 'package:karbarab/utils/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
-const USER_ID_PREFERENCES = 'users_id';
-const USER_FCMTOKEN_PREFERENCES = 'users_fcmtoken';
-const USER_NAME_PREFERENCES = 'username';
-const USER_AVATAR_PREFERENCES = 'user_avatar_fcmtoken';
+const USER_ID_PREFERENCES = 'user_id';
+const USER_FCMTOKEN_PREFERENCES = 'user_fcmtoken';
+const USER_NAME_PREFERENCES = 'user_username';
+const USER_AVATAR_PREFERENCES = 'user_avatar';
 const USER_IS_GOOGLEAUTH = 'user_is_googleauth';
-const USER_MAIL_PREFERENCES = 'user_mail_preferences';
-const USER_FULLNAME_PREFERENCES = 'user_fullname_preferences';
+const USER_MAIL_PREFERENCES = 'user_email';
+const USER_FULLNAME_PREFERENCES = 'user_fullname';
 
 class UserRepository {
+  static const ID = 'id';
+  static const AVATAR = 'avatar';
+  static const EMAIL = 'email';
+  static const FULLNAME = 'fullname';
+  static const IS_GOOGLE_AUTH = 'isGoogleAuth';
+  static const PASSWORD = 'password';
+  static const TOKEN_FCM = 'tokenFCM';
+  static const USERNAME = 'username';
+
+  static User fromDoc(DocumentSnapshot document) {
+    return User((u) => u
+      ..id = document[ID]
+      ..avatar = document[AVATAR]
+      ..email = document[EMAIL]
+      ..fullname = document[FULLNAME]
+      ..isGoogleAuth = document[IS_GOOGLE_AUTH]
+      ..tokenFCM = document[TOKEN_FCM]
+      ..username = document[USERNAME]);
+  }
+
+  static Map<String, dynamic> toMap(User user) {
+    return {
+      ID: user.id,
+      AVATAR: user.avatar,
+      EMAIL: user.email,
+      FULLNAME: user.fullname,
+      IS_GOOGLE_AUTH: user.isGoogleAuth,
+      TOKEN_FCM: user.tokenFCM,
+      USERNAME: user.username,
+    };
+  }
+
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
@@ -28,7 +60,7 @@ class UserRepository {
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _googleSignIn = googleSignin ?? GoogleSignIn();
 
-  Future<void> saveUserToLocal(UserModel user) async {
+  Future<void> saveUserToLocal(User user) async {
     final SharedPreferences prefs = await _prefs;
     await prefs.setString(USER_ID_PREFERENCES, user.id);
     await prefs.setString(USER_FCMTOKEN_PREFERENCES, user.tokenFCM);
@@ -56,24 +88,23 @@ class UserRepository {
     }
   }
 
-  Future<UserModel> updateUserWithGoogle(String username) async {
+  Future<User> updateUserWithGoogle(String username) async {
     final updateData = _usersCollection.document(username).updateData;
     final email = await getEmailFirebase();
     final avatar = await getAvatarFirebase();
     final displayName = (await _firebaseAuth.currentUser()).displayName;
     final id = await getUserId();
-    // final tokenFCM = await getUserTokenFCM();
     final tokenFCM = await _firebaseMessaging.getToken();
-    final UserModel userData = UserModel(
-      id: id,
-      username: username,
-      isGoogleAuth: true,
-      tokenFCM: tokenFCM,
-      avatar: avatar,
-      email: email,
-      fullname: displayName,
-    );
-    await updateData(userData.toJson());
+    final User userData = User((u) => u
+      ..id = id
+      ..avatar = avatar
+      ..email = email
+      ..fullname = displayName
+      ..isGoogleAuth = true
+      ..tokenFCM = tokenFCM
+      ..username = username);
+
+    await updateData(toMap(userData));
     return userData;
   }
 
@@ -95,25 +126,23 @@ class UserRepository {
       final email = await getEmailFirebase();
       final avatar = await getAvatarFirebase();
       final displayName = (await _firebaseAuth.currentUser()).displayName;
-      final UserModel userData = UserModel(
-        id: id,
-        username: username,
-        isGoogleAuth: isGoogleAuth,
-        tokenFCM: tokenFCM,
-        avatar: avatar,
-        email: email,
-        fullname: displayName,
-      );
-      await save(userData.toJson());
+      final User userData = User((u) => u
+        ..id = id
+        ..avatar = avatar
+        ..email = email
+        ..fullname = displayName
+        ..isGoogleAuth = true
+        ..tokenFCM = tokenFCM
+        ..username = username);
+      await save(toMap(userData));
       return saveUserToLocal(userData);
     }
-    final UserModel userData = UserModel(
-      id: id,
-      username: username,
-      isGoogleAuth: isGoogleAuth,
-      tokenFCM: tokenFCM,
-    );
-    await save(userData.toJson());
+    final User userData = User((u) => u
+      ..id = id
+      ..isGoogleAuth = true
+      ..tokenFCM = tokenFCM
+      ..username = username);
+    await save(toMap(userData));
     return await saveUserToLocal(userData);
   }
 
@@ -219,7 +248,7 @@ class UserRepository {
     return email;
   }
 
-  Future<UserModel> getUserMeta() async {
+  Future<User> getUserMeta() async {
     final SharedPreferences prefs = await _prefs;
     final String id = prefs.getString(USER_ID_PREFERENCES);
     final String fcmtoken = prefs.getString(USER_FCMTOKEN_PREFERENCES);
@@ -228,15 +257,14 @@ class UserRepository {
     final bool isGoogleAuth = prefs.getBool(USER_IS_GOOGLEAUTH);
     final String email = prefs.getString(USER_MAIL_PREFERENCES);
     final String fullname = prefs.getString(USER_FULLNAME_PREFERENCES);
-    return UserModel(
-      id: id,
-      username: username,
-      tokenFCM: fcmtoken,
-      isGoogleAuth: isGoogleAuth,
-      email: email,
-      fullname: fullname,
-      avatar: avatar,
-    );
+    return User((u) => u
+      ..id = id
+      ..avatar = avatar
+      ..email = email
+      ..fullname = fullname
+      ..isGoogleAuth = isGoogleAuth
+      ..tokenFCM = fcmtoken
+      ..username = username);
   }
 
   // firebase account data

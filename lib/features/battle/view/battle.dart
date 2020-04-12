@@ -6,13 +6,14 @@ import 'package:karbarab/core/helper/device_height.dart';
 import 'package:karbarab/core/helper/utils.dart';
 import 'package:karbarab/core/ui/button.dart';
 import 'package:karbarab/core/ui/typography.dart';
-import 'package:karbarab/features/auth/model/user_model.dart';
+
 import 'package:karbarab/features/battle/bloc/battle_bloc.dart';
 import 'package:karbarab/features/battle/view/gamemode_chooser.dart';
 import 'package:karbarab/features/battle/view/quiz_chooser.dart';
 import 'package:karbarab/features/battle/view/user_chooser.dart';
 import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
 import 'package:karbarab/features/quiz/model/quiz.dart';
+import 'package:karbarab/model/user.dart';
 
 enum SelectedType { Quiz, User, Mode }
 
@@ -25,7 +26,7 @@ class BattleScreen extends StatefulWidget {
 
 class _BattleScreenState extends State<BattleScreen> {
   QuizModel quizSelected;
-  UserModel userSelected;
+  User userSelected;
   GameMode gameModeSelected;
 
   SelectedType mode;
@@ -68,7 +69,7 @@ class _BattleScreenState extends State<BattleScreen> {
 
   bool get _isCompleteField {
     return quizSelected is QuizModel &&
-        userSelected is UserModel &&
+        userSelected is User &&
         gameModeSelected is GameMode;
   }
 
@@ -88,7 +89,7 @@ class _BattleScreenState extends State<BattleScreen> {
         );
       case SelectedType.User:
         return UserChooser(
-          onSelect: (UserModel user) {
+          onSelect: (User user) {
             _setSelected(SelectedType.User, user);
           },
         );
