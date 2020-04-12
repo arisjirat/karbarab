@@ -1,14 +1,14 @@
 import 'package:flutter/foundation.dart';
 
 class UserModel {
-  final String id;
-  final String username;
-  final bool isGoogleAuth;
-  final String tokenFCM;
-  final String password;
-  final String email;
-  final String avatar;
-  final String fullname;
+  String id;
+  String username;
+  bool isGoogleAuth;
+  String tokenFCM;
+  String password;
+  String email;
+  String avatar;
+  String fullname;
 
   UserModel({
     @required this.id,
@@ -20,6 +20,17 @@ class UserModel {
     this.avatar,
     this.fullname,
   });
+
+  UserModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    username = json['username'];
+    isGoogleAuth = json['isGoogleAuth'];
+    tokenFCM = json['tokenFCM'];
+    password = json['password'];
+    email = json['email'];
+    avatar = json['avatar'];
+    fullname = json['fullname'];
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};

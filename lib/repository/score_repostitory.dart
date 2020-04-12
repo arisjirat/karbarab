@@ -9,15 +9,15 @@ import 'package:karbarab/utils/logger.dart';
 import 'package:uuid/uuid.dart';
 
 class BattleCardModel {
-  final String scoreId;
-  final String userId;
-  final String userIdSender;
-  final GameMode quizMode;
-  final String quizId;
-  final int targetScore;
-  final int score;
-  final QuizModel metaQuiz;
-  final UserModel metaUser;
+  String scoreId;
+  String userId;
+  String userIdSender;
+  GameMode quizMode;
+  String quizId;
+  int targetScore;
+  int score;
+  QuizModel metaQuiz;
+  UserModel metaUser;
   DateTime createdAt;
 
   BattleCardModel({
@@ -32,6 +32,34 @@ class BattleCardModel {
     this.scoreId,
     this.createdAt,
   });
+
+  BattleCardModel.fromJson(Map<String, dynamic> json) {
+    userId = json['userId'];
+    userIdSender = json['userIdSender'];
+    quizMode = stringToGameMode(json['quizMode']);
+    quizId = json['quizId'];
+    targetScore = json['targetScore'];
+    score = json['score'];
+    metaQuiz = QuizModel.fromJson(json['metaQuiz']);
+    metaUser = UserModel.fromJson(json['metaUser']);
+    scoreId = json['scoreId'];
+    createdAt = DateTime.fromMicrosecondsSinceEpoch(json['createdAt'] * 1000);
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    data['userId'] = userId;
+    data['userIdSender'] = userIdSender;
+    data['quizMode'] = quizMode;
+    data['quizId'] = quizId;
+    data['targetScore'] = targetScore;
+    data['score'] = score;
+    data['metaQuiz'] = metaQuiz;
+    data['metaUser'] = metaUser;
+    data['scoreId'] = scoreId;
+    data['createdAt'] = createdAt;
+    return data;
+  }
 }
 
 class ScoreRepository {
@@ -68,7 +96,7 @@ class ScoreRepository {
   Future addBattleCard(BattleCardModel battleCard) async {
     try {
       final scoreId = Uuid().v4();
-      return await scoreCollection.document(scoreId).setData({
+      await scoreCollection.document(scoreId).setData({
         'scoreId': scoreId,
         'isBattle': true,
         'isSolved': false,
@@ -82,6 +110,7 @@ class ScoreRepository {
         'metaQuiz': battleCard.metaQuiz.toJson(),
         'createdAt': FieldValue.serverTimestamp(),
       });
+      return scoreId;
     } catch (e) {
       Logger.e('AddBattleCard', e: e, s: StackTrace.current);
     }
@@ -97,6 +126,43 @@ class ScoreRepository {
       });
     } catch (e) {
       Logger.e('AddBattleCard', e: e, s: StackTrace.current);
+    }
+  }
+
+  Future readStateBattleCard(String scoreId) async {
+    try {
+      final updateData = scoreCollection.document(scoreId).updateData;
+      return await updateData({
+        'isSolved': true,
+      });
+    } catch (e) {
+      Logger.e('AddBattleCard', e: e, s: StackTrace.current);
+    }
+  }
+
+  Future<DocumentSnapshot> getSingleScore(String scoreId) async {
+    try {
+      final getSingleData = await scoreCollection.document('3537bae3-fcd5-4d33-a624-c50641d87944').get();
+      Logger.w('Get Single Score ${scoreId},');
+      return getSingleData;
+    } catch (e) {
+      Logger.e('Get Single Score', e: e, s: StackTrace.current);
+      throw Exception('Faild get single score');
+    }
+  }
+
+  Future<Iterable<DocumentSnapshot>> getAllBattleCard(String userId) async {
+    try {
+      final getAllData = await scoreCollection
+        .where('userId', isEqualTo: userId)
+        .where('isBattle', isEqualTo: true )
+        .where('isSolved', isEqualTo: false )
+        .limit(10000)
+        .getDocuments();
+      return getAllData.documents;
+    } catch (e) {
+      Logger.e('Get Battle caard', e: e, s: StackTrace.current);
+      throw Exception('Faild get all battle card');
     }
   }
 

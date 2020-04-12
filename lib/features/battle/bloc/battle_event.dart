@@ -17,3 +17,5 @@ class SendCard extends BattleEvent {
     @required this.gameMode,
   });
 }
+
+class GetAllQuizBattleSelf extends BattleEvent {}

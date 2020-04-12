@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/features/auth/model/user_model.dart';
@@ -33,7 +34,19 @@ class BattleBloc extends Bloc<BattleEvent, BattleState> {
         event.quiz,
         event.gameMode,
       );
+    } else if (event is GetAllQuizBattleSelf) {
+      yield* _mapGetAllQuizBattle();
     }
+  }
+
+  Stream<BattleState> _mapGetAllQuizBattle() async* {
+    final userId = await _userRepository.getUserId();
+    final List<DocumentSnapshot> list = await _scoreRepository.getAllBattleCard(userId);
+    final List<BattleCardModel> listModel = list.map((e) {
+      return BattleCardModel.fromJson(e.data);
+    });
+    Logger.w('LIST $listModel');
+    yield ListQuizBattleCard(listModel);
   }
 
   Stream<BattleState> _mapSendCardToState(
@@ -53,11 +66,14 @@ class BattleBloc extends Bloc<BattleEvent, BattleState> {
         metaQuiz: quiz,
         metaUser: userReciever,
       );
-      await _scoreRepository.addBattleCard(payload);
+      final scoreId =  await _scoreRepository.addBattleCard(payload);
       await _notificationRepository.sendCardToUser(
         userReciever.tokenFCM,
         await _userRepository.getUserMeta(),
         quiz.id,
+        payload.targetScore,
+        gameMode,
+        scoreId,
       );
       yield SendCardState(true, false, false);
     } catch (e) {

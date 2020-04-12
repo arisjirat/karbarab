@@ -18,6 +18,15 @@ class QuizRepository {
     return getQuizData();
   }
 
+  QuizModel getSingleQuiz(id) {
+    try {
+      final QuizModel quiz = allQuiz().where((e) => e.id == id).toList()[0];
+      return quiz;
+    } catch (e) {
+      throw Exception('quiz not found');
+    }
+  }
+
   Quiz getQuiz(bool image) {
     List<QuizModel> listQuiz = getQuizData();
     if (image) {

@@ -13,6 +13,7 @@ import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/helper/scale_calculator.dart';
 import 'package:karbarab/features/battle/view/battle.dart';
+import 'package:karbarab/features/notification/view/notification.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -232,6 +233,7 @@ class Hero extends StatelessWidget {
                   height: deviceHeight / 8,
                 ),
               ),
+              NotificationScreen(),
               Positioned(
                 top: 15.0,
                 right: 15.0,

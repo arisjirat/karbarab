@@ -21,3 +21,13 @@ class SendCardState extends BattleState {
     isLoading,
   ];
 }
+
+class ListQuizBattleCard extends BattleState {
+  final List<BattleCardModel> listBattle;
+  ListQuizBattleCard(this.listBattle);
+
+  @override
+  List<Object> get props => [
+    listBattle,
+  ];
+}

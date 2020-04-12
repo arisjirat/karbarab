@@ -2,14 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:karbarab/core/helper/utils.dart';
 
 class QuizModel {
-  final String id;
-  final String arab;
-  final String bahasa;
-  final String image;
-  final String voice;
-  final CardCategory cardCategory;
-  final int level;
-  final DateTime date;
+  String id;
+  String arab;
+  String bahasa;
+  String image;
+  String voice;
+  CardCategory cardCategory;
+  int level;
+  DateTime date;
 
   QuizModel({
     @required this.id,
@@ -21,6 +21,17 @@ class QuizModel {
     @required this.date,
     this.image = '',
   });
+
+  QuizModel.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    arab = json['arab'];
+    bahasa = json['bahasa'];
+    image = json['image'];
+    voice = json['voice'];
+    cardCategory = stringToCardCategory(json['cardCategory']);
+    level = json['level'];
+    date = DateTime.now();
+  }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};

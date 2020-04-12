@@ -1,6 +1,3 @@
-import 'dart:io' show Platform;
-
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:karbarab/core/config/colors.dart';
@@ -25,7 +22,6 @@ import 'package:karbarab/features/users/bloc/users_bloc.dart';
 import 'package:karbarab/features/voices/bloc/voices_bloc.dart';
 import 'package:karbarab/repository/quiz_repository.dart';
 import 'package:karbarab/repository/user_repository.dart';
-import 'package:karbarab/utils/logger.dart';
 
 class CirclesApp extends StatefulWidget {
 
@@ -33,86 +29,9 @@ class CirclesApp extends StatefulWidget {
   _CirclesAppState createState() => _CirclesAppState();
 }
 
-Future<dynamic> _myBackgroundMessageHandler(Map<String, dynamic> message) async {
-    // if (message.containsKey('data')) {
-    //   // Handle data message
-    //   final dynamic data = message['data'];
-    //   Logger.w('[Background comming] $data');
-    // }
-
-    // if (message.containsKey('notification')) {
-    //   // Handle notification message
-    //   final dynamic notification = message['notification'];
-    //   Logger.w('[Background comming notification] $notification');
-    // }
-    Logger.w('[Background comming notification] $message');
-    // print(message);
-    return message;
-    // Or do other work.
-  }
-
 class _CirclesAppState extends State<CirclesApp> {
-
-  
-
-
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final UserRepository userRepository = UserRepository();
   final QuizRepository quizRepository = QuizRepository();
-
-  @override
-  void initState() {
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        Logger.w('onMessage');
-        try {
-          final data = message['data'];
-          final String quizId = data['quizId'];
-          final String userId = data['userSenderId'];
-          // final String userId = data['userSenderId'];
-          // getLogger('FCM').e('name: $name & age: $age');
-          Logger.w('Message comming $quizId, $userId');
-        } catch (error) {
-          Logger.e('onMessage', e: error, s: StackTrace.current);
-        }
-        return true;
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        Logger.w('onLaunch');
-        try {
-          final data = message['data'];
-          final String quizId = data['quizId'];
-          final String userId = data['userSenderId'];
-          // final String userId = data['userSenderId'];
-          // getLogger('FCM').e('name: $name & age: $age');
-          Logger.w('onLaunch Message comming $quizId, $userId');
-        } catch (error) {
-          Logger.e('onLaunch', e: error, s: StackTrace.current);
-        }
-        return true;
-      },
-      onResume: (Map<String, dynamic> message) async {
-        Logger.w('Resume');
-        try {
-          final data = message['data'];
-          final String quizId = data['quizId'];
-          final String userId = data['userSenderId'];
-          // final String userId = data['userSenderId'];
-          // getLogger('FCM').e('name: $name & age: $age');
-          Logger.w('Resume Message comming $quizId, $userId');
-        } catch (error) {
-          Logger.e('Resume', e: error, s: StackTrace.current);
-        }
-        return true;
-      },
-      // onBackgroundMessage: Platform.isIOS ? null : _myBackgroundMessageHandler,
-
-    );
-    // _firebaseMessaging.getToken().then((String token) {
-    //   Logger.w('Token new: $token');
-    // });
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
