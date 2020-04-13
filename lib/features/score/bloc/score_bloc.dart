@@ -2,12 +2,12 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/config/score_value.dart';
-import 'package:karbarab/core/helper/utils.dart';
 
-import 'package:karbarab/features/quiz/model/quiz.dart';
+import 'package:karbarab/model/quiz.dart';
+import 'package:karbarab/model/score.dart';
 import 'package:karbarab/model/user.dart';
+import 'package:karbarab/repository/quiz_repository.dart';
 import 'package:karbarab/utils/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
@@ -17,16 +17,16 @@ import 'package:karbarab/repository/user_repository.dart';
 part 'score_event.dart';
 part 'score_state.dart';
 
-class ScoreQuizModel {
+class ScoreQuiz {
   final int totalScore;
   final int totalAttempt;
   final double averageScore;
   final List<int> scores;
   final String quizId;
-  final QuizModel quiz;
+  final Quiz quiz;
   final GameMode quizMode;
 
-  ScoreQuizModel({
+  ScoreQuiz({
     @required this.quizId,
     @required this.totalScore,
     @required this.quiz,
@@ -44,7 +44,7 @@ class ScoreQuizModel {
     data['scores'] = scores;
     data['quizId'] = quizId;
     data['quiz'] = quiz;
-    data['quizMode'] = quizMode;
+    data['quizMode'] = GameModeHelper.stringOf(quizMode);
     return data;
   }
 
@@ -67,7 +67,7 @@ class ListScore {
 
   List<DocumentSnapshot> get scoreFilter {
     return scoreDocuments
-        .where((e) => e['quizMode'] == gameModeToString(mode))
+        .where((e) => e['quizMode'] == GameModeHelper.stringOf(mode))
         .toList();
   }
 }
@@ -99,54 +99,39 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
   }
 
   Stream<ScoreState> _mapGetSummaryUserQuizScore() async* {
-    final _id = await _userRepository.getUserId();
-    final _userScores = await _scoreRepository.getUserScore(_id);
-    final List<ScoreQuizModel> summaryQuiz = _userScores.fold(
+      final _id = await _userRepository.getUserId();
+    final Iterable<DocumentSnapshot> _userScores = await _scoreRepository.getUserScore(_id);
+    final List<ScoreQuiz> summaryQuiz = _userScores.fold(
       [],
       (acc, cur) {
-        final found = acc.indexWhere((e) => e.quizId == cur['quizId']);
-        final Timestamp timestamp = cur['metaQuiz']['date'];
-        final String quizId = cur['quizId'];
-        final int level = cur['level'];
-        final CardCategory cardCategory = stringToCardCategory(cur['cardCategory']);
+        final Map<String, dynamic> data = Map<String, dynamic>.from(cur.data);
+        final found = acc.indexWhere((e) => e.quizId == data['quizId']);
+        final Timestamp timestamp = data['metaQuiz']['date'];
+        final String quizId = data['quizId'];
         final int totalAttempt = 1;
-        final String id = cur['metaQuiz']['id'];
-        final String arab = cur['metaQuiz']['arab'];
-        final String bahasa = cur['metaQuiz']['bahasa'];
-        final String image = cur['metaQuiz']['image'];
-        final String voice = cur['metaQuiz']['voice'];
-        final GameMode quizMode = stringToGameMode(cur['quizMode']);
-        final DateTime date = Timestamp(timestamp.seconds, timestamp.nanoseconds).toDate();
-        final QuizModel quizModel = QuizModel(
-          id: id,
-          arab: arab,
-          bahasa: bahasa,
-          image: image,
-          level: level,
-          cardCategory: cardCategory,
-          voice: voice,
-          date: date,
-        );
-        final int totalScore = cur['score'];
-        final List<int> scores = [cur['score']];
+        final GameMode quizMode = GameModeHelper.valueOf(data['quizMode']);
+        data['metaQuiz']['date'] = Timestamp(timestamp.seconds, timestamp.nanoseconds).toDate();
+        final Quiz quiz = QuizRepository.fromJson(data['metaQuiz']);
+        final int totalScore = data['score'];
+        final List<int> scores = [data['score']];
         if (found >= 0) {
-          acc[found].scores.add(cur['score']);
-          final int totalScoreSum = acc[found].totalScore + cur['score'];
-          acc[found] = ScoreQuizModel(
+          acc[found].scores.add(data['score']);
+          final int totalScoreSum = acc[found].totalScore + data['score'];
+          acc[found] = ScoreQuiz(
             quizId: quizId,
             totalAttempt: totalAttempt + 1,
             averageScore: totalScoreSum / (SCORE_BASE * acc[found].scores.length),
-            quiz: quizModel,
+            quiz: quiz,
             quizMode: quizMode,
             totalScore: totalScoreSum,
             scores: acc[found].scores,
           );
           return acc;
         }
-        acc.add(ScoreQuizModel(
+        acc.add(ScoreQuiz(
           quizId: quizId,
           totalAttempt: totalAttempt,
-          quiz: quizModel,
+          quiz: quiz,
           quizMode: quizMode,
           averageScore: totalScore / (SCORE_BASE * 1),
           totalScore: totalScore,
@@ -163,7 +148,6 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
   }
 
   Stream<ScoreState> _mapGetScoreUserByMode() async* {
-    // loading
     yield HasScore(
       scoreArabGambar: 0,
       scoreGambarArab: 0,
@@ -195,7 +179,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
   }
 
   Stream<ScoreState> _mapAddUserScore(
-      GameMode quizMode, String quizId, int score, QuizModel metaQuiz) async* {
+      GameMode quizMode, String quizId, int score, Quiz metaQuiz) async* {
     
     final User user = await _userRepository.getUserMeta();
     try {

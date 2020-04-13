@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:karbarab/features/quiz/model/quiz.dart';
+import 'package:karbarab/model/quiz.dart';
 import 'package:karbarab/repository/quiz_repository.dart';
 
 part 'quiz_event.dart';

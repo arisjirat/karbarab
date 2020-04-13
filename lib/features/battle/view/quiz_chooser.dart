@@ -5,10 +5,10 @@ import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/features/auth/view/card_item.dart';
 import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
-import 'package:karbarab/features/quiz/model/quiz.dart';
+import 'package:karbarab/model/quiz.dart';
 
 class QuizChooser extends StatefulWidget {
-  final Function(QuizModel) onSelect;
+  final Function(Quiz) onSelect;
   QuizChooser({Key key, @required this.onSelect, }) : super(key: key);
 
   @override
@@ -17,7 +17,7 @@ class QuizChooser extends StatefulWidget {
 
 class _QuizChooserState extends State<QuizChooser> {
   TextEditingController search = TextEditingController();
-  List<QuizModel> filtered = [];
+  List<Quiz> filtered = [];
 
   @override
   void initState() {
@@ -25,7 +25,7 @@ class _QuizChooserState extends State<QuizChooser> {
     super.initState();
   }
 
-  void filtering(List<QuizModel> list, value) {
+  void filtering(List<Quiz> list, value) {
     final RegExp reg = RegExp('${value.toLowerCase()}');
     setState(() {
       filtered =
@@ -134,7 +134,7 @@ class _QuizChooserState extends State<QuizChooser> {
                     itemBuilder: (_, id) {
                       return CardItemAction(
                         quiz: filtered[id],
-                        onTap: (QuizModel quiz) {
+                        onTap: (Quiz quiz) {
                           widget.onSelect(quiz);
                           Navigator.pop(context);
                         },

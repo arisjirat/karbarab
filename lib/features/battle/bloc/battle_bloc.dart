@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/model/quiz.dart';
+import 'package:karbarab/model/score.dart';
 
-import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/model/user.dart';
 import 'package:karbarab/repository/notification_repository.dart';
 import 'package:karbarab/repository/score_repostitory.dart';
@@ -52,7 +52,7 @@ class BattleBloc extends Bloc<BattleEvent, BattleState> {
 
   Stream<BattleState> _mapSendCardToState(
     User userReciever,
-    QuizModel quiz,
+    Quiz quiz,
     GameMode gameMode,
   ) async* {
     try {

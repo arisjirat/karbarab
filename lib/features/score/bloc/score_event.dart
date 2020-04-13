@@ -16,7 +16,7 @@ class AddScoreUser extends ScoreEvent {
   final GameMode mode;
   final int score;
   final String quizId;
-  final QuizModel metaQuiz;
+  final Quiz metaQuiz;
 
   AddScoreUser({
     @required this.mode,

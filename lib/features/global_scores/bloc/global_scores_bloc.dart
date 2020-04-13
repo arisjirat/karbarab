@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/model/score.dart';
 
 import 'package:karbarab/model/user.dart';
 import 'package:karbarab/repository/score_repostitory.dart';

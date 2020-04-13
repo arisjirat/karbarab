@@ -25,7 +25,7 @@ abstract class User implements Built<User, UserBuilder> {
 
   String get username;
 
+  factory User([void Function(UserBuilder) updates]) = _$User;
   User._();
 
-  factory User([void Function(UserBuilder) updates]) = _$User;
 }

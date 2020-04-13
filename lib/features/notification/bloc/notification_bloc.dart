@@ -6,7 +6,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/features/notification/model/notification.model.dart';
-import 'package:karbarab/features/quiz/model/quiz.dart';
+import 'package:karbarab/model/quiz.dart';
+import 'package:karbarab/model/score.dart';
 import 'package:karbarab/model/user.dart';
 import 'package:karbarab/repository/quiz_repository.dart';
 import 'package:karbarab/repository/score_repostitory.dart';
@@ -28,7 +29,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   Stream<NotificationState> mapEventToState(
     NotificationEvent event,
   ) async* {
-    Logger.w('event ${event}');
+    Logger.w('event $event');
     if (event is OnPushNotification) {
       Logger.w('Notifi');
       yield* _pushNotifToState(event.message);
@@ -45,7 +46,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       // final GameMode gameMode = stringToGameMode(message.gameMode);
       final String targetScore = message.targetScore;
       final userSenderUsername = message.userSenderUsername;
-      final QuizModel quiz = _quizRepository.getSingleQuiz(quizId);
+      final Quiz quiz = _quizRepository.getSingleQuiz(quizId);
       final DocumentSnapshot userSnapshot =
           await _userRepository.getUserFromUsername(userSenderUsername);
       final getScore = (await _scoreRepository.getSingleScore(scoreId)).data;

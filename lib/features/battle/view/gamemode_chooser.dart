@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/ui/typography.dart';
+import 'package:karbarab/model/score.dart';
 
 class GameModeChooser extends StatelessWidget {
   final Function(GameMode) onSelect;

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
-import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/ui/cards/point.dart';
+import 'package:karbarab/model/quiz.dart';
 
 class CardImage extends StatelessWidget {
   final int point;
-  final QuizModel quiz;
+  final Quiz quiz;
   final double height;
   final bool loading;
   final bool isCorrect;

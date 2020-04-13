@@ -8,7 +8,7 @@ abstract class BattleEvent extends Equatable {
 
 class SendCard extends BattleEvent {
   final User userReciever;
-  final QuizModel quiz;
+  final Quiz quiz;
   final GameMode gameMode;
 
   SendCard({

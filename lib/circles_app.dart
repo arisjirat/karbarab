@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:karbarab/core/config/colors.dart';
-import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
 import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/features/auth/view/profile_screen.dart';
@@ -20,6 +19,7 @@ import 'package:karbarab/features/quiz/view/game_start_screen.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
 import 'package:karbarab/features/users/bloc/users_bloc.dart';
 import 'package:karbarab/features/voices/bloc/voices_bloc.dart';
+import 'package:karbarab/model/score.dart';
 import 'package:karbarab/repository/quiz_repository.dart';
 import 'package:karbarab/repository/user_repository.dart';
 

@@ -13,13 +13,14 @@ import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
 import 'package:karbarab/features/admob/view/ads.dart';
 import 'package:karbarab/features/feedback/bloc/feedback_bloc.dart';
 import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
-import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/core/ui/button.dart';
 import 'package:karbarab/core/ui/cards/card_answer.dart';
 import 'package:karbarab/core/ui/cards/card_quiz.dart';
 import 'package:karbarab/core/ui/congratulation.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
 import 'package:karbarab/features/voices/view/speech.dart';
+import 'package:karbarab/model/quiz.dart';
+import 'package:karbarab/model/score.dart';
 
 String _getAnswerIndex(index) {
   const answer = ['A', 'B', 'C', 'D'];
@@ -73,8 +74,8 @@ class _GameStartScreenState extends State<GameStartScreen> {
 class GameQuiz extends StatefulWidget {
   final double deviceHeight;
   final GameMode mode;
-  final List<QuizModel> list;
-  final QuizModel correct;
+  final List<Quiz> list;
+  final Quiz correct;
   final QuizBloc quizBloc;
   final ScoreBloc scoreBloc;
 
@@ -225,7 +226,7 @@ class _GameQuizState extends State<GameQuiz> {
     );
   }
 
-  List<Widget> buildOptions(List<QuizModel> list) {
+  List<Widget> buildOptions(List<Quiz> list) {
     return list
         .asMap()
         .map(

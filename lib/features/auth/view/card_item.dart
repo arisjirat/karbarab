@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
-import 'package:karbarab/core/config/game_mode.dart';
-import 'package:karbarab/core/helper/utils.dart';
 import 'package:karbarab/core/ui/typography.dart';
-import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/features/voices/view/speech.dart';
+import 'package:karbarab/model/quiz.dart';
+import 'package:karbarab/model/score.dart';
 
 class CardItem extends StatelessWidget {
-  final QuizModel quiz;
+  final Quiz quiz;
   final GameMode gameMode;
   final bool extra;
   final int totalScore;
@@ -38,7 +37,7 @@ class CardItem extends StatelessWidget {
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      quiz.image == ''
+                      quiz.image == '' || quiz.image == null
                           ? Column(
                               children: <Widget>[
                                 const Image(
@@ -50,7 +49,7 @@ class CardItem extends StatelessWidget {
                               ],
                             )
                           : Image(
-                              image: AssetImage('assets/quiz/$quiz.image'),
+                              image: AssetImage('assets/quiz/${quiz.image}'),
                               height: 60,
                               fit: BoxFit.fill,
                             ),
@@ -80,7 +79,7 @@ class CardItem extends StatelessWidget {
                                     padding: const EdgeInsets.all(5),
                                     color: secondaryColor,
                                     child: SmallerText(
-                                        text: gameModeToString(gameMode),
+                                        text: GameModeHelper.stringOf(gameMode),
                                         dark: false,
                                         bold: true),
                                   ),
@@ -108,8 +107,8 @@ class CardItem extends StatelessWidget {
 }
 
 class CardItemAction extends StatelessWidget {
-  final QuizModel quiz;
-  final Function(QuizModel) onTap;
+  final Quiz quiz;
+  final Function(Quiz) onTap;
   CardItemAction({@required this.quiz, @required this.onTap});
 
   @override

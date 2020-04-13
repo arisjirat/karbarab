@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/ui/cards/point.dart';
+import 'package:karbarab/model/score.dart';
 
 class CardText extends StatelessWidget {
   final int point;

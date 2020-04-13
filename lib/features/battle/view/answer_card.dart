@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:karbarab/features/quiz/model/quiz.dart';
+import 'package:karbarab/model/quiz.dart';
 
 class AnswerQuestionCardBattle extends StatefulWidget {
   final String scoreId;
   final int targetScore;
-  final QuizModel quiz;
+  final Quiz quiz;
   AnswerQuestionCardBattle({
     Key key,
     this.quiz,

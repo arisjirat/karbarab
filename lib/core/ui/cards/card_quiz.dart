@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
-import 'package:karbarab/core/config/game_mode.dart';
-import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/core/ui/cards/card_game.dart';
 import 'package:karbarab/core/ui/cards/card_plain.dart';
+import 'package:karbarab/model/quiz.dart';
+import 'package:karbarab/model/score.dart';
 
 class CardQuiz extends StatelessWidget {
   final bool isCorrect;
   final double currentPoint;
   final bool loading;
   final double deviceHeight;
-  final QuizModel quiz;
+  final Quiz quiz;
   final GameMode mode;
   final Widget adsHint;
   final Function giveFeedback;

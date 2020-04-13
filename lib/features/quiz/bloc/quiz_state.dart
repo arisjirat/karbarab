@@ -10,7 +10,7 @@ abstract class QuizState extends Equatable {
 class EmptyQuiz extends QuizState {}
 
 class AllQuiz extends QuizState {
-  final List<QuizModel> list;
+  final List<Quiz> list;
 
   AllQuiz(this.list);
   @override
@@ -22,8 +22,8 @@ class AllQuiz extends QuizState {
 }
 
 class HasQuiz extends QuizState {
-  final List<QuizModel> list;
-  final QuizModel correct;
+  final List<Quiz> list;
+  final Quiz correct;
 
   HasQuiz({ @required this.list, @required this.correct });
 

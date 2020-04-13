@@ -3,13 +3,13 @@ import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:karbarab/core/config/ads.dart';
 import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
-import 'package:karbarab/features/quiz/model/quiz.dart';
+import 'package:karbarab/model/quiz.dart';
 import 'package:karbarab/utils/logger.dart';
 
 class AdsScreen extends StatefulWidget {
   final AdsMode adsMode;
   final Function onReward;
-  final QuizModel quiz;
+  final Quiz quiz;
   final Widget buttonShow;
   AdsScreen({
     @required this.adsMode,

@@ -7,7 +7,7 @@ import 'package:karbarab/core/ui/popup.dart';
 import 'package:karbarab/features/battle/view/answer_card.dart';
 import 'package:karbarab/features/notification/bloc/notification_bloc.dart';
 import 'package:karbarab/features/notification/model/notification.model.dart';
-import 'package:karbarab/features/quiz/model/quiz.dart';
+import 'package:karbarab/model/quiz.dart';
 import 'package:karbarab/model/user.dart';
 import 'package:karbarab/repository/quiz_repository.dart';
 import 'package:karbarab/repository/score_repostitory.dart';
@@ -27,7 +27,7 @@ class NotificationScreenState extends State<NotificationScreen> {
   final QuizRepository quizRepository = QuizRepository();
 
   void _showModal(
-    QuizModel quiz,
+    Quiz quiz,
     User sender,
     int targetScore,
     BattleCardModel battleCardModel,

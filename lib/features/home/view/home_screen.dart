@@ -9,12 +9,12 @@ import 'package:karbarab/core/helper/greetings.dart';
 import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/features/auth/view/profile_screen.dart';
 import 'package:karbarab/core/ui/cards/card_play.dart';
-import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/helper/scale_calculator.dart';
 import 'package:karbarab/features/battle/view/battle.dart';
 import 'package:karbarab/features/notification/view/notification.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
+import 'package:karbarab/model/score.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/home';

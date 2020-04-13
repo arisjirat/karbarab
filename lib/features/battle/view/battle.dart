@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:karbarab/core/config/colors.dart';
-import 'package:karbarab/core/config/game_mode.dart';
-import 'package:karbarab/core/helper/device_height.dart';
-import 'package:karbarab/core/helper/utils.dart';
-import 'package:karbarab/core/ui/button.dart';
 import 'package:karbarab/core/ui/typography.dart';
 
 import 'package:karbarab/features/battle/bloc/battle_bloc.dart';
 import 'package:karbarab/features/battle/view/gamemode_chooser.dart';
 import 'package:karbarab/features/battle/view/quiz_chooser.dart';
 import 'package:karbarab/features/battle/view/user_chooser.dart';
-import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
-import 'package:karbarab/features/quiz/model/quiz.dart';
+import 'package:karbarab/model/quiz.dart';
+import 'package:karbarab/model/score.dart';
 import 'package:karbarab/model/user.dart';
 
 enum SelectedType { Quiz, User, Mode }
@@ -25,7 +21,7 @@ class BattleScreen extends StatefulWidget {
 }
 
 class _BattleScreenState extends State<BattleScreen> {
-  QuizModel quizSelected;
+  Quiz quizSelected;
   User userSelected;
   GameMode gameModeSelected;
 
@@ -68,7 +64,7 @@ class _BattleScreenState extends State<BattleScreen> {
   }
 
   bool get _isCompleteField {
-    return quizSelected is QuizModel &&
+    return quizSelected is Quiz &&
         userSelected is User &&
         gameModeSelected is GameMode;
   }
@@ -83,7 +79,7 @@ class _BattleScreenState extends State<BattleScreen> {
         );
       case SelectedType.Quiz:
         return QuizChooser(
-          onSelect: (QuizModel quiz) {
+          onSelect: (Quiz quiz) {
             _setSelected(SelectedType.Quiz, quiz);
           },
         );
@@ -219,7 +215,7 @@ class _BattleScreenState extends State<BattleScreen> {
                     children: [
                       RegularText(
                         text: gameModeSelected != null
-                            ? gameModeToString(gameModeSelected)
+                            ? GameModeHelper.stringOf(gameModeSelected)
                             : 'Silahkan Pilih',
                       ),
                       FlatButton(

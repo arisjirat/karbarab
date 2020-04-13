@@ -1,6 +1,7 @@
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
 import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/model/score.dart';
 
 import 'package:karbarab/model/user.dart';
 import 'package:karbarab/utils/logger.dart';
@@ -45,7 +46,7 @@ class NotificationRepository {
             'userSenderId': userSender.id,
             'quizId': quizId,
             'targetScore': targetScore,
-            'gameMode': gameMode,
+            'gameMode': GameModeHelper.stringOf(gameMode),
             'image':
                 'https://lh3.googleusercontent.com/proxy/SlPQ6zw4v85bQbFWqxkro3KQu2ejoF7giJ0SwoLAzVEO3pauUF-KB6YWlmxwT16iqqunz1SKtoHXMUNfeqz3R1GPp0NNb6I',
           }

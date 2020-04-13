@@ -1,10 +1,12 @@
+import 'package:karbarab/model/score.dart';
+
 class DataModel {
   String image;
   String collapseKey;
   String googleOriginalPriority;
   String quizId;
   String targetScore;
-  String gameMode;
+  GameMode gameMode;
   String googleDeliveredPriority;
   String userSenderUsername;
   String clickAction;
@@ -31,7 +33,7 @@ class DataModel {
     googleOriginalPriority = json['google.original_priority'];
     quizId = json['quizId'];
     targetScore = json['targetScore'];
-    gameMode = json['gameMode'];
+    gameMode = GameModeHelper.valueOf(json['gameMode']);
     googleDeliveredPriority = json['google.delivered_priority'];
     userSenderUsername = json['userSenderUsername'];
     clickAction = json['click_action'];

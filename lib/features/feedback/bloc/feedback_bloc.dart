@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:karbarab/core/config/game_mode.dart';
-import 'package:karbarab/core/helper/utils.dart';
+import 'package:karbarab/model/quiz.dart';
+import 'package:karbarab/model/score.dart';
 
-import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/model/user.dart';
+import 'package:karbarab/repository/quiz_repository.dart';
 import 'package:karbarab/repository/user_repository.dart';
 import 'package:meta/meta.dart';
 
@@ -43,7 +43,7 @@ class FeedbackBloc extends Bloc<FeedbackEvent, FeedbackState> {
   Stream<FeedbackState> _mapAddFeedbackQuiz(
     String quizId,
     GameMode gameMode,
-    QuizModel metaQuiz,
+    Quiz metaQuiz,
     String shouldBe,
     String notes,
   ) async* {
@@ -52,9 +52,9 @@ class FeedbackBloc extends Bloc<FeedbackEvent, FeedbackState> {
       final User user = await _userRepository.getUserMeta();
       await feedbackCollection.document().setData({
         'user': UserRepository.toMap(user),
-        'metaQuiz': metaQuiz.toJson(),
+        'metaQuiz': QuizRepository.toMap(metaQuiz),
         'quizId': quizId,
-        'adsMode': gameModeToString(gameMode),
+        'adsMode': GameModeHelper.stringOf(gameMode),
         'shouldBe': shouldBe,
         'notes': notes,
         'createdAt': FieldValue.serverTimestamp()

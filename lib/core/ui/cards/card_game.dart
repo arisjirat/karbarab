@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
-import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/helper/utils.dart';
-import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/core/ui/cards/card_image.dart';
 import 'package:karbarab/core/ui/cards/card_text.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:flutter_flip_view/flutter_flip_view.dart';
+import 'package:karbarab/model/quiz.dart';
+import 'package:karbarab/model/score.dart';
 
 class CardGame extends StatefulWidget {
   final bool correct;
   final int point;
   final double height;
   final bool loading;
-  final QuizModel quiz;
+  final Quiz quiz;
   final GameMode mode;
   final Widget adsHint;
   final Function giveFeedback;

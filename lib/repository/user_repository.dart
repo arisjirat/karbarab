@@ -37,6 +37,17 @@ class UserRepository {
       ..username = document[USERNAME]);
   }
 
+  static User fromJson(Map<String, dynamic> document) {
+    return User((u) => u
+      ..id = document[ID]
+      ..avatar = document[AVATAR]
+      ..email = document[EMAIL]
+      ..fullname = document[FULLNAME]
+      ..isGoogleAuth = document[IS_GOOGLE_AUTH]
+      ..tokenFCM = document[TOKEN_FCM]
+      ..username = document[USERNAME]);
+  }
+
   static Map<String, dynamic> toMap(User user) {
     return {
       ID: user.id,
