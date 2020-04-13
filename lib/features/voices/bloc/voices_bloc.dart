@@ -33,22 +33,25 @@ class VoicesBloc extends Bloc<VoicesEvent, VoicesState> {
     yield VoicesState.loading();
     final SharedPreferences prefs = await _prefs;
     final List<String> _voices = prefs.getStringList(VOICES_PREFERENCES);
-    if (_voices == null) {
+    if (_voices.isEmpty) {
+      Logger.e('FIND VOICE', e: 'error static', s: StackTrace.current);
       final String speech = await _speechRepository.textToSpeech(quizId, arab);
       await prefs.setStringList(VOICES_PREFERENCES, [speech]);
       yield VoicesState.success(quizId, speech);
-    } else {
-      final RegExp regExp = RegExp('/($quizId.mp3)');
-      try {
-        final String voice = _voices.firstWhere((v) => regExp.hasMatch(v));
-        Logger.e('VOICE FOUND', e: voice, s: StackTrace.current);
-        yield VoicesState.success(quizId, voice);
-      } catch (e) {
-        Logger.e('VOICE NOT FOUND', e: e, s: StackTrace.current);
-        final String speech = await _speechRepository.textToSpeech(quizId, arab);
-        await prefs.setStringList(VOICES_PREFERENCES, [speech]);
-        yield VoicesState.success(quizId, speech);
-      }
+      return;
     }
+    final RegExp regExp = RegExp('/($quizId.mp3)');
+    final String voice = _voices.firstWhere((v) => regExp.hasMatch(v), orElse: () { Logger.d('no Maatc'); return 'No match'; });
+    if (voice == 'No match') {
+      Logger.e('FIND VOICE', e: 'error static', s: StackTrace.current);
+      final String speech = await _speechRepository.textToSpeech(quizId, arab);
+      _voices.add(speech);
+      await prefs.setStringList(VOICES_PREFERENCES, _voices);
+      yield VoicesState.success(quizId, speech);
+      return;
+    }
+    Logger.e('VOICE FOUND', e: voice, s: StackTrace.current);
+    yield VoicesState.success(quizId, voice);
+    return;
   }
 }
