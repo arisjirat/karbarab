@@ -36,12 +36,15 @@ class NotificationRepository {
           // 'collapse_key': 'type_a',
           'notification': {
             'body':
-                'Hey kamu dapat quiz ${userSender.username} yang perlu kamu jawab',
+                'Hey kamu dapat quiz, dari ${userSender.username} yang perlu kamu jawab',
             'title': 'Kamu dapat kartu kiriman',
             'image':
                 'https://lh3.googleusercontent.com/proxy/SlPQ6zw4v85bQbFWqxkro3KQu2ejoF7giJ0SwoLAzVEO3pauUF-KB6YWlmxwT16iqqunz1SKtoHXMUNfeqz3R1GPp0NNb6I',
           },
+          'contentAvailable': true,
           'data': {
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'type': 'BATTLE',
             'scoreId': scoreId,
             'userSenderId': userSender.id,
             'quizId': quizId,
