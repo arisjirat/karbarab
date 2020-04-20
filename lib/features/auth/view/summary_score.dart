@@ -101,6 +101,7 @@ class _SummaryScoreState extends State<SummaryScore>
                                   itemCount: state.badQuiz.length,
                                   itemBuilder: (context, position) {
                                     return CardItem(
+                                      key: Key(state.badQuiz[position].quizId),
                                       positive: false,
                                       quiz:
                                           state.badQuiz[position].quiz,
@@ -156,6 +157,7 @@ class _SummaryScoreState extends State<SummaryScore>
                                   itemCount: state.goodQuiz.length,
                                   itemBuilder: (context, position) {
                                     return CardItem(
+                                      key: Key(state.goodQuiz[position].quizId),
                                       positive: true,
                                       quiz:
                                           state.goodQuiz[position].quiz,

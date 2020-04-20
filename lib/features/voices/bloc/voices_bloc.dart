@@ -32,7 +32,7 @@ class VoicesBloc extends Bloc<VoicesEvent, VoicesState> {
   Stream<VoicesState> _mapGetSpeech(String quizId, String arab) async* {
     yield VoicesState.loading();
     final SharedPreferences prefs = await _prefs;
-    final List<String> _voices = prefs.getStringList(VOICES_PREFERENCES);
+    final List<String> _voices = prefs.getStringList(VOICES_PREFERENCES) ?? [];
     if (_voices.isEmpty) {
       Logger.e('FIND VOICE', e: 'error static', s: StackTrace.current);
       final String speech = await _speechRepository.textToSpeech(quizId, arab);
