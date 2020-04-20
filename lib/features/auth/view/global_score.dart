@@ -1,8 +1,6 @@
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:karbarab/core/config/ads.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/helper/device_height.dart';
 import 'package:karbarab/core/ui/typography.dart';

@@ -3,7 +3,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:karbarab/repository/score_repostitory.dart';
-import 'package:karbarab/utils/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:karbarab/repository/user_repository.dart';
 

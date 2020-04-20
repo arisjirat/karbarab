@@ -1,6 +1,5 @@
 import 'dart:convert' as convert;
 import 'package:http/http.dart' as http;
-import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/model/score.dart';
 
 import 'package:karbarab/model/user.dart';

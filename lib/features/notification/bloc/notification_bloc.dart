@@ -4,7 +4,6 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/features/notification/model/notification.model.dart';
 import 'package:karbarab/model/quiz.dart';
 import 'package:karbarab/model/score.dart';

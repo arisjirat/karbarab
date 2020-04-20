@@ -21,7 +21,7 @@ class _AnswerQuestionCardBattleState extends State<AnswerQuestionCardBattle> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text('Answer'),
+      child: const Text('Answer'),
     );
   }
 }

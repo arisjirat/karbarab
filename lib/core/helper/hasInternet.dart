@@ -13,7 +13,7 @@ void checkConnectionFirst(Function callback, BuildContext context) async {
         callback();
       }
     } on SocketException catch (_) {
-      Logger.e('ga ada internet');
+      Logger.e('ga ada internet', s: StackTrace.current);
       popup(
         context,
         text: 'Internet kamu mati ya?',
@@ -36,6 +36,6 @@ void checkConnectionFirst(Function callback, BuildContext context) async {
         confirmLabel: 'Hidupkan',
       );
     } catch (e) {
-      Logger.e('another catch');
+      Logger.e('another catch', s: StackTrace.current, e: e);
     }
   }

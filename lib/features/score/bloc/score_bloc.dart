@@ -185,7 +185,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
     try {
       _scoreRepository.addScoreUser(user.id, quizMode, quizId, score, metaQuiz, user);
     } catch (e) {
-      Logger.e('AddUserScore', e:e);
+      Logger.e('AddUserScore', e:e, s: StackTrace.current);
     }
   }
 }
