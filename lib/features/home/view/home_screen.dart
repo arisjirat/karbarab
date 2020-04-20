@@ -12,7 +12,6 @@ import 'package:karbarab/core/ui/cards/card_play.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/helper/scale_calculator.dart';
 import 'package:karbarab/features/battle/view/battle.dart';
-import 'package:karbarab/features/notification/view/notification.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
 import 'package:karbarab/model/score.dart';
 
@@ -233,7 +232,6 @@ class Hero extends StatelessWidget {
                   height: deviceHeight / 8,
                 ),
               ),
-              NotificationScreen(),
               Positioned(
                 top: 15.0,
                 right: 15.0,

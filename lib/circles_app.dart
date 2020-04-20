@@ -14,6 +14,7 @@ import 'package:karbarab/features/karbarab/view/karbarab.dart';
 import 'package:karbarab/features/login/bloc/login_bloc.dart';
 import 'package:karbarab/features/login/view/login_screen.dart';
 import 'package:karbarab/features/notification/bloc/notification_bloc.dart';
+import 'package:karbarab/features/notification/view/app_pushes.dart';
 import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
 import 'package:karbarab/features/quiz/view/game_start_screen.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
@@ -97,11 +98,11 @@ class App extends StatelessWidget {
       home: BlocBuilder<AuthBloc, AuthState>(
         builder: (BuildContext context, AuthState state) {
           if (state is Unauthenticated) {
-            return LoginScreen(userRepository: userRepository);
+            return AppPushs(child: LoginScreen(userRepository: userRepository));
           }
           if (state is Authenticated) {
-            // return BattleScreen();
-            return HomeScreen();
+            // return AppPushs(child: BattleScreen());
+            return AppPushs(child: HomeScreen());
           }
           if (state is Uninitialized) {
             return SplashLoginScreen();
@@ -110,12 +111,12 @@ class App extends StatelessWidget {
         },
       ),
       routes: {
-        LoginScreen.routeName: (_) => LoginScreen(userRepository: userRepository),
-        HomeScreen.routeName: (_) => HomeScreen(),
-        ProfileScreen.routeName: (_) => ProfileScreen(),
-        BattleScreen.routeName: (_) => BattleScreen(),
-        GameStartScreen.routeName: (_) => GameStartScreen(mode: GameMode.GambarArab),
-        KarbarabScreen.routeName: (_) => KarbarabScreen(),
+        LoginScreen.routeName: (_) => AppPushs(child: LoginScreen(userRepository: userRepository)),
+        HomeScreen.routeName: (_) => AppPushs(child: HomeScreen()),
+        ProfileScreen.routeName: (_) => AppPushs(child: ProfileScreen()),
+        BattleScreen.routeName: (_) => AppPushs(child: BattleScreen()),
+        GameStartScreen.routeName: (_) => AppPushs(child: GameStartScreen(mode: GameMode.GambarArab)),
+        KarbarabScreen.routeName: (_) => AppPushs(child: KarbarabScreen()),
       },
     );
   }
