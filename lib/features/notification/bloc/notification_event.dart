@@ -7,11 +7,8 @@ abstract class NotificationEvent extends Equatable {
 }
 
 class OnPushNotification extends NotificationEvent {
-  final DataModel message;
-  OnPushNotification(this.message);
+  final String payload;
+  OnPushNotification(this.payload);
 }
 
-class OnAppPushNotification extends NotificationEvent {
-  final DataModel message;
-  OnAppPushNotification(this.message);
-}
+class ResetNotification extends NotificationEvent {}

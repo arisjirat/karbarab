@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:karbarab/core/request/quiz.dart';
 import 'package:karbarab/model/quiz.dart';
+import 'package:karbarab/model/score.dart';
 import 'package:meta/meta.dart';
 
 
@@ -36,17 +37,17 @@ class QuizRepository {
     );
   }
 
-  static Quiz fromJson(Map<String, dynamic> document) {
+  static Quiz fromJson(Map<String, dynamic> json) {
     return Quiz(
       (u) => u
-        ..id = document[ID]
-        ..arab = document[ARAB]
-        ..bahasa = document[BAHASA]
-        ..image = document[IMAGE]
-        ..voice = document[VOICE]
-        ..cardCategory = CardCategoryHelper.valueOf(document[CARD_CATEGORY])
-        ..level = document[LEVEL]
-        ..date = document[DATE]
+        ..id = json[ID]
+        ..arab = json[ARAB]
+        ..bahasa = json[BAHASA]
+        ..image = json[IMAGE]
+        ..voice = json[VOICE]
+        ..cardCategory = CardCategoryHelper.valueOf(json[CARD_CATEGORY])
+        ..level = json[LEVEL]
+        ..date = DateTime.fromMicrosecondsSinceEpoch((json[DATE] as Timestamp).nanoseconds)
     );
   }
 
@@ -71,7 +72,7 @@ class QuizRepository {
 
   Quiz getSingleQuiz(id) {
     try {
-      final Quiz quiz = allQuiz().where((e) => e.id == id).toList()[0];
+      final Quiz quiz = allQuiz().firstWhere((e) => e.id == id);
       return quiz;
     } catch (e) {
       throw Exception('quiz not found');
@@ -91,6 +92,22 @@ class QuizRepository {
     return ListQuiz(
       list: quizList,
       correct: correct
+    );
+  }
+
+  ListQuiz getBattleQuiz(Score score) {
+    List<Quiz> listQuiz = getQuizData();
+    final isImageQuiz = score.quizMode == GameMode.ArabGambar || score.quizMode == GameMode.GambarArab;
+    if (isImageQuiz) {
+      listQuiz = listQuiz.where((q) => !(q.image == '' || q.image == null)).toList();
+    }
+    listQuiz.shuffle();
+    listQuiz = listQuiz.sublist(0, 3);
+    listQuiz.add(score.metaQuiz);
+    listQuiz.shuffle();
+    return ListQuiz(
+      list: listQuiz,
+      correct: score.metaQuiz
     );
   }
 

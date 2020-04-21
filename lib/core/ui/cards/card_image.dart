@@ -82,7 +82,7 @@ class CardImage extends StatelessWidget {
             ? Positioned(
                 bottom: 10.0,
                 left: 10.0,
-                child: adsHint,
+                child: adsHint is Widget ? adsHint : const SizedBox(width: 0),
               )
             : Container(
                 width: 0,

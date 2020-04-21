@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:karbarab/model/score.dart';
 import 'package:karbarab/repository/score_repostitory.dart';
 import 'package:meta/meta.dart';
 import 'package:karbarab/repository/user_repository.dart';
@@ -43,9 +44,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final fullname = await _userRepository.getUserFullname();
         final isGoogleAuth = await _userRepository.isUserGoogleAuth();
         final userId = await _userRepository.getUserId();
-        final scores = await _scoreRepository.getUserScore(userId);
+        final scores = await _scoreRepository.getUserScore(userId) ?? [];
         final tokenFCM = await _userRepository.getUserTokenFCM();
-        final totalScore = await scores.fold(0, (t, e) => e['score'] + t);
+        final double totalScore = await scores.fold(0, (t, e) => e[SCORE] + t);
 
         yield Authenticated(
           displayName: name,
@@ -70,14 +71,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final userId = await _userRepository.getUserId();
     final isGoogleAuth = await _userRepository.isUserGoogleAuth();
     final scores = await _scoreRepository.getUserScore(userId);
-    final totalScore = await scores.fold(0, (t, e) => e['score'] + t);
+    final double totalScore = await scores.fold(0, (t, e) => e[SCORE] + t);
     final tokenFCM = await _userRepository.getUserTokenFCM();
+    final limit = await _userRepository.getUserSendCardLimit();
 
     final newToken = await _firebaseMessaging.getToken();
 
     if (newToken != tokenFCM) {
       _userRepository.updateUserTokenFCM(name, newToken);
     }
+
+    _userRepository.updateToLimitLocal(limit);
 
     yield Authenticated(
         displayName: name,

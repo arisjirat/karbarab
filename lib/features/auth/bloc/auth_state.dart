@@ -14,7 +14,7 @@ class Authenticated extends AuthState {
   final String avatar;
   final String fullname;
   final bool isGoogleAuth;
-  final int totalPoints;
+  final double totalPoints;
   final String tokenFCM;
 
   const Authenticated({

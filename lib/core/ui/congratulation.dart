@@ -8,10 +8,12 @@ class Congratulation extends StatelessWidget {
   final bool isCorrect;
   final Function onNewGame;
   final int point;
+  final String nextWord;
   const Congratulation({
     @required this.isCorrect,
     @required this.onNewGame,
     @required this.point,
+    @required this.nextWord,
   });
   void _nextCard() {
     onNewGame();
@@ -35,7 +37,7 @@ class Congratulation extends StatelessWidget {
           Container(height: scaleCalculator(20.0, context)),
           Button(
             onTap: _nextCard,
-            text: 'Kata Selanjutnya',
+            text: nextWord,
           ),
         ],
       ),

@@ -33,7 +33,7 @@ class _GlobalScoreState extends State<GlobalScore> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     setState(() {
-      _watched = false;
+      _watched = true;
     });
   }
 

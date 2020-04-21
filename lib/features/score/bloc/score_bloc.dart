@@ -18,10 +18,10 @@ part 'score_event.dart';
 part 'score_state.dart';
 
 class ScoreQuiz {
-  final int totalScore;
+  final double totalScore;
   final int totalAttempt;
   final double averageScore;
-  final List<int> scores;
+  final List<double> scores;
   final String quizId;
   final Quiz quiz;
   final GameMode quizMode;
@@ -35,19 +35,6 @@ class ScoreQuiz {
     @required this.totalAttempt,
     @required this.quizMode,
   });
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = {};
-    data['totalScore'] = totalScore;
-    data['totalAttempt'] = totalAttempt;
-    data['averageScore'] = averageScore;
-    data['scores'] = scores;
-    data['quizId'] = quizId;
-    data['quiz'] = quiz;
-    data['quizMode'] = GameModeHelper.stringOf(quizMode);
-    return data;
-  }
-
 }
 
 class ListScore {
@@ -60,14 +47,15 @@ class ListScore {
   });
 
   double get score {
-    final int total = scoreFilter.fold(0, (t, e) => e['score'] + t);
+    final double total = scoreFilter.fold(0, (t, e) => e[SCORE] + t);
     final int scoreLength = scoreFilter.isNotEmpty ? scoreFilter.length : 1;
     return (total / scoreLength / SCORE_BASE) * 10;
   }
 
   List<DocumentSnapshot> get scoreFilter {
     return scoreDocuments
-        .where((e) => e['quizMode'] == GameModeHelper.stringOf(mode))
+        .where((e) => e[QUIZ_MODE] == GameModeHelper.stringOf(mode))
+        .where((s) => !s[IS_BATTLE])
         .toList();
   }
 }
@@ -95,56 +83,40 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
           event.mode, event.quizId, event.score, event.metaQuiz);
     } else if (event is GetSummaryUserQuizScore) {
       yield* _mapGetSummaryUserQuizScore();
+    } else if (event is DirtyBattle) {
+      yield* _mapDirtyScore(event.score);
+    } else if (event is SolvedBattle) {
+      yield* _mapSolvedBattleScore(event.battleQuiz, event.score);
     }
   }
 
+  Stream<ScoreState> _mapSolvedBattleScore(
+    Score scoreBattle,
+    double score,
+  ) async* {
+    try {
+      yield SolvedBattleState(true, false);
+      double scorePayload = scoreBattle.targetScore / 2;
+      if (scoreBattle.targetScore == score) {
+        scorePayload = score * 2;
+      }
+      await _scoreRepository.updateBattleCard(scoreBattle.scoreId, scorePayload);
+      yield SolvedBattleState(false, true);
+    } catch (e) {
+      Logger.e('AddUserScore', e: e, s: StackTrace.current);
+      yield SolvedBattleState(false, true);
+    }
+  }
+
+  Stream<ScoreState> _mapDirtyScore(Score score) async* {
+    await _scoreRepository.dirtyBattleCard(score.scoreId);
+  }
+
   Stream<ScoreState> _mapGetSummaryUserQuizScore() async* {
-      final _id = await _userRepository.getUserId();
-    final Iterable<DocumentSnapshot> _userScores = await _scoreRepository.getUserScore(_id);
-    final List<ScoreQuiz> summaryQuiz = _userScores.fold(
-      [],
-      (acc, cur) {
-        final Map<String, dynamic> data = Map<String, dynamic>.from(cur.data);
-        final found = acc.indexWhere((e) => e.quizId == data['quizId']);
-        final Timestamp timestamp = data['metaQuiz']['date'];
-        final String quizId = data['quizId'];
-        final int totalAttempt = 1;
-        final GameMode quizMode = GameModeHelper.valueOf(data['quizMode']);
-        data['metaQuiz']['date'] = Timestamp(timestamp.seconds, timestamp.nanoseconds).toDate();
-        final Quiz quiz = QuizRepository.fromJson(data['metaQuiz']);
-        final int totalScore = data['score'];
-        final List<int> scores = [data['score']];
-        if (found >= 0) {
-          acc[found].scores.add(data['score']);
-          final int totalScoreSum = acc[found].totalScore + data['score'];
-          acc[found] = ScoreQuiz(
-            quizId: quizId,
-            totalAttempt: totalAttempt + 1,
-            averageScore: totalScoreSum / (SCORE_BASE * acc[found].scores.length),
-            quiz: quiz,
-            quizMode: quizMode,
-            totalScore: totalScoreSum,
-            scores: acc[found].scores,
-          );
-          return acc;
-        }
-        acc.add(ScoreQuiz(
-          quizId: quizId,
-          totalAttempt: totalAttempt,
-          quiz: quiz,
-          quizMode: quizMode,
-          averageScore: totalScore / (SCORE_BASE * 1),
-          totalScore: totalScore,
-          scores: scores,
-        ));
-        return acc;
-      },
-    );
-
-    final badQuiz = summaryQuiz.where((e) => e.averageScore <= 0.9).toList();
-    final goodQuiz = summaryQuiz.where((e) => e.averageScore > 0.9).toList();
-
-    yield SummaryUserScore(badQuiz: badQuiz, goodQuiz: goodQuiz);
+    final _id = await _userRepository.getUserId();
+    final List<List<ScoreQuiz>> _userScores =
+        await _scoreRepository.getUserScoreGoodOrBadQuiz(_id);
+    yield SummaryUserScore(badQuiz: _userScores[0], goodQuiz: _userScores[1]);
   }
 
   Stream<ScoreState> _mapGetScoreUserByMode() async* {
@@ -179,13 +151,13 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
   }
 
   Stream<ScoreState> _mapAddUserScore(
-      GameMode quizMode, String quizId, int score, Quiz metaQuiz) async* {
-    
+      GameMode quizMode, String quizId, double score, Quiz metaQuiz) async* {
     final User user = await _userRepository.getUserMeta();
     try {
-      _scoreRepository.addScoreUser(user.id, quizMode, quizId, score, metaQuiz, user);
+      _scoreRepository.addScoreUser(
+          user.id, quizMode, quizId, score, metaQuiz, user);
     } catch (e) {
-      Logger.e('AddUserScore', e:e, s: StackTrace.current);
+      Logger.e('AddUserScore', e: e, s: StackTrace.current);
     }
   }
 }

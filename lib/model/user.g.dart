@@ -22,6 +22,8 @@ class _$User extends User {
   @override
   final String tokenFCM;
   @override
+  final int sendCardLimit;
+  @override
   final String username;
 
   factory _$User([void Function(UserBuilder) updates]) =>
@@ -35,6 +37,7 @@ class _$User extends User {
       this.isGoogleAuth,
       this.password,
       this.tokenFCM,
+      this.sendCardLimit,
       this.username})
       : super._() {
     if (id == null) {
@@ -45,6 +48,9 @@ class _$User extends User {
     }
     if (tokenFCM == null) {
       throw new BuiltValueNullFieldError('User', 'tokenFCM');
+    }
+    if (sendCardLimit == null) {
+      throw new BuiltValueNullFieldError('User', 'sendCardLimit');
     }
     if (username == null) {
       throw new BuiltValueNullFieldError('User', 'username');
@@ -69,6 +75,7 @@ class _$User extends User {
         isGoogleAuth == other.isGoogleAuth &&
         password == other.password &&
         tokenFCM == other.tokenFCM &&
+        sendCardLimit == other.sendCardLimit &&
         username == other.username;
   }
 
@@ -79,12 +86,14 @@ class _$User extends User {
             $jc(
                 $jc(
                     $jc(
-                        $jc($jc($jc(0, id.hashCode), avatar.hashCode),
-                            email.hashCode),
-                        fullname.hashCode),
-                    isGoogleAuth.hashCode),
-                password.hashCode),
-            tokenFCM.hashCode),
+                        $jc(
+                            $jc($jc($jc(0, id.hashCode), avatar.hashCode),
+                                email.hashCode),
+                            fullname.hashCode),
+                        isGoogleAuth.hashCode),
+                    password.hashCode),
+                tokenFCM.hashCode),
+            sendCardLimit.hashCode),
         username.hashCode));
   }
 
@@ -98,6 +107,7 @@ class _$User extends User {
           ..add('isGoogleAuth', isGoogleAuth)
           ..add('password', password)
           ..add('tokenFCM', tokenFCM)
+          ..add('sendCardLimit', sendCardLimit)
           ..add('username', username))
         .toString();
   }
@@ -134,6 +144,10 @@ class UserBuilder implements Builder<User, UserBuilder> {
   String get tokenFCM => _$this._tokenFCM;
   set tokenFCM(String tokenFCM) => _$this._tokenFCM = tokenFCM;
 
+  int _sendCardLimit;
+  int get sendCardLimit => _$this._sendCardLimit;
+  set sendCardLimit(int sendCardLimit) => _$this._sendCardLimit = sendCardLimit;
+
   String _username;
   String get username => _$this._username;
   set username(String username) => _$this._username = username;
@@ -149,6 +163,7 @@ class UserBuilder implements Builder<User, UserBuilder> {
       _isGoogleAuth = _$v.isGoogleAuth;
       _password = _$v.password;
       _tokenFCM = _$v.tokenFCM;
+      _sendCardLimit = _$v.sendCardLimit;
       _username = _$v.username;
       _$v = null;
     }
@@ -179,6 +194,7 @@ class UserBuilder implements Builder<User, UserBuilder> {
             isGoogleAuth: isGoogleAuth,
             password: password,
             tokenFCM: tokenFCM,
+            sendCardLimit: sendCardLimit,
             username: username);
     replace(_$result);
     return _$result;

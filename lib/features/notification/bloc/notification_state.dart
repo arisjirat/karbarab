@@ -10,18 +10,10 @@ class NotificationInitial extends NotificationState {
 }
 
 class HaveNewBattleCard extends NotificationState {
-  final Quiz quiz;
-  final User userSender;
-  final int targetScore;
-  final GameMode gameMode;
-  final BattleCardModel battleCard;
+  final bool hasNew;
   HaveNewBattleCard({
-    @required this.quiz,
-    @required this.userSender,
-    @required this.targetScore,
-    @required this.gameMode,
-    @required this.battleCard,
+    @required this.hasNew,
   });
   @override
-  List<Object> get props => [quiz, userSender, targetScore, gameMode];
+  List<Object> get props => [hasNew];
 }

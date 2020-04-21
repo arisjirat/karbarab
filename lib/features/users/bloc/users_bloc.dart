@@ -27,6 +27,8 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
         final List<User> users = usersData.map(
           (u) => UserRepository.fromDoc(u),
         ).toList();
+        final username = await _userRepository.getUser();
+        users.removeWhere((u) => u.username == username);
         yield UsersState.success(users);
         return;
       } catch (e) {

@@ -23,6 +23,8 @@ abstract class User implements Built<User, UserBuilder> {
 
   String get tokenFCM;
 
+  int get sendCardLimit;
+
   String get username;
 
   factory User([void Function(UserBuilder) updates]) = _$User;

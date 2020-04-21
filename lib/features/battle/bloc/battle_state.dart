@@ -23,7 +23,7 @@ class SendCardState extends BattleState {
 }
 
 class ListQuizBattleCard extends BattleState {
-  final List<BattleCardModel> listBattle;
+  final List<Score> listBattle;
   ListQuizBattleCard(this.listBattle);
 
   @override

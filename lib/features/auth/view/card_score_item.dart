@@ -51,7 +51,7 @@ class CardScoreItem extends StatelessWidget {
             child: ListView.builder(
               itemCount: score.scoreHistory.length,
               itemBuilder: (context, position) {
-                final DateTime date = score.scoreHistory[position].date;
+                final DateTime date = score.scoreHistory[position].createdAt;
                 return Card(
                   child: Padding(
                     padding: const EdgeInsets.all(10),
@@ -62,7 +62,7 @@ class CardScoreItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             RegularText(
-                              text: score.scoreHistory[position].bahasa,
+                              text: score.scoreHistory[position].metaQuiz.bahasa,
                               dark: true,
                             ),
                             TinyText(
@@ -131,7 +131,7 @@ class CardScoreItem extends StatelessWidget {
                         dark: true,
                       ),
                       BoldRegularText(
-                        text: score.score.toString(),
+                        text: score.score.toInt().toString(),
                         dark: false,
                         color: greenColor,
                       ),
@@ -159,14 +159,21 @@ class CardUserAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      onPressed: () {
-        onTap(users);
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: MaterialButton(
+        padding: const EdgeInsets.all(15),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
+          ),
+          side: BorderSide(color: greenColor, width: 2),
+        ),
+        focusColor: greenColorLight,
+        onPressed: () {
+          onTap(users);
+        },
+        child: Row(
             children: [
               const SizedBox(
                 width: 15,
@@ -191,7 +198,7 @@ class CardUserAction extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  RegularText(
+                  BoldRegularText(
                     text: users.username,
                     dark: true,
                   ),
@@ -199,7 +206,6 @@ class CardUserAction extends StatelessWidget {
               )
             ],
           ),
-        ],
       ),
     );
   }

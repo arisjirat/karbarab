@@ -23,10 +23,10 @@ class CardGame extends StatefulWidget {
     this.point,
     this.height = 200,
     this.loading = false,
+    this.adsHint,
     @required this.giveFeedback,
     @required this.quiz,
     @required this.mode,
-    @required this.adsHint,
     @required this.speech,
   });
 

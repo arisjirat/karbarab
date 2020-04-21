@@ -21,6 +21,25 @@ class AllQuiz extends QuizState {
   
 }
 
+class AllGoodQuiz extends QuizState {
+  final bool isLoading;
+  final bool isSuccess;
+  final List<Quiz> list;
+
+  AllGoodQuiz({ @required this.list, @required this.isLoading, @required this.isSuccess });
+
+  @override
+  List<Object> get props => [
+    list,
+    isLoading,
+    isSuccess,
+  ];
+
+  @override
+  String toString() => 'AllGoodQuiz { list: $list, $isLoading, $isSuccess';
+  
+}
+
 class HasQuiz extends QuizState {
   final List<Quiz> list;
   final Quiz correct;

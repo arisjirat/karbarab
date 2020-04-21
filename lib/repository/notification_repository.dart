@@ -21,13 +21,11 @@ class NotificationRepository {
     String userRecieverTokenId,
     User userSender,
     String quizId,
-    int targetScore,
+    double targetScore,
     GameMode gameMode,
     String scoreId,
   ) async {
-    Logger.w('Sending Notification');
     await Future.delayed(const Duration(seconds: 1), () async {
-      Logger.e(userRecieverTokenId, s: StackTrace.current);
       try {
         final body = convert.json.encode({
           'to': userRecieverTokenId,
@@ -36,12 +34,12 @@ class NotificationRepository {
           'contentAvailable': true,
           'data': {
             'type': 'BATTLE',
-            'scoreId': scoreId,
-            'userSenderId': userSender.id,
-            'userSenderUsername': userSender.username,
-            'quizId': quizId,
-            'targetScore': targetScore,
-            'gameMode': GameModeHelper.stringOf(gameMode),
+            SCORE_ID: scoreId,
+            USER_ID_SENDER: userSender.id,
+            USERNAME_SENDER: userSender.username,
+            QUIZ_ID: quizId,
+            TARGET_SCORE: targetScore,
+            QUIZ_MODE: GameModeHelper.stringOf(gameMode),
           }
         });
         final http.Response response = await _client.post(

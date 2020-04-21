@@ -11,7 +11,7 @@ import 'package:karbarab/features/auth/view/profile_screen.dart';
 import 'package:karbarab/core/ui/cards/card_play.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/helper/scale_calculator.dart';
-import 'package:karbarab/features/battle/view/battle.dart';
+import 'package:karbarab/features/battle/view/battle_screen.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
 import 'package:karbarab/model/score.dart';
 
@@ -213,12 +213,7 @@ class Hero extends StatelessWidget {
                   },
                   minWidth: 0,
                   child: Icon(
-                    // local_activity
-                    // local_play
-                    // offline_bolt
-                    // style ..like card
-                    // card_giftcard
-                    Icons.card_giftcard,
+                    Icons.flash_on,
                     size: 35,
                     color: greenColor,
                   ),

@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/helper/device_height.dart';
+import 'package:karbarab/core/ui/cards/card_item.dart';
 import 'package:karbarab/core/ui/typography.dart';
-import 'package:karbarab/features/auth/view/card_item.dart';
 import 'package:karbarab/features/home/view/home_screen.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
 

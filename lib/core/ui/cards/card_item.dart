@@ -9,7 +9,7 @@ class CardItem extends StatelessWidget {
   final Quiz quiz;
   final GameMode gameMode;
   final bool extra;
-  final int totalScore;
+  final double totalScore;
   final double averageScore;
   final bool positive;
   const CardItem({
@@ -113,17 +113,27 @@ class CardItemAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialButton(
-      padding: const EdgeInsets.all(10),
-      onPressed: () {
-        onTap(quiz);
-      },
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          BoldRegularText(text: quiz.bahasa, dark: true),
-          BoldRegularText(text: quiz.arab, dark: true),
-        ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: MaterialButton(
+        padding: const EdgeInsets.all(15),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(15),
+          ),
+          side: BorderSide(color: greenColor, width: 2),
+        ),
+        focusColor: greenColorLight,
+        onPressed: () {
+          onTap(quiz);
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            BoldRegularText(text: quiz.bahasa, dark: true),
+            BoldRegularText(text: quiz.arab, dark: true),
+          ],
+        ),
       ),
     );
   }

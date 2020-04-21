@@ -3,7 +3,37 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:karbarab/features/battle/view/battle_screen.dart';
+import 'package:karbarab/features/notification/bloc/notification_bloc.dart';
+import 'package:rxdart/subjects.dart';
+
+final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
+
+// Streams are created so that app can respond to notification-related events since the plugin is initialised in the `main` function
+final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
+    BehaviorSubject<ReceivedNotification>();
+
+final BehaviorSubject<String> selectNotificationSubject =
+    BehaviorSubject<String>();
+
+NotificationAppLaunchDetails notificationAppLaunchDetails;
+
+class ReceivedNotification {
+  final int id;
+  final String title;
+  final String body;
+  final String payload;
+
+  ReceivedNotification({
+    @required this.id,
+    @required this.title,
+    @required this.body,
+    @required this.payload,
+  });
+}
 
 class AppPushs extends StatefulWidget {
   AppPushs({
@@ -17,8 +47,6 @@ class AppPushs extends StatefulWidget {
 }
 
 class _AppPushsState extends State<AppPushs> {
-  static FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
 
   @override
@@ -26,11 +54,24 @@ class _AppPushsState extends State<AppPushs> {
     super.initState();
     _initLocalNotifications();
     _initFirebaseMessaging();
+    _configureSelectNotificationSubject();
   }
 
   @override
   Widget build(BuildContext context) {
-    return widget.child;
+    return BlocListener<NotificationBloc, NotificationState>(
+      listener: (ctx, s) async {
+        // if (s is HaveNewBattleCard && s.hasNew) {
+        //   await _flutterLocalNotificationsPlugin.cancelAll();
+        //   BlocProvider.of<NotificationBloc>(context).add(ResetNotification());
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(builder: (ct) => const BattleScreen()),
+        //   );
+        // }
+      },
+      child: widget.child,
+    );
   }
 
   void _initLocalNotifications() {
@@ -47,11 +88,46 @@ class _AppPushsState extends State<AppPushs> {
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
     }
-    // await Navigator.push(
+    selectNotificationSubject.add(payload);
+    // BlocProvider.of<NotificationBloc>(context).add(OnPushNotification(payload));
+    // Navigator.of(context)
+    // .pushNamedAndRemoveUntil(BattleScreen.routeName, (Route<dynamic> route) => false);
+    // Navigator.of(context).pushAndRemoveUntil(
+    //                                       MaterialPageRoute(builder: (context) {
+    //                                     return const BattleScreen();
+    //                                   }), ModalRoute.withName('/'));
+    // await Navigator.of(context).pus(
     //   context,
-    //   MaterialPageRoute(builder: (context) => SecondScreen(payload)),
+    //   MaterialPageRoute(builder: (context) => const BattleScreen()),
     // );
   }
+
+  void _configureSelectNotificationSubject() {
+    selectNotificationSubject.stream.listen((String payload) async {
+      // await Navigator.push(
+      //   context,
+      //   MaterialPageRoute(builder: (context) => SecondScreen(payload)),
+      // );
+      await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (ct) => const BattleScreen()),
+          );
+    });
+  }
+
+  @override
+  void dispose() {
+    didReceiveLocalNotificationSubject.close();
+    selectNotificationSubject.close();
+    super.dispose();
+  }
+
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   _flutterLocalNotificationsPlugin.cancelAll();
+  //   BlocProvider.of<NotificationBloc>(context).add(ResetNotification());
+  // }
 
   void _initFirebaseMessaging() {
     _firebaseMessaging.configure(
@@ -60,7 +136,7 @@ class _AppPushsState extends State<AppPushs> {
         _showNotification(message);
         return;
       },
-      onBackgroundMessage: Platform.isIOS ? null : backgroundMessageHandler,
+      // onBackgroundMessage: Platform.isIOS ? null : backgroundMessageHandler,
       onResume: (Map<String, dynamic> message) {
         print('AppPushs onResume : $message');
         if (Platform.isIOS) {
@@ -95,12 +171,12 @@ class _AppPushsState extends State<AppPushs> {
       final nodeData = message['data'];
       payloadQuizId = nodeData['quizId'];
       pushTitle = 'Hai kamu dapat kartu!';
-      pushText = 'Coba jawab kaartu dari ${nodeData['userSenderUsername']}';
+      pushText = 'Coba jawab kaartu dari ${nodeData['usernameSender']}';
       type = nodeData['action'];
     } else {
       payloadQuizId = message['quizId'];
       pushTitle = 'Hai kamu dapat kartu!';
-      pushText = 'Coba jawab kaartu dari ${message['userSenderUsername']}';
+      pushText = 'Coba jawab kaartu dari ${message['usernameSender']}';
       type = message['type'];
     }
     print('AppPushs pushTitle : $pushTitle');

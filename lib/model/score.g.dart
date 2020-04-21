@@ -24,15 +24,21 @@ class _$Score extends Score {
   @override
   final GameMode quizMode;
   @override
-  final int score;
+  final double score;
   @override
   final String scoreId;
   @override
-  final int targetScore;
+  final double targetScore;
   @override
   final String userId;
   @override
-  final String userSenderId;
+  final String userIdSender;
+  @override
+  final String userAvatarSender;
+  @override
+  final String usernameSender;
+  @override
+  final String userTokenSender;
 
   factory _$Score([void Function(ScoreBuilder) updates]) =>
       (new ScoreBuilder()..update(updates)).build();
@@ -50,7 +56,10 @@ class _$Score extends Score {
       this.scoreId,
       this.targetScore,
       this.userId,
-      this.userSenderId})
+      this.userIdSender,
+      this.userAvatarSender,
+      this.usernameSender,
+      this.userTokenSender})
       : super._() {
     if (createdAt == null) {
       throw new BuiltValueNullFieldError('Score', 'createdAt');
@@ -73,14 +82,8 @@ class _$Score extends Score {
     if (quizMode == null) {
       throw new BuiltValueNullFieldError('Score', 'quizMode');
     }
-    if (score == null) {
-      throw new BuiltValueNullFieldError('Score', 'score');
-    }
     if (scoreId == null) {
       throw new BuiltValueNullFieldError('Score', 'scoreId');
-    }
-    if (targetScore == null) {
-      throw new BuiltValueNullFieldError('Score', 'targetScore');
     }
     if (userId == null) {
       throw new BuiltValueNullFieldError('Score', 'userId');
@@ -110,7 +113,10 @@ class _$Score extends Score {
         scoreId == other.scoreId &&
         targetScore == other.targetScore &&
         userId == other.userId &&
-        userSenderId == other.userSenderId;
+        userIdSender == other.userIdSender &&
+        userAvatarSender == other.userAvatarSender &&
+        usernameSender == other.usernameSender &&
+        userTokenSender == other.userTokenSender;
   }
 
   @override
@@ -126,19 +132,30 @@ class _$Score extends Score {
                                     $jc(
                                         $jc(
                                             $jc(
-                                                $jc($jc(0, createdAt.hashCode),
-                                                    updatedAt.hashCode),
-                                                isBattle.hashCode),
-                                            isSolved.hashCode),
-                                        metaQuiz.hashCode),
-                                    metaUser.hashCode),
-                                quizId.hashCode),
-                            quizMode.hashCode),
-                        score.hashCode),
-                    scoreId.hashCode),
-                targetScore.hashCode),
-            userId.hashCode),
-        userSenderId.hashCode));
+                                                $jc(
+                                                    $jc(
+                                                        $jc(
+                                                            $jc(
+                                                                $jc(
+                                                                    0,
+                                                                    createdAt
+                                                                        .hashCode),
+                                                                updatedAt
+                                                                    .hashCode),
+                                                            isBattle.hashCode),
+                                                        isSolved.hashCode),
+                                                    metaQuiz.hashCode),
+                                                metaUser.hashCode),
+                                            quizId.hashCode),
+                                        quizMode.hashCode),
+                                    score.hashCode),
+                                scoreId.hashCode),
+                            targetScore.hashCode),
+                        userId.hashCode),
+                    userIdSender.hashCode),
+                userAvatarSender.hashCode),
+            usernameSender.hashCode),
+        userTokenSender.hashCode));
   }
 
   @override
@@ -156,7 +173,10 @@ class _$Score extends Score {
           ..add('scoreId', scoreId)
           ..add('targetScore', targetScore)
           ..add('userId', userId)
-          ..add('userSenderId', userSenderId))
+          ..add('userIdSender', userIdSender)
+          ..add('userAvatarSender', userAvatarSender)
+          ..add('usernameSender', usernameSender)
+          ..add('userTokenSender', userTokenSender))
         .toString();
   }
 }
@@ -196,25 +216,40 @@ class ScoreBuilder implements Builder<Score, ScoreBuilder> {
   GameMode get quizMode => _$this._quizMode;
   set quizMode(GameMode quizMode) => _$this._quizMode = quizMode;
 
-  int _score;
-  int get score => _$this._score;
-  set score(int score) => _$this._score = score;
+  double _score;
+  double get score => _$this._score;
+  set score(double score) => _$this._score = score;
 
   String _scoreId;
   String get scoreId => _$this._scoreId;
   set scoreId(String scoreId) => _$this._scoreId = scoreId;
 
-  int _targetScore;
-  int get targetScore => _$this._targetScore;
-  set targetScore(int targetScore) => _$this._targetScore = targetScore;
+  double _targetScore;
+  double get targetScore => _$this._targetScore;
+  set targetScore(double targetScore) => _$this._targetScore = targetScore;
 
   String _userId;
   String get userId => _$this._userId;
   set userId(String userId) => _$this._userId = userId;
 
-  String _userSenderId;
-  String get userSenderId => _$this._userSenderId;
-  set userSenderId(String userSenderId) => _$this._userSenderId = userSenderId;
+  String _userIdSender;
+  String get userIdSender => _$this._userIdSender;
+  set userIdSender(String userIdSender) => _$this._userIdSender = userIdSender;
+
+  String _userAvatarSender;
+  String get userAvatarSender => _$this._userAvatarSender;
+  set userAvatarSender(String userAvatarSender) =>
+      _$this._userAvatarSender = userAvatarSender;
+
+  String _usernameSender;
+  String get usernameSender => _$this._usernameSender;
+  set usernameSender(String usernameSender) =>
+      _$this._usernameSender = usernameSender;
+
+  String _userTokenSender;
+  String get userTokenSender => _$this._userTokenSender;
+  set userTokenSender(String userTokenSender) =>
+      _$this._userTokenSender = userTokenSender;
 
   ScoreBuilder();
 
@@ -232,7 +267,10 @@ class ScoreBuilder implements Builder<Score, ScoreBuilder> {
       _scoreId = _$v.scoreId;
       _targetScore = _$v.targetScore;
       _userId = _$v.userId;
-      _userSenderId = _$v.userSenderId;
+      _userIdSender = _$v.userIdSender;
+      _userAvatarSender = _$v.userAvatarSender;
+      _usernameSender = _$v.usernameSender;
+      _userTokenSender = _$v.userTokenSender;
       _$v = null;
     }
     return this;
@@ -269,7 +307,10 @@ class ScoreBuilder implements Builder<Score, ScoreBuilder> {
               scoreId: scoreId,
               targetScore: targetScore,
               userId: userId,
-              userSenderId: userSenderId);
+              userIdSender: userIdSender,
+              userAvatarSender: userAvatarSender,
+              usernameSender: usernameSender,
+              userTokenSender: userTokenSender);
     } catch (_) {
       String _$failedField;
       try {

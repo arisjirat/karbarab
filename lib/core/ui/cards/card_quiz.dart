@@ -15,6 +15,7 @@ class CardQuiz extends StatelessWidget {
   final Widget adsHint;
   final Function giveFeedback;
   final Widget speech;
+  final Function confirmClose;
 
   CardQuiz({
     @required this.currentPoint,
@@ -23,9 +24,10 @@ class CardQuiz extends StatelessWidget {
     @required this.deviceHeight,
     @required this.quiz,
     @required this.mode,
-    @required this.adsHint,
     @required this.giveFeedback,
     @required this.speech,
+    @required this.confirmClose,
+    this.adsHint,
   });
 
   @override
@@ -42,6 +44,7 @@ class CardQuiz extends StatelessWidget {
                 height: _cardPlainHeight,
                 color: isCorrect ? greenColor : greyColor,
                 backColor: isCorrect ? greenColorLight : softGreyColor,
+                confirmClose: confirmClose,
               ),
               CardGame(
                 point: currentPoint.round(),

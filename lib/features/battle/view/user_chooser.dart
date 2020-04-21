@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/features/auth/view/card_score_item.dart';
@@ -67,7 +68,6 @@ class _UserChooserState extends State<UserChooser> {
                         minWidth: 0,
                         color: redColor,
                         onPressed: () {
-                          // widget.onCancel();
                           Navigator.pop(context);
                         },
                         child: Icon(
@@ -79,7 +79,8 @@ class _UserChooserState extends State<UserChooser> {
                       Expanded(
                         child: TextFormField(
                           inputFormatters: [
-                            WhitelistingTextInputFormatter(RegExp('[a-zA-Z0-9\s]')),
+                            WhitelistingTextInputFormatter(
+                                RegExp('[a-zA-Z0-9\s]')),
                           ],
                           enableSuggestions: false,
                           keyboardType: TextInputType.visiblePassword,
@@ -88,14 +89,19 @@ class _UserChooserState extends State<UserChooser> {
                           style: TextStyle(color: whiteColor),
                           cursorColor: whiteColor,
                           onChanged: (v) {
-                            filtering(state.users, v);
+                            if (!state.isLoading) {
+                              filtering(state.users, v);
+                            }
                           },
                           onEditingComplete: () {
-                            filtering(state.users, search.text);
+                            if (!state.isLoading) {
+                              filtering(state.users, search.text);
+                            }
                           },
                           decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.fromLTRB(20, 20, 75, 20),
-                            labelText: 'Cari Quiz',
+                            contentPadding:
+                                const EdgeInsets.fromLTRB(20, 20, 75, 20),
+                            labelText: 'Cari Username nya',
                             labelStyle: TextStyle(
                               color: whiteColor,
                             ),
@@ -105,23 +111,28 @@ class _UserChooserState extends State<UserChooser> {
                             hasFloatingPlaceholder: true,
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(width: 2, color: whiteColor),
+                              borderSide:
+                                  BorderSide(width: 2, color: whiteColor),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(width: 2, color: whiteColor),
+                              borderSide:
+                                  BorderSide(width: 2, color: whiteColor),
                             ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(width: 2, color: whiteColor),
+                              borderSide:
+                                  BorderSide(width: 2, color: whiteColor),
                             ),
                             focusedErrorBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(width: 2, color: whiteColor),
+                              borderSide:
+                                  BorderSide(width: 2, color: whiteColor),
                             ),
                             errorBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(width: 2, color: whiteColor),
+                              borderSide:
+                                  BorderSide(width: 2, color: whiteColor),
                             ),
                           ),
                         ),
@@ -129,25 +140,50 @@ class _UserChooserState extends State<UserChooser> {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemBuilder: (_, id) {
-                      return CardUserAction(
-                        users: filtered[id],
-                        onTap: (User quiz) {
-                          widget.onSelect(quiz);
-                          Navigator.pop(context);
+                state.isLoading
+                    ? SpinKitDoubleBounce(
+                        color: greenColor,
+                      )
+                    : const SizedBox(
+                        width: 0,
+                      ),
+                state.isSuccess && state.users.isNotEmpty && filtered.isNotEmpty
+                    ? Expanded(
+                        child: ListView.builder(
+                        itemBuilder: (_, id) {
+                          return CardUserAction(
+                            users: filtered[id],
+                            onTap: (User quiz) {
+                              widget.onSelect(quiz);
+                              Navigator.pop(context);
+                            },
+                          );
                         },
-                        
-                      );
-                    },
-                    itemCount: filtered.length,
-                  ),
-                ),
+                        itemCount: filtered.length,
+                      ))
+                    : const SizedBox(width: 0),
+                state.isSuccess && filtered.isEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.all(100),
+                        child: RegularText(
+                          text: 'User tidak ditemukan',
+                        ),
+                      )
+                    : const SizedBox(width: 0),
+                state.isSuccess && state.users.isEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.all(100),
+                        child: RegularText(
+                          text: 'Tidak ada user',
+                        ),
+                      )
+                    : const SizedBox(width: 0),
               ],
             );
           }
-          return RegularText(text: 'text');
+          return SpinKitDoubleBounce(
+            color: greenColor,
+          );
         },
       ),
     );

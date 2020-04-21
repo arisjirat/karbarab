@@ -24,9 +24,9 @@ class CardText extends StatelessWidget {
     @required this.loading,
     @required this.answerMode,
     @required this.isCorrect,
-    @required this.adsHint,
     @required this.giveFeedback,
     @required this.speech,
+    this.adsHint,
     this.voice = '',
   }) : super(key: key);
 
@@ -107,7 +107,7 @@ class CardText extends StatelessWidget {
             ? Positioned(
                 bottom: 10.0,
                 left: 10.0,
-                child: adsHint,
+                child: adsHint is Widget ? adsHint : const SizedBox(width: 0),
               )
             : const SizedBox(width: 0)
       ],

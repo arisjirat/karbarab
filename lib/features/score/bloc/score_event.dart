@@ -14,7 +14,7 @@ class GetSummaryUserQuizScore extends ScoreEvent {}
 
 class AddScoreUser extends ScoreEvent {
   final GameMode mode;
-  final int score;
+  final double score;
   final String quizId;
   final Quiz metaQuiz;
 
@@ -23,5 +23,23 @@ class AddScoreUser extends ScoreEvent {
     @required this.score,
     @required this.metaQuiz,
     @required this.quizId,
+  });
+}
+
+class DirtyBattle extends ScoreEvent {
+  final Score score;
+
+  DirtyBattle({
+    @required this.score,
+  });
+}
+
+class SolvedBattle extends ScoreEvent {
+  final Score battleQuiz;
+  final double score;
+
+  SolvedBattle({
+    @required this.score,
+    @required this.battleQuiz,
   });
 }

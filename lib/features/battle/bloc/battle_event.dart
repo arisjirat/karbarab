@@ -6,6 +6,8 @@ abstract class BattleEvent extends Equatable {
   List<Object> get props => [];
 }
 
+class ResetSendCardState extends BattleEvent {}
+
 class SendCard extends BattleEvent {
   final User userReciever;
   final Quiz quiz;

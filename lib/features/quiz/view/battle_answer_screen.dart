@@ -1,17 +1,14 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/config/score_value.dart';
 import 'package:karbarab/core/helper/device_height.dart';
-import 'package:karbarab/core/ui/button_ads_hint.dart';
 import 'package:karbarab/core/ui/feedback_form.dart';
 import 'package:karbarab/core/ui/popup.dart';
 import 'package:karbarab/core/ui/typography.dart';
-import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
-import 'package:karbarab/features/admob/view/ads.dart';
+import 'package:karbarab/features/battle/view/battle_screen.dart';
 import 'package:karbarab/features/feedback/bloc/feedback_bloc.dart';
-import 'package:karbarab/features/home/view/home_screen.dart';
+import 'package:karbarab/features/notification/view/app_pushes.dart';
 import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
 import 'package:karbarab/core/ui/button.dart';
 import 'package:karbarab/core/ui/cards/card_answer.dart';
@@ -27,22 +24,21 @@ String _getAnswerIndex(index) {
   return answer[index];
 }
 
-class GameStartScreen extends StatefulWidget {
-  static const String routeName = '/start';
-  final GameMode mode;
-  GameStartScreen({@required this.mode});
+class BattleAnswerScreen extends StatefulWidget {
+  final Score battle;
+  BattleAnswerScreen({@required this.battle});
 
   @override
-  _GameStartScreenState createState() => _GameStartScreenState();
+  _BattleAnswerScreenState createState() => _BattleAnswerScreenState();
 }
 
-class _GameStartScreenState extends State<GameStartScreen> {
+class _BattleAnswerScreenState extends State<BattleAnswerScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<QuizBloc>(context).add(GetQuiz(
-        image: widget.mode == GameMode.ArabGambar ||
-            widget.mode == GameMode.GambarArab));
+    BlocProvider.of<QuizBloc>(context)
+        .add(GetBattleQuiz(battleQuiz: widget.battle));
+    BlocProvider.of<ScoreBloc>(context).add(DirtyBattle(score: widget.battle));
   }
 
   @override
@@ -50,28 +46,33 @@ class _GameStartScreenState extends State<GameStartScreen> {
     final QuizBloc quizBloc = BlocProvider.of<QuizBloc>(context);
     final ScoreBloc scoreBloc = BlocProvider.of<ScoreBloc>(context);
     final double _deviceHeight = deviceHeight(context);
-    return Scaffold(
-      body: BlocBuilder<QuizBloc, QuizState>(builder: (context, state) {
-        if (state is HasQuiz) {
-          return GameQuiz(
-            deviceHeight: _deviceHeight,
-            mode: widget.mode,
-            list: state.list,
-            correct: state.correct,
-            quizBloc: quizBloc,
-            scoreBloc: scoreBloc,
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Scaffold(
+        body: BlocBuilder<QuizBloc, QuizState>(builder: (context, state) {
+          if (state is HasQuiz) {
+            return GameQuiz(
+              deviceHeight: _deviceHeight,
+              mode: widget.battle.quizMode,
+              battle: widget.battle,
+              list: state.list,
+              correct: state.correct,
+              quizBloc: quizBloc,
+              scoreBloc: scoreBloc,
+            );
+          }
+          return Container(
+            width: 0,
+            height: 0,
           );
-        }
-        return Container(
-          width: 0,
-          height: 0,
-        );
-      }),
+        }),
+      ),
     );
   }
 }
 
 class GameQuiz extends StatefulWidget {
+  final Score battle;
   final double deviceHeight;
   final GameMode mode;
   final List<Quiz> list;
@@ -80,6 +81,7 @@ class GameQuiz extends StatefulWidget {
   final ScoreBloc scoreBloc;
 
   const GameQuiz({
+    @required this.battle,
     @required this.deviceHeight,
     @required this.mode,
     @required this.list,
@@ -93,12 +95,10 @@ class GameQuiz extends StatefulWidget {
 }
 
 class _GameQuizState extends State<GameQuiz> {
-  List<String> _recentAnswers = [];
+  final List<String> _recentAnswers = [];
   bool _isCorrect = false;
-  bool _loading = false;
   String _currentAnswer = '';
-  double _currentPoint = SCORE_BASE;
-  bool _hint = false;
+  double _currentPoint = 0;
 
   String get _rightAnswer =>
       _getAnswerIndex(widget.list.indexOf(widget.correct));
@@ -107,30 +107,12 @@ class _GameQuizState extends State<GameQuiz> {
     return _recentAnswers.contains(key);
   }
 
-  void _handleRewardedHint() {
+  @override
+  void initState() {
     setState(() {
-      _hint = true;
+      _currentPoint = widget.battle.targetScore;
     });
-  }
-
-  void _getQuiz() {
-    BlocProvider.of<FeedbackBloc>(context).add(ResetFeedbackQuiz());
-    setState(() {
-      _currentPoint = SCORE_BASE;
-      _loading = true;
-      _isCorrect = false;
-      _currentAnswer = '';
-      _recentAnswers = [];
-      _hint = false;
-    });
-    Timer(const Duration(milliseconds: 500), () {
-      widget.quizBloc.add(GetQuiz(
-          image: widget.mode == GameMode.ArabGambar ||
-              widget.mode == GameMode.GambarArab));
-      setState(() {
-        _loading = false;
-      });
-    });
+    super.initState();
   }
 
   void _selectAnswer(answer) {
@@ -145,29 +127,25 @@ class _GameQuizState extends State<GameQuiz> {
       setState(() {
         _isCorrect = true;
       });
-      widget.scoreBloc.add(AddScoreUser(
-        mode: widget.mode,
-        metaQuiz: widget.correct,
-        score: _currentPoint,
-        quizId: widget.correct.id,
-      ));
-    } else if (_recentAnswers.length > 1) {
-      widget.scoreBloc.add(AddScoreUser(
-        mode: widget.mode,
-        metaQuiz: widget.correct,
-        score: _currentPoint,
-        quizId: widget.correct.id,
-      ));
+      widget.scoreBloc
+          .add(SolvedBattle(score: _currentPoint, battleQuiz: widget.battle));
+    } else if (_recentAnswers.isNotEmpty) {
+      widget.scoreBloc
+          .add(SolvedBattle(score: _currentPoint, battleQuiz: widget.battle));
       popup(
         context,
-        text: 'Kesempatan Kamu habis',
-        confirmLabel: 'Kartu Selanjutnya',
+        text: 'Kesempatan hanya 1 kali',
+        confirmLabel: 'Kamu dapat score ${widget.battle.targetScore / 2}',
         cancel: () {
           Navigator.of(context).pop();
         },
         confirm: () {
-          _getQuiz();
-          Navigator.of(context).pop();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const BattleScreen(),
+            ),
+          );
         },
         confirmColor: greenColor,
         cancelAble: false,
@@ -175,7 +153,8 @@ class _GameQuizState extends State<GameQuiz> {
     } else {
       setState(() {
         _recentAnswers.add(_currentAnswer);
-        _currentPoint = _currentPoint - (SCORE_BASE / FAIL_TOLERANCE);
+        _currentPoint =
+            _currentPoint - (widget.battle.targetScore / 2);
         _currentAnswer = '';
       });
     }
@@ -233,9 +212,9 @@ class _GameQuizState extends State<GameQuiz> {
           (i, w) => MapEntry(
             i,
             CardAnswer(
-              loading: _loading,
+              loading: widget.list.isEmpty,
               item: w,
-              hint: _hint && (_rightAnswer == _getAnswerIndex(i)),
+              hint: false,
               answerId: _getAnswerIndex(i),
               answerMode: widget.mode,
               currentAnswer: _currentAnswer == _getAnswerIndex(i),
@@ -296,27 +275,34 @@ class _GameQuizState extends State<GameQuiz> {
           children: [
             CardQuiz(
               confirmClose: () {
-                Navigator.of(context).pushNamed(HomeScreen.routeName);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const BattleScreen(),
+                  ),
+                );
               },
               currentPoint: _currentPoint,
               isCorrect: _isCorrect,
-              loading: _loading,
+              loading: widget.list.isEmpty,
               deviceHeight: widget.deviceHeight,
               quiz: widget.correct,
               mode: widget.mode,
-              adsHint: AdsScreen(
-                adsMode: AdsMode.HINT,
-                onReward: _handleRewardedHint,
-                buttonShow: const ButtonAdsHint(),
-              ),
               giveFeedback: _giveFeedback,
               speech: Speech(id: widget.correct.id, arab: widget.correct.arab),
             ),
             _isCorrect
                 ? Congratulation(
-                    nextWord: 'Kata Selanjutnya',
+                    nextWord: 'Kembali ke perang kartu',
                     isCorrect: _isCorrect,
-                    onNewGame: _getQuiz,
+                    onNewGame: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const BattleScreen(),
+                        ),
+                      );
+                    },
                     point: _currentPoint.round(),
                   )
                 : buildQuiz(widget.deviceHeight, widget.list)

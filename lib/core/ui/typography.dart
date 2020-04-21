@@ -23,6 +23,29 @@ class LogoText extends StatelessWidget {
   }
 }
 
+class LogoTextSmaller extends StatelessWidget {
+  final String text;
+  final bool dark;
+  final Color color;
+
+  LogoTextSmaller({@required this.text, this.dark = true, this.color});
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(
+        fontFamily: 'FTF-Ahlan',
+        color: color == null ? dark ? textColor : whiteColor : color,
+        // fontSize: 50.0,
+        fontSize: scaleCalculator(30, context),
+        fontStyle: FontStyle.italic,
+        fontWeight: FontWeight.bold
+      ),
+    );
+  }
+}
+
 class ArabicText extends StatelessWidget {
   final String text;
   final bool dark;
@@ -174,3 +197,24 @@ class BiggerText extends StatelessWidget {
     );
   }
 }
+
+class BiggerTextItalic extends StatelessWidget {
+  final String text;
+  final bool dark;
+  final bool bold;
+  final Color color;
+  BiggerTextItalic({@required this.text, this.dark, this.bold = false, this.color});
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      text,
+      style: TextStyle(
+        color: color != null ? color : dark ? textColor : whiteColor,
+        fontWeight: bold ? FontWeight.bold : FontWeight.normal,
+        fontSize: scaleCalculator(25, context),
+        fontStyle: FontStyle.italic
+      ),
+    );
+  }
+}
+
