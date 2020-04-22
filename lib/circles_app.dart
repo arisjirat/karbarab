@@ -26,13 +26,7 @@ import 'package:karbarab/model/score.dart';
 import 'package:karbarab/repository/quiz_repository.dart';
 import 'package:karbarab/repository/user_repository.dart';
 
-class CirclesApp extends StatefulWidget {
-
-  @override
-  _CirclesAppState createState() => _CirclesAppState();
-}
-
-class _CirclesAppState extends State<CirclesApp> {
+class CirclesApp extends StatelessWidget {
   final UserRepository userRepository = UserRepository();
   final QuizRepository quizRepository = QuizRepository();
 
@@ -72,7 +66,9 @@ class _CirclesAppState extends State<CirclesApp> {
           create: (BuildContext context) => BattleBloc(),
         ),
         BlocProvider(
-          create: (BuildContext context) => LoginBloc(userRepository: userRepository,),
+          create: (BuildContext context) => LoginBloc(
+            userRepository: userRepository,
+          ),
         ),
         BlocProvider(
           create: (BuildContext context) => VoicesBloc(),
@@ -91,13 +87,12 @@ class _CirclesAppState extends State<CirclesApp> {
 
 class App extends StatelessWidget {
   final UserRepository userRepository;
-
   const App({@required this.userRepository});
 
   @override
   Widget build(BuildContext context) {
     return AppPushs(
-          child: MaterialApp(
+      child: MaterialApp(
         title: 'Karbarab',
         theme: ThemeData(
           primaryColor: primaryColor,
@@ -110,10 +105,7 @@ class App extends StatelessWidget {
               return LoginScreen(userRepository: userRepository);
             }
             if (state is Authenticated) {
-              return ProfileScreen();
-              // return HomeScreen();
-              // return AppPushs(child: HomeScreen());
-              // return AppPushs(child: BattleScreen());
+              return HomeScreen();
             }
             if (state is Uninitialized) {
               return SplashLoginScreen();
