@@ -18,6 +18,7 @@ const USER_ID_SENDER = 'userIdSender';
 const USER_AVATAR_SENDER = 'userAvatarSender';
 const USERNAME_SENDER = 'usernameSender';
 const USER_FCMTOKEN_SENDER = 'userFCMSender';
+const USER_SENDER_SCORE = 'userSenderScore';
 const META_USER = 'metaUser';
 const META_QUIZ = 'metaQuiz';
 const IS_SOLVED = 'isSolved';
@@ -61,6 +62,9 @@ abstract class Score implements Built<Score, ScoreBuilder> {
 
   @nullable
   String get userTokenSender;
+
+  @nullable
+  double get userSenderScore;
 
   factory Score([updates(ScoreBuilder b)]) = _$Score;
   Score._();

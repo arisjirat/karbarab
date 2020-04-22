@@ -31,6 +31,7 @@ class ScoreRepository {
         ..userIdSender = document[USER_ID_SENDER]
         ..userTokenSender = document[USER_FCMTOKEN_SENDER]
         ..userAvatarSender = document[USER_AVATAR_SENDER]
+        ..userSenderScore = document[USER_SENDER_SCORE]
         ..usernameSender = document[USERNAME_SENDER]
         ..metaUser = UserRepository.fromDoc(document[META_USER]).toBuilder()
         ..metaQuiz = QuizRepository.fromDoc(document[META_QUIZ]).toBuilder(),
@@ -56,6 +57,7 @@ class ScoreRepository {
       ..userIdSender = json[USER_ID_SENDER]
       ..userTokenSender = json[USER_FCMTOKEN_SENDER]
       ..userAvatarSender = json[USER_AVATAR_SENDER]
+      ..userSenderScore = json[USER_SENDER_SCORE]
       ..usernameSender = json[USERNAME_SENDER]
       ..metaUser = UserRepository.fromJson(json[META_USER]).toBuilder()
       ..metaQuiz = QuizRepository.fromJson(json[META_QUIZ]).toBuilder());
@@ -76,6 +78,7 @@ class ScoreRepository {
       USER_ID_SENDER: score.userIdSender,
       USER_FCMTOKEN_SENDER: score.userTokenSender,
       USER_AVATAR_SENDER: score.userAvatarSender,
+      USER_SENDER_SCORE: score.userSenderScore,
       USERNAME_SENDER: score.usernameSender,
       META_USER: UserRepository.toMap(score.metaUser),
       META_QUIZ: QuizRepository.toMap(score.metaQuiz),
@@ -106,6 +109,7 @@ class ScoreRepository {
         USER_ID_SENDER: null,
         META_USER: UserRepository.toMap(metaUser),
         META_QUIZ: QuizRepository.toMap(metaQuiz),
+        USER_SENDER_SCORE: null,
         IS_SOLVED: true,
         IS_BATTLE: false,
       });
@@ -132,6 +136,7 @@ class ScoreRepository {
         USER_FCMTOKEN_SENDER: userSender.tokenFCM,
         USER_AVATAR_SENDER: userSender.avatar,
         USERNAME_SENDER: userSender.username,
+        USER_SENDER_SCORE: null,
         META_USER: UserRepository.toMap(user),
         META_QUIZ: QuizRepository.toMap(quiz),
         IS_SOLVED: false,
@@ -146,9 +151,13 @@ class ScoreRepository {
   Future dirtyBattleCard(String scoreId) async {
     try {
       final updateData = scoreCollection.document(scoreId).updateData;
+      final DocumentSnapshot currentData =
+          await scoreCollection.document(scoreId).get();
+      final targetScore = currentData.data[TARGET_SCORE];
       return await updateData({
         IS_SOLVED: true,
         SCORE: 0.toDouble(),
+        USER_SENDER_SCORE: targetScore * 2,
         UPDATED_AT: FieldValue.serverTimestamp(),
       });
     } catch (e) {
@@ -159,9 +168,14 @@ class ScoreRepository {
   Future updateBattleCard(String scoreId, score) async {
     try {
       final updateData = scoreCollection.document(scoreId).updateData;
+      final DocumentSnapshot currentData =
+          await scoreCollection.document(scoreId).get();
+      final targetScore = currentData.data[TARGET_SCORE];
       return await updateData({
         IS_SOLVED: true,
-        SCORE: score,
+        SCORE: targetScore == score ? targetScore * 2 : targetScore / 2,
+        USER_SENDER_SCORE:
+            targetScore == score ? targetScore / 2 : targetScore * 2,
         UPDATED_AT: FieldValue.serverTimestamp(),
       });
     } catch (e) {
@@ -224,49 +238,50 @@ class ScoreRepository {
       final Iterable<DocumentSnapshot> documents = scores.documents;
 
       final List<ScoreQuiz> summaryQuiz = documents.fold(
-      [],
-      (acc, cur) {
-        final Map<String, dynamic> data = Map<String, dynamic>.from(cur.data);
-        final found = acc.indexWhere((e) => e.quizId == data[QUIZ_ID]);
-        final String quizId = data[QUIZ_ID];
-        final int totalAttempt = 1;
-        final GameMode quizMode = GameModeHelper.valueOf(data[QUIZ_MODE]);
-        final Quiz quiz = QuizRepository.fromJson(data[META_QUIZ]);
-        final double totalScore = data[SCORE];
-        final List<double> scores = [data[SCORE]];
-        if (found >= 0) {
-          acc[found].scores.add(data[SCORE]);
-          final double totalScoreSum = acc[found].totalScore + data[SCORE];
-          acc[found] = ScoreQuiz(
+        [],
+        (acc, cur) {
+          final Map<String, dynamic> data = Map<String, dynamic>.from(cur.data);
+          final found = acc.indexWhere((e) => e.quizId == data[QUIZ_ID]);
+          final String quizId = data[QUIZ_ID];
+          final int totalAttempt = 1;
+          final GameMode quizMode = GameModeHelper.valueOf(data[QUIZ_MODE]);
+          final Quiz quiz = QuizRepository.fromJson(data[META_QUIZ]);
+          final double totalScore = data[SCORE];
+          final List<double> scores = [data[SCORE]];
+          if (found >= 0) {
+            acc[found].scores.add(data[SCORE]);
+            final double totalScoreSum = acc[found].totalScore + data[SCORE];
+            acc[found] = ScoreQuiz(
+              quizId: quizId,
+              totalAttempt: totalAttempt + 1,
+              averageScore:
+                  totalScoreSum / (SCORE_BASE * acc[found].scores.length),
+              quiz: quiz,
+              quizMode: quizMode,
+              totalScore: totalScoreSum,
+              scores: acc[found].scores,
+            );
+            return acc;
+          }
+          acc.add(ScoreQuiz(
             quizId: quizId,
-            totalAttempt: totalAttempt + 1,
-            averageScore:
-                totalScoreSum / (SCORE_BASE * acc[found].scores.length),
+            totalAttempt: totalAttempt,
             quiz: quiz,
             quizMode: quizMode,
-            totalScore: totalScoreSum,
-            scores: acc[found].scores,
-          );
+            averageScore: totalScore / (SCORE_BASE * 1),
+            totalScore: totalScore,
+            scores: scores,
+          ));
           return acc;
-        }
-        acc.add(ScoreQuiz(
-          quizId: quizId,
-          totalAttempt: totalAttempt,
-          quiz: quiz,
-          quizMode: quizMode,
-          averageScore: totalScore / (SCORE_BASE * 1),
-          totalScore: totalScore,
-          scores: scores,
-        ));
-        return acc;
-      },
-    );
+        },
+      );
 
-    final List<ScoreQuiz> badQuiz = summaryQuiz.where((e) => e.averageScore <= 0.9).toList();
-    final List<ScoreQuiz> goodQuiz = summaryQuiz.where((e) => e.averageScore > 0.9).toList();
+      final List<ScoreQuiz> badQuiz =
+          summaryQuiz.where((e) => e.averageScore <= 0.9).toList();
+      final List<ScoreQuiz> goodQuiz =
+          summaryQuiz.where((e) => e.averageScore > 0.9).toList();
 
-    return [badQuiz, goodQuiz];
-
+      return [badQuiz, goodQuiz];
     } catch (e) {
       Logger.e('GetUserScore', e: e, s: StackTrace.current);
       throw Exception;
@@ -281,21 +296,10 @@ class ScoreRepository {
 
     List<ScoreGlobalModel> reconstruct(List<ScoreGlobalModel> acc, cur) {
       final Map<String, dynamic> data = Map<String, dynamic>.from(cur.data);
-      final found = acc.indexWhere(
-          (e) => e.userId == data[USER_ID] || e.userId == data[USER_ID_SENDER]);
-      final isSenderScore =
-          acc.indexWhere((e) => e.userId == data[USER_ID_SENDER]);
-      final metaUser = data[META_USER];
-      final User user = UserRepository.fromJson(metaUser);
-        print('globalL!');
-        print(isSenderScore);
-        print(user.username);
+      final int found = acc.indexWhere((e) => e.userId == data[USER_ID]);
+      final User user = UserRepository.fromJson(data[META_USER]);
       if (found >= 0) {
-        double score = acc[found].score.toDouble() + data[SCORE];
-        if (isSenderScore > 0) {
-          final additionScore = data[TARGET_SCORE] == data[SCORE] ? data[TARGET_SCORE] / 2 : data[TARGET_SCORE] * 2;
-          score = acc[found].score.toDouble() + additionScore;
-        }
+        final double score = acc[found].score.toDouble() + data[SCORE];
         acc[found] = ScoreGlobalModel(
           userId: user.id,
           metaUser: user,
@@ -316,9 +320,21 @@ class ScoreRepository {
 
     final List<ScoreGlobalModel> grouped =
         scores.documents.fold([], reconstruct);
+      final List<ScoreGlobalModel> added = grouped.map((ScoreGlobalModel g) {
+      final filteredScores = scores.documents
+          .where((s) => s.data[USER_ID_SENDER] == g.userId)
+          .map((s) => s.data[USER_SENDER_SCORE])
+          .toList()
+          .fold(0, (acc, cur) => acc + cur);
+      return ScoreGlobalModel(
+        metaUser: g.metaUser,
+        scoreHistory: g.scoreHistory,
+        score: g.score + filteredScores,
+        userId: g.userId,
+      );
+    }).toList();
+    added.sort((a, b) => b.score.compareTo(a.score));
 
-    grouped.sort((a, b) => b.score.compareTo(a.score));
-
-    return grouped;
+    return added;
   }
 }

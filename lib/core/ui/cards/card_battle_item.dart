@@ -16,21 +16,28 @@ class CardBattleItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Card(
-        margin: const EdgeInsets.symmetric(vertical: 10),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
               padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.all(0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Row(children: <Widget>[
-                    RegularText(text: 'Kartu: ',),
-                    RegularText(text: score.metaQuiz.bahasa, bold: true,),
-                  ],),
-                  const SizedBox(height: 10),
+                  Row(
+                    children: <Widget>[
+                      RegularText(
+                        text: 'Mode: ',
+                      ),
+                      RegularText(
+                        text: GameModeHelper.stringOf(score.quizMode),
+                        bold: true,
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 5),
                   Row(
                     children: <Widget>[
                       score.userAvatarSender != null
@@ -41,11 +48,16 @@ class CardBattleItem extends StatelessWidget {
                               radius: 20,
                               backgroundColor: Colors.transparent,
                             )
-                          : const SizedBox(
-                              width: 0,
+                          : const CircleAvatar(
+                              radius: 20,
+                              backgroundColor: whiteColor,
+                              backgroundImage:
+                                  AssetImage('assets/images/character.png'),
                             ),
                       const SizedBox(width: 10),
-                      RegularText(text: score.usernameSender,)
+                      RegularText(
+                        text: score.usernameSender,
+                      )
                     ],
                   )
                 ],
@@ -58,9 +70,13 @@ class CardBattleItem extends StatelessWidget {
                   return;
                 }
               },
-              height: 100,
+              height: 90,
+              elevation: score.isSolved ? 0 : 2,
               color: score.isSolved ? greyColor : greenColor,
-              child: RegularText(text: 'Jawab', dark: false,),
+              child: RegularText(
+                text: score.isSolved ? score.score.toInt().toString() : 'Jawab',
+                dark: false,
+              ),
             ),
           ],
         ),

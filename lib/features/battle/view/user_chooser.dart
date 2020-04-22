@@ -151,12 +151,15 @@ class _UserChooserState extends State<UserChooser> {
                     ? Expanded(
                         child: ListView.builder(
                         itemBuilder: (_, id) {
-                          return CardUserAction(
-                            users: filtered[id],
-                            onTap: (User quiz) {
-                              widget.onSelect(quiz);
-                              Navigator.pop(context);
-                            },
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 10),
+                            child: CardUserAction(
+                              users: filtered[id],
+                              onTap: (User quiz) {
+                                widget.onSelect(quiz);
+                                Navigator.pop(context);
+                              },
+                            ),
                           );
                         },
                         itemCount: filtered.length,

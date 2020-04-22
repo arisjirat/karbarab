@@ -156,7 +156,6 @@ class _AppPushsState extends State<AppPushs> {
   static Future<dynamic> backgroundMessageHandler(
     Map<String, dynamic> message,
   ) {
-    print('AppPushs backgroundMessageHandler : $message');
     _showNotification(message);
     return Future<void>.value();
   }

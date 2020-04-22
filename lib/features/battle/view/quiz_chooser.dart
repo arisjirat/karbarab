@@ -148,7 +148,7 @@ class _QuizChooserState extends State<QuizChooser> {
                   ),
                 ),
                 state.isLoading
-                    ? SpinKitDoubleBounce(
+                    ? const SpinKitDoubleBounce(
                         color: greenColor,
                       )
                     : const SizedBox(
@@ -158,12 +158,15 @@ class _QuizChooserState extends State<QuizChooser> {
                     ? Expanded(
                         child: ListView.builder(
                           itemBuilder: (_, id) {
-                            return CardItemAction(
-                              quiz: filtered[id],
-                              onTap: (Quiz quiz) {
-                                widget.onSelect(quiz);
-                                Navigator.pop(context);
-                              },
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: CardItemAction(
+                                quiz: filtered[id],
+                                onTap: (Quiz quiz) {
+                                  widget.onSelect(quiz);
+                                  Navigator.pop(context);
+                                },
+                              ),
                             );
                           },
                           itemCount: filtered.length,
@@ -192,7 +195,7 @@ class _QuizChooserState extends State<QuizChooser> {
               ],
             );
           }
-          return SpinKitDoubleBounce(
+          return const SpinKitDoubleBounce(
             color: greenColor,
           );
         },

@@ -39,6 +39,8 @@ class _$Score extends Score {
   final String usernameSender;
   @override
   final String userTokenSender;
+  @override
+  final double userSenderScore;
 
   factory _$Score([void Function(ScoreBuilder) updates]) =>
       (new ScoreBuilder()..update(updates)).build();
@@ -59,7 +61,8 @@ class _$Score extends Score {
       this.userIdSender,
       this.userAvatarSender,
       this.usernameSender,
-      this.userTokenSender})
+      this.userTokenSender,
+      this.userSenderScore})
       : super._() {
     if (createdAt == null) {
       throw new BuiltValueNullFieldError('Score', 'createdAt');
@@ -116,7 +119,8 @@ class _$Score extends Score {
         userIdSender == other.userIdSender &&
         userAvatarSender == other.userAvatarSender &&
         usernameSender == other.usernameSender &&
-        userTokenSender == other.userTokenSender;
+        userTokenSender == other.userTokenSender &&
+        userSenderScore == other.userSenderScore;
   }
 
   @override
@@ -137,25 +141,28 @@ class _$Score extends Score {
                                                         $jc(
                                                             $jc(
                                                                 $jc(
-                                                                    0,
-                                                                    createdAt
+                                                                    $jc(
+                                                                        0,
+                                                                        createdAt
+                                                                            .hashCode),
+                                                                    updatedAt
                                                                         .hashCode),
-                                                                updatedAt
+                                                                isBattle
                                                                     .hashCode),
-                                                            isBattle.hashCode),
-                                                        isSolved.hashCode),
-                                                    metaQuiz.hashCode),
-                                                metaUser.hashCode),
-                                            quizId.hashCode),
-                                        quizMode.hashCode),
-                                    score.hashCode),
-                                scoreId.hashCode),
-                            targetScore.hashCode),
-                        userId.hashCode),
-                    userIdSender.hashCode),
-                userAvatarSender.hashCode),
-            usernameSender.hashCode),
-        userTokenSender.hashCode));
+                                                            isSolved.hashCode),
+                                                        metaQuiz.hashCode),
+                                                    metaUser.hashCode),
+                                                quizId.hashCode),
+                                            quizMode.hashCode),
+                                        score.hashCode),
+                                    scoreId.hashCode),
+                                targetScore.hashCode),
+                            userId.hashCode),
+                        userIdSender.hashCode),
+                    userAvatarSender.hashCode),
+                usernameSender.hashCode),
+            userTokenSender.hashCode),
+        userSenderScore.hashCode));
   }
 
   @override
@@ -176,7 +183,8 @@ class _$Score extends Score {
           ..add('userIdSender', userIdSender)
           ..add('userAvatarSender', userAvatarSender)
           ..add('usernameSender', usernameSender)
-          ..add('userTokenSender', userTokenSender))
+          ..add('userTokenSender', userTokenSender)
+          ..add('userSenderScore', userSenderScore))
         .toString();
   }
 }
@@ -251,6 +259,11 @@ class ScoreBuilder implements Builder<Score, ScoreBuilder> {
   set userTokenSender(String userTokenSender) =>
       _$this._userTokenSender = userTokenSender;
 
+  double _userSenderScore;
+  double get userSenderScore => _$this._userSenderScore;
+  set userSenderScore(double userSenderScore) =>
+      _$this._userSenderScore = userSenderScore;
+
   ScoreBuilder();
 
   ScoreBuilder get _$this {
@@ -271,6 +284,7 @@ class ScoreBuilder implements Builder<Score, ScoreBuilder> {
       _userAvatarSender = _$v.userAvatarSender;
       _usernameSender = _$v.usernameSender;
       _userTokenSender = _$v.userTokenSender;
+      _userSenderScore = _$v.userSenderScore;
       _$v = null;
     }
     return this;
@@ -310,7 +324,8 @@ class ScoreBuilder implements Builder<Score, ScoreBuilder> {
               userIdSender: userIdSender,
               userAvatarSender: userAvatarSender,
               usernameSender: usernameSender,
-              userTokenSender: userTokenSender);
+              userTokenSender: userTokenSender,
+              userSenderScore: userSenderScore);
     } catch (_) {
       String _$failedField;
       try {

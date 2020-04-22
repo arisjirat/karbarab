@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/ui/typography.dart';
+import 'package:karbarab/model/quiz.dart';
 import 'package:karbarab/model/score.dart';
 
 class GameModeChooser extends StatelessWidget {
   final Function(GameMode) onSelect;
-  const GameModeChooser({Key key, @required this.onSelect}) : super(key: key);
+  final Quiz quiz;
+  const GameModeChooser({Key key, @required this.onSelect, @required this.quiz}) : super(key: key);
+
+  bool get isHasImage {
+    return quiz.image != '' ?? quiz.image != null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +22,7 @@ class GameModeChooser extends StatelessWidget {
         const SizedBox(height: 90),
         BiggerText(text: 'Pilih Mode yang akan kamu berikan', dark: true,),
         const SizedBox(height: 30),
+        isHasImage ? 
         RaisedButton(
           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
           color: greenColorLight,
@@ -31,7 +38,7 @@ class GameModeChooser extends StatelessWidget {
             onSelect(GameMode.ArabGambar);
             Navigator.of(context).pop();
           },
-        ),
+        ) : const SizedBox(width: 0),
         const SizedBox(height: 15),
         RaisedButton(
           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
@@ -50,6 +57,7 @@ class GameModeChooser extends StatelessWidget {
           },
         ),
         const SizedBox(height: 15),
+        isHasImage ? 
         RaisedButton(
           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
           color: greenColorLight,
@@ -65,7 +73,7 @@ class GameModeChooser extends StatelessWidget {
             onSelect(GameMode.GambarArab);
             Navigator.of(context).pop();
           },
-        ),
+        ) : const SizedBox(width: 0),
         const SizedBox(height: 15),
         RaisedButton(
           padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),

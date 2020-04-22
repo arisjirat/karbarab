@@ -19,7 +19,7 @@ class _GlobalScoreState extends State<GlobalScore> {
 
   void _handleReward() {
     setState(() {
-      _watched = true;
+      _watched = false;
     });
   }
 

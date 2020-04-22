@@ -24,7 +24,7 @@ class _BattleListViewState extends State<BattleListView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child:
           BlocBuilder<BattleListBloc, BattleListState>(builder: (ctx, state) {
         if (state is HasBattleList) {
@@ -33,19 +33,23 @@ class _BattleListViewState extends State<BattleListView> {
           }
           if (state.quizBattle.isNotEmpty) {
             return ListView.builder(
+              padding: const EdgeInsets.all(0),
               itemCount: state.quizBattle.length,
               itemBuilder: (context, position) {
-                return CardBattleItem(
-                  onAnswer: () {
-                    Navigator.push(
-                      ctx,
-                      MaterialPageRoute(
-                        builder: (ct) => BattleAnswerScreen(battle: state.quizBattle[position],),
-                      ),
-                    );
-                  },
-                  key: Key(state.quizBattle[position].scoreId),
-                  score: state.quizBattle[position],
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: CardBattleItem(
+                    onAnswer: () {
+                      Navigator.push(
+                        ctx,
+                        MaterialPageRoute(
+                          builder: (ct) => BattleAnswerScreen(battle: state.quizBattle[position],),
+                        ),
+                      );
+                    },
+                    key: Key(state.quizBattle[position].scoreId),
+                    score: state.quizBattle[position],
+                  ),
                 );
               },
             );

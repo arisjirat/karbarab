@@ -31,7 +31,7 @@ class _SendBattleCardState extends State<SendBattleCard> {
 
   SelectedType mode;
 
-  void _onChangeMode(SelectedType type, context) {
+  void _onChangeMode(SelectedType type, context, {payloadImage = false}) {
     setState(() {
       mode = type;
     });
@@ -77,6 +77,7 @@ class _SendBattleCardState extends State<SendBattleCard> {
     switch (mode) {
       case SelectedType.Mode:
         return GameModeChooser(
+          quiz: quizSelected,
           onSelect: (GameMode gameMode) {
             _setSelected(SelectedType.Mode, gameMode);
           },
@@ -96,6 +97,7 @@ class _SendBattleCardState extends State<SendBattleCard> {
       default:
     }
     return GameModeChooser(
+      quiz: quizSelected,
       onSelect: (GameMode gameMode) {
         _setSelected(SelectedType.Mode, gameMode);
       },
@@ -123,6 +125,7 @@ class _SendBattleCardState extends State<SendBattleCard> {
           BlocListener<BattleBloc, BattleState>(
             listener: (c, state) {
               if (state is SendCardState && state.isSuccess) {
+                print('succes!');
                 BlocProvider.of<SendCardLimitBloc>(context)
                     .add(DecreaseSendCardLimit());
                 time = Timer(const Duration(seconds: 3), () {
@@ -141,7 +144,9 @@ class _SendBattleCardState extends State<SendBattleCard> {
           SendCardLimitView(),
           BlocBuilder<BattleBloc, BattleState>(
             builder: (c, s) {
-              Widget stateWidget = const SizedBox(width: 0,);
+              Widget stateWidget = const SizedBox(
+                width: 0,
+              );
               if (s is SendCardState && s.isLoading) {
                 stateWidget = RegularText(
                   text: 'Sedang mengirim..',
@@ -159,7 +164,7 @@ class _SendBattleCardState extends State<SendBattleCard> {
               }
               return BlocBuilder<SendCardLimitBloc, SendCardLimitState>(
                   builder: (ctx, snapshot) {
-                if (snapshot is HasSendCardLimit && snapshot.limit > 1) {
+                if (snapshot is HasSendCardLimit && snapshot.limit > 0) {
                   return Column(children: [
                     stateWidget,
                     const SizedBox(height: 30),
@@ -173,15 +178,33 @@ class _SendBattleCardState extends State<SendBattleCard> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            RegularText(
-                              text: quizSelected != null
-                                  ? quizSelected.bahasa
-                                  : 'Pilih Kartunya',
-                            ),
-                            FlatButton(
+                            quizSelected != null
+                                ? Row(
+                                    children: <Widget>[
+                                      RegularText(
+                                        text: 'Kartu: ',
+                                        color: greyColor.withOpacity(0.8),
+                                      ),
+                                      RegularText(
+                                        text: quizSelected.bahasa,
+                                        bold: true,
+                                        dark: true,
+                                      ),
+                                    ],
+                                  )
+                                : RegularText(
+                                    text: 'Pilih Kartunya',
+                                    color: greyColor.withOpacity(0.8),
+                                  ),
+                            MaterialButton(
+                              color: secondaryColor,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                              ),
                               child: RegularText(
-                                text: 'Pilih',
-                                color: secondaryColor,
+                                text: quizSelected != null ? 'Ganti' : 'Pilih',
+                                // color: whiteColor,
                               ),
                               onPressed: () {
                                 _onChangeMode(SelectedType.Quiz, context);
@@ -201,15 +224,48 @@ class _SendBattleCardState extends State<SendBattleCard> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            RegularText(
-                              text: userSelected != null
-                                  ? userSelected.username
-                                  : 'Pilih Lawan',
-                            ),
-                            FlatButton(
+                            userSelected != null
+                                ? Row(
+                                    children: <Widget>[
+                                      RegularText(
+                                        text: 'Lawan: ',
+                                        color: greyColor.withOpacity(0.8),
+                                      ),
+                                      userSelected.avatar != null
+                                          ? CircleAvatar(
+                                              backgroundImage: NetworkImage(
+                                                userSelected.avatar,
+                                              ),
+                                              radius: 20,
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                            )
+                                          : const CircleAvatar(
+                                              radius: 20,
+                                              backgroundColor: whiteColor,
+                                              backgroundImage: AssetImage(
+                                                  'assets/images/character.png'),
+                                            ),
+                                      const SizedBox(width: 10),
+                                      RegularText(
+                                        text: userSelected.username,
+                                        bold: true,
+                                        dark: true,
+                                      ),
+                                    ],
+                                  )
+                                : RegularText(
+                                    text: 'Pilih Lawan',
+                                    color: greyColor.withOpacity(0.8),
+                                  ),
+                            MaterialButton(
+                              color: secondaryColor,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20)),
+                              ),
                               child: RegularText(
-                                text: 'Pilih',
-                                color: secondaryColor,
+                                text: userSelected != null ? 'Ganti' : 'Pilih',
                               ),
                               onPressed: () {
                                 _onChangeMode(SelectedType.User, context);
@@ -219,34 +275,59 @@ class _SendBattleCardState extends State<SendBattleCard> {
                         ),
                       ),
                     ),
-                    Card(
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          side: BorderSide(color: greenColor, width: 2)),
-                      elevation: 3,
-                      child: Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            RegularText(
-                              text: gameModeSelected != null
-                                  ? GameModeHelper.stringOf(gameModeSelected)
-                                  : 'Pilih Mode',
-                            ),
-                            FlatButton(
-                              child: RegularText(
-                                text: 'Pilih',
-                                color: secondaryColor,
+                    quizSelected != null
+                        ? Card(
+                            shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                side: BorderSide(color: greenColor, width: 2)),
+                            elevation: 3,
+                            child: Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  gameModeSelected != null
+                                      ? Row(
+                                          children: <Widget>[
+                                            RegularText(
+                                              text: 'Mode: ',
+                                              color: greyColor.withOpacity(0.8),
+                                            ),
+                                            RegularText(
+                                              text: GameModeHelper.stringOf(
+                                                  gameModeSelected),
+                                              bold: true,
+                                              dark: true,
+                                            ),
+                                          ],
+                                        )
+                                      : RegularText(
+                                          text: 'Pilih Mode',
+                                          color: greyColor.withOpacity(0.8),
+                                        ),
+                                  MaterialButton(
+                                    color: secondaryColor,
+                                    shape: const RoundedRectangleBorder(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(20)),
+                                    ),
+                                    child: RegularText(
+                                      text: gameModeSelected != null
+                                          ? 'Ganti'
+                                          : 'Pilih',
+                                      // color: whiteColor,
+                                    ),
+                                    onPressed: () {
+                                      _onChangeMode(SelectedType.Mode, context);
+                                    },
+                                  )
+                                ],
                               ),
-                              onPressed: () {
-                                _onChangeMode(SelectedType.Mode, context);
-                              },
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
+                            ),
+                          )
+                        : const SizedBox(width: 0),
                     const SizedBox(height: 20),
                     RaisedButton(
                       elevation: 0,

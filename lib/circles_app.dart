@@ -110,7 +110,8 @@ class App extends StatelessWidget {
               return LoginScreen(userRepository: userRepository);
             }
             if (state is Authenticated) {
-              return HomeScreen();
+              return ProfileScreen();
+              // return HomeScreen();
               // return AppPushs(child: HomeScreen());
               // return AppPushs(child: BattleScreen());
             }

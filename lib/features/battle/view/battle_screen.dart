@@ -42,28 +42,28 @@ class _BattleScreenState extends State<BattleScreen>
       body: Stack(
         children: <Widget>[
           Container(
-            height: 0.2 * deviceHeight(context),
-            padding: const EdgeInsets.only(top: 35, left: 20, right: 20, bottom: 5),
+            height: 0.3 * deviceHeight(context),
+            padding: const EdgeInsets.fromLTRB(10, 30, 0, 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 LogoTextSmaller(text: 'Kirim Kartu'.toUpperCase(), dark: true, color: greenColor,),
                 const SizedBox(height: 10),
-                SmallerText(text: 'Kirim kartu terbaikmu ke lawan. raih score 50 jika lawan menjawab tanpa salah, score 200 jika lawan gagal menjawab dengan sempurna, sebalik nya untuk penerima kartu', dark: true,)
+                SmallerText(text: 'Kirim Kartu terbaikmu ke lawan. Score 50 jika lawan menjawab tanpa salah, Score 200 jika lawan gagal menjawab dengan sempurna, sebalik nya untuk penerima kartu', dark: true,)
               ],
             ),
           ),
           Stack(
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(top: 0.2 * deviceHeight(context)),
+                margin: EdgeInsets.only(top: 0.3 * deviceHeight(context)),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   children: [
                     Container(
                       width: double.infinity,
-                      height: 0.8 * deviceHeight(context),
+                      height: 0.7 * deviceHeight(context),
                       margin: const EdgeInsets.only(top: 24),
                       padding: const EdgeInsets.symmetric(horizontal: 0),
                       child: TabBarView(
@@ -78,7 +78,7 @@ class _BattleScreenState extends State<BattleScreen>
                 width: MediaQuery.of(context).size.width,
                 height: 40.0,
                 margin: EdgeInsets.only(
-                  top: 0.25 * deviceHeight(context) - 20,
+                  top: 0.3 * deviceHeight(context) - 20,
                   left: 90,
                   right: 90,
                 ),
@@ -116,7 +116,7 @@ class _BattleScreenState extends State<BattleScreen>
                 ),
               ),
               Positioned(
-                top: 0.25 * deviceHeight(context) - 25,
+                top: 0.3 * deviceHeight(context) - 25,
                 left: 15,
                 child: MaterialButton(
                   padding: const EdgeInsets.all(10),

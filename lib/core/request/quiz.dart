@@ -189,6 +189,7 @@ List<Quiz> getQuizData() {
     Quiz((u) => u
       ..arab = 'وَجْه'
       ..bahasa = 'Wajah'
+      ..image = ''
       ..date = DateTime.now()
       ..cardCategory = CardCategory.Object
       ..voice = ''
@@ -227,6 +228,7 @@ List<Quiz> getQuizData() {
     Quiz((u) => u
       ..arab = 'يَد'
       ..bahasa = 'Tangan'
+      ..image = ''
       ..date = DateTime.now()
       ..cardCategory = CardCategory.Object
       ..voice = ''
@@ -335,6 +337,7 @@ List<Quiz> getQuizData() {
     Quiz((u) => u
       ..arab = 'أمْطَرَ'
       ..bahasa = 'Hujan'
+      ..image = ''
       ..date = DateTime.now()
       ..cardCategory = CardCategory.Object
       ..voice = ''
@@ -373,6 +376,7 @@ List<Quiz> getQuizData() {
     Quiz((u) => u
       ..arab = 'مُعَلِّم'
       ..bahasa = 'Guru'
+      ..image = ''
       ..date = DateTime.now()
       ..cardCategory = CardCategory.Object
       ..voice = ''
@@ -381,6 +385,7 @@ List<Quiz> getQuizData() {
     ),Quiz((u) => u
       ..arab = 'مَدْرَسَة'
       ..bahasa = 'Sekolah'
+      ..image = ''
       ..date = DateTime.now()
       ..cardCategory = CardCategory.Object
       ..voice = ''
@@ -389,6 +394,7 @@ List<Quiz> getQuizData() {
     ),Quiz((u) => u
       ..arab = 'مَكْتَب'
       ..bahasa = 'Kantor'
+      ..image = ''
       ..date = DateTime.now()
       ..cardCategory = CardCategory.Object
       ..voice = ''
@@ -618,6 +624,7 @@ List<Quiz> getQuizData() {
       ..arab = 'مَاء'
       ..bahasa = 'Air'
       ..date = DateTime.now()
+      ..image = ''
       ..cardCategory = CardCategory.Object
       ..voice = ''
       ..level = 1

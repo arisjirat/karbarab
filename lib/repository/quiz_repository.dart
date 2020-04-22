@@ -101,6 +101,7 @@ class QuizRepository {
     if (isImageQuiz) {
       listQuiz = listQuiz.where((q) => !(q.image == '' || q.image == null)).toList();
     }
+    listQuiz.removeWhere((q) => score.quizId == q.id);
     listQuiz.shuffle();
     listQuiz = listQuiz.sublist(0, 3);
     listQuiz.add(score.metaQuiz);

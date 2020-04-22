@@ -23,6 +23,7 @@ class ScoreGlobalModel {
   final User metaUser;
   final List<Score> scoreHistory;
   final String userIdSender;
+  final double targetScore;
 
   ScoreGlobalModel({
     @required this.userId,
@@ -30,5 +31,6 @@ class ScoreGlobalModel {
     @required this.metaUser,
     @required this.scoreHistory,
     this.userIdSender,
+    this.targetScore,
   });
 }

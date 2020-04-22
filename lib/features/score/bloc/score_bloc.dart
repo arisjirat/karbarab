@@ -96,11 +96,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
   ) async* {
     try {
       yield SolvedBattleState(true, false);
-      double scorePayload = scoreBattle.targetScore / 2;
-      if (scoreBattle.targetScore == score) {
-        scorePayload = score * 2;
-      }
-      await _scoreRepository.updateBattleCard(scoreBattle.scoreId, scorePayload);
+      await _scoreRepository.updateBattleCard(scoreBattle.scoreId, score);
       yield SolvedBattleState(false, true);
     } catch (e) {
       Logger.e('AddUserScore', e: e, s: StackTrace.current);
