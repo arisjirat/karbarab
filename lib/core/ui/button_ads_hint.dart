@@ -21,7 +21,7 @@ class ButtonAdsHint extends StatelessWidget {
             margin: const EdgeInsets.all(3.0),
             width: 20,
             height: 20,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: whiteColor,
               shape: BoxShape.circle,
             ),
