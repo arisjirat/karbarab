@@ -111,7 +111,9 @@ class _SendBattleCardState extends State<SendBattleCard> {
   @override
   void dispose() {
     super.dispose();
-    time.cancel();
+    if (time != null) {
+      time.cancel();
+    }
   }
 
   @override
@@ -125,7 +127,6 @@ class _SendBattleCardState extends State<SendBattleCard> {
           BlocListener<BattleBloc, BattleState>(
             listener: (c, state) {
               if (state is SendCardState && state.isSuccess) {
-                print('succes!');
                 BlocProvider.of<SendCardLimitBloc>(context)
                     .add(DecreaseSendCardLimit());
                 time = Timer(const Duration(seconds: 3), () {

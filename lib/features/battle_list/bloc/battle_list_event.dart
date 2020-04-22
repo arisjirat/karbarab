@@ -8,3 +8,4 @@ abstract class BattleListEvent extends Equatable {
 
 class GetBattleList extends BattleListEvent {}
 
+class GetAllBattleAvtiveCount extends BattleListEvent {}

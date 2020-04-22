@@ -45,14 +45,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final isGoogleAuth = await _userRepository.isUserGoogleAuth();
         final userId = await _userRepository.getUserId();
         final scores = await _scoreRepository.getUserScore(userId) ?? [];
-        final tokenFCM = await _userRepository.getUserTokenFCM();
+        final scoresSender = await _scoreRepository.getUserScoreSender(userId) ?? [];
         final double totalScore = await scores.fold(0, (t, e) => e[SCORE] + t);
+        final double totalScoreSender = await scoresSender.fold(0, (t, e) => e[USER_SENDER_SCORE] + t);
+        final tokenFCM = await _userRepository.getUserTokenFCM();
 
         yield Authenticated(
           displayName: name,
           avatar: avatar,
           fullname: fullname,
-          totalPoints: totalScore,
+          totalPoints: totalScore + totalScoreSender,
           isGoogleAuth: isGoogleAuth,
           tokenFCM: tokenFCM
         );
@@ -71,7 +73,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final userId = await _userRepository.getUserId();
     final isGoogleAuth = await _userRepository.isUserGoogleAuth();
     final scores = await _scoreRepository.getUserScore(userId);
+    final scoresSender = await _scoreRepository.getUserScoreSender(userId);
     final double totalScore = await scores.fold(0, (t, e) => e[SCORE] + t);
+    final double totalScoreSender = await scoresSender.fold(0, (t, e) => e[USER_SENDER_SCORE] + t);
     final tokenFCM = await _userRepository.getUserTokenFCM();
     final limit = await _userRepository.getUserSendCardLimit();
 
@@ -89,7 +93,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         isGoogleAuth: isGoogleAuth,
         fullname: fullname,
         tokenFCM: newToken != tokenFCM ? newToken : tokenFCM,
-        totalPoints: totalScore);
+        totalPoints: totalScore + totalScoreSender);
   }
 
   Stream<AuthState> _mapLoggedOutToState() async* {

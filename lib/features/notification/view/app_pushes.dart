@@ -3,16 +3,12 @@ import 'dart:io';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:karbarab/features/battle/view/battle_screen.dart';
-import 'package:karbarab/features/notification/bloc/notification_bloc.dart';
 import 'package:rxdart/subjects.dart';
 
 final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
-// Streams are created so that app can respond to notification-related events since the plugin is initialised in the `main` function
 final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
     BehaviorSubject<ReceivedNotification>();
 
@@ -36,11 +32,9 @@ class ReceivedNotification {
 }
 
 class AppPushs extends StatefulWidget {
-  AppPushs({
-    @required this.child,
-  });
-
   final Widget child;
+
+  AppPushs({@required this.child});
 
   @override
   _AppPushsState createState() => _AppPushsState();
@@ -59,19 +53,7 @@ class _AppPushsState extends State<AppPushs> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<NotificationBloc, NotificationState>(
-      listener: (ctx, s) async {
-        // if (s is HaveNewBattleCard && s.hasNew) {
-        //   await _flutterLocalNotificationsPlugin.cancelAll();
-        //   BlocProvider.of<NotificationBloc>(context).add(ResetNotification());
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(builder: (ct) => const BattleScreen()),
-        //   );
-        // }
-      },
-      child: widget.child,
-    );
+    return widget.child;
   }
 
   void _initLocalNotifications() {
@@ -79,39 +61,26 @@ class _AppPushsState extends State<AppPushs> {
         AndroidInitializationSettings('@drawable/ic_stat_group');
     const initializationSettingsIOS = IOSInitializationSettings();
     const initializationSettings = InitializationSettings(
-        initializationSettingsAndroid, initializationSettingsIOS);
-    _flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onSelectNotification: _onSelectNotification);
+      initializationSettingsAndroid,
+      initializationSettingsIOS,
+    );
+    _flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onSelectNotification: _onSelectNotification,
+    );
   }
 
   Future _onSelectNotification(String payload) async {
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
+      selectNotificationSubject.add(payload);
     }
-    selectNotificationSubject.add(payload);
-    // BlocProvider.of<NotificationBloc>(context).add(OnPushNotification(payload));
-    // Navigator.of(context)
-    // .pushNamedAndRemoveUntil(BattleScreen.routeName, (Route<dynamic> route) => false);
-    // Navigator.of(context).pushAndRemoveUntil(
-    //                                       MaterialPageRoute(builder: (context) {
-    //                                     return const BattleScreen();
-    //                                   }), ModalRoute.withName('/'));
-    // await Navigator.of(context).pus(
-    //   context,
-    //   MaterialPageRoute(builder: (context) => const BattleScreen()),
-    // );
+    _flutterLocalNotificationsPlugin.cancelAll();
   }
 
   void _configureSelectNotificationSubject() {
     selectNotificationSubject.stream.listen((String payload) async {
-      // await Navigator.push(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => SecondScreen(payload)),
-      // );
-      await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (ct) => const BattleScreen()),
-          );
+      // widget.navigatorKey.currentState.pushNamed(BattleScreen.routeName);
     });
   }
 
@@ -122,13 +91,6 @@ class _AppPushsState extends State<AppPushs> {
     super.dispose();
   }
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   _flutterLocalNotificationsPlugin.cancelAll();
-  //   BlocProvider.of<NotificationBloc>(context).add(ResetNotification());
-  // }
-
   void _initFirebaseMessaging() {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) {
@@ -136,7 +98,7 @@ class _AppPushsState extends State<AppPushs> {
         _showNotification(message);
         return;
       },
-      // onBackgroundMessage: Platform.isIOS ? null : backgroundMessageHandler,
+      onBackgroundMessage: Platform.isIOS ? null : backgroundMessageHandler,
       onResume: (Map<String, dynamic> message) {
         print('AppPushs onResume : $message');
         if (Platform.isIOS) {

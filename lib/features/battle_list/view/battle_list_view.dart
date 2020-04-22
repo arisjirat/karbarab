@@ -29,7 +29,7 @@ class _BattleListViewState extends State<BattleListView> {
           BlocBuilder<BattleListBloc, BattleListState>(builder: (ctx, state) {
         if (state is HasBattleList) {
           if (state.isLoading) {
-            return SpinKitDoubleBounce(color: greenColor);
+            return const SpinKitDoubleBounce(color: greenColor);
           }
           if (state.quizBattle.isNotEmpty) {
             return ListView.builder(
@@ -59,12 +59,12 @@ class _BattleListViewState extends State<BattleListView> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                RegularText(text: 'Tidak ada kartu',)
+                RegularText(text: 'Tidak ada kartu kiriman',)
               ],
             );
           }
         }
-        return SpinKitDoubleBounce(color: greenColor);
+        return const SpinKitDoubleBounce(color: greenColor);
       }),
     );
   }

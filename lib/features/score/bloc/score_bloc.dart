@@ -7,7 +7,6 @@ import 'package:karbarab/core/config/score_value.dart';
 import 'package:karbarab/model/quiz.dart';
 import 'package:karbarab/model/score.dart';
 import 'package:karbarab/model/user.dart';
-import 'package:karbarab/repository/quiz_repository.dart';
 import 'package:karbarab/utils/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
@@ -124,7 +123,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
       loadScore: true,
     );
     final _userId = await _userRepository.getUserId();
-    final _userScores = await _scoreRepository.getUserScore(_userId);
+    final _userScores = await _scoreRepository.getUserScoreWithoutBattle(_userId);
     yield HasScore(
       scoreArabGambar: ListScore(
         mode: GameMode.ArabGambar,

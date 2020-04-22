@@ -9,7 +9,7 @@ class KarbarabScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: whiteColor,
+      backgroundColor: greenColor,
       body: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
@@ -22,7 +22,7 @@ class KarbarabScreen extends StatelessWidget {
                   LogoText(
                     text: 'Karbarab',
                     dark: false,
-                    color: greenColor,
+                    // color: greenColor,
                   ),
                   Stack(
                     overflow: Overflow.visible,
@@ -53,7 +53,7 @@ class KarbarabScreen extends StatelessWidget {
                         ),
                         RowContainer(
                           label: 'Versi',
-                          value: '1.0.0',
+                          value: 'v0.0.1',
                         ),
                         RowContainer(
                           label: 'Credits',
@@ -61,15 +61,15 @@ class KarbarabScreen extends StatelessWidget {
                         ),
                         RowContainer(
                           label: '',
-                          value: 'Ust. Jakaria',
+                          value: '-',
                         ),
                         const SizedBox(
                           height: 20,
                         ),
-                        SmallerText(
-                          text: '@ 2020',
-                          dark: true,
-                        ),
+                        // SmallerText(
+                        //   text: '@ 2020',
+                        //   dark: true,
+                        // ),
                         const SizedBox(height: 20,),
                         RaisedButton(
                           shape: const RoundedRectangleBorder(

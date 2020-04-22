@@ -214,11 +214,60 @@ class ScoreRepository {
     }
   }
 
+  Future<List<Score>> getAllBattleCardUnSolved(String userId) async {
+    try {
+      final getAllData = await scoreCollection
+          .where(USER_ID, isEqualTo: userId)
+          .where(IS_BATTLE, isEqualTo: true)
+          .where(IS_SOLVED, isEqualTo: false)
+          .limit(10000)
+          .getDocuments();
+      final documents = getAllData.documents;
+      final List<Score> listData = documents.fold([], (a, c) {
+        a.add(fromJson(c.data));
+        return a;
+      });
+      return listData;
+    } catch (e) {
+      Logger.e('Get Battle caard', e: e, s: StackTrace.current);
+      throw Exception('Faild get all battle card');
+    }
+  }
+
   Future<Iterable<DocumentSnapshot>> getUserScore(String id) async {
     try {
       final QuerySnapshot scores = await scoreCollection
           .where(USER_ID, isEqualTo: id)
+          // .where(IS_BATTLE, isEqualTo: false)
+          .limit(10000)
+          .getDocuments();
+      return scores.documents;
+    } catch (e) {
+      Logger.e('GetUserScore', e: e, s: StackTrace.current);
+      throw Exception;
+    }
+  }
+
+  Future<Iterable<DocumentSnapshot>> getUserScoreWithoutBattle(String id) async {
+    try {
+      final QuerySnapshot scores = await scoreCollection
+          .where(USER_ID, isEqualTo: id)
           .where(IS_BATTLE, isEqualTo: false)
+          .limit(10000)
+          .getDocuments();
+      return scores.documents;
+    } catch (e) {
+      Logger.e('GetUserScore', e: e, s: StackTrace.current);
+      throw Exception;
+    }
+  }
+
+  Future<Iterable<DocumentSnapshot>> getUserScoreSender(String id) async {
+    try {
+      final QuerySnapshot scores = await scoreCollection
+          .where(USER_ID_SENDER, isEqualTo: id)
+          .where(IS_BATTLE, isEqualTo: true)
+          .where(IS_SOLVED, isEqualTo: true)
           .limit(10000)
           .getDocuments();
       return scores.documents;

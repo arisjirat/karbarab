@@ -31,3 +31,13 @@ class ListQuizBattleCard extends BattleState {
     listBattle,
   ];
 }
+
+class CountQuizBattleCard extends BattleState {
+  final int count;
+  CountQuizBattleCard(this.count);
+
+  @override
+  List<Object> get props => [
+    count,
+  ];
+}

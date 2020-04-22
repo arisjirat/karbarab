@@ -28,11 +28,21 @@ class BattleListBloc extends Bloc<BattleListEvent, BattleListState> {
   ) async* {
     if (event is GetBattleList) {
       yield* _mapGetBattleList();
+    } else if (event is GetAllBattleAvtiveCount) {
+      yield* _mapBattleActiveCardToState();
     }
+  }
+
+  Stream<BattleListState> _mapBattleActiveCardToState() async* {
+    yield HasBattleList(isComplete: false, isLoading: true, quizBattle: []);
+    final userId = await _userRepository.getUserId();
+    final list = await _scoreRepository.getAllBattleCardUnSolved(userId);
+    yield HasBattleList(isComplete: true, isLoading: false, quizBattle: list);
   }
 
   Stream<BattleListState> _mapGetBattleList() async* {
     try {
+      yield HasBattleList(isComplete: false, isLoading: true, quizBattle: []);
       final String userId = await _userRepository.getUserId();
       final List<Score> quizBattle = await _scoreRepository.getAllBattleCard(userId);
       yield HasBattleList(

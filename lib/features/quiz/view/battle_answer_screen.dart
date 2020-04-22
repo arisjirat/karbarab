@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:karbarab/core/config/colors.dart';
-import 'package:karbarab/core/config/score_value.dart';
 import 'package:karbarab/core/helper/device_height.dart';
 import 'package:karbarab/core/ui/feedback_form.dart';
 import 'package:karbarab/core/ui/popup.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/features/battle/view/battle_screen.dart';
 import 'package:karbarab/features/feedback/bloc/feedback_bloc.dart';
-import 'package:karbarab/features/notification/view/app_pushes.dart';
 import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
 import 'package:karbarab/core/ui/button.dart';
 import 'package:karbarab/core/ui/cards/card_answer.dart';

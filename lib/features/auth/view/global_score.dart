@@ -19,7 +19,7 @@ class _GlobalScoreState extends State<GlobalScore> {
 
   void _handleReward() {
     setState(() {
-      _watched = false;
+      _watched = true;
     });
   }
 
@@ -33,7 +33,7 @@ class _GlobalScoreState extends State<GlobalScore> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     setState(() {
-      _watched = true;
+      _watched = false;
     });
   }
 

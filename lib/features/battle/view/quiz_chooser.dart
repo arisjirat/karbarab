@@ -5,6 +5,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/ui/cards/card_item.dart';
 import 'package:karbarab/core/ui/typography.dart';
+import 'package:karbarab/features/auth/view/profile_screen.dart';
 import 'package:karbarab/features/quiz/bloc/quiz_bloc.dart';
 import 'package:karbarab/model/quiz.dart';
 
@@ -175,7 +176,7 @@ class _QuizChooserState extends State<QuizChooser> {
                     : const SizedBox(width: 0),
                 filtered.isEmpty
                     ? Padding(
-                        padding: const EdgeInsets.all(100),
+                        padding: const EdgeInsets.all(20),
                         child: RegularText(
                           text: 'Kartu tidak ditemukan',
                         ),
@@ -184,10 +185,47 @@ class _QuizChooserState extends State<QuizChooser> {
                 const SizedBox(height: 30),
                 state.isSuccess && state.list.isEmpty
                     ? Padding(
-                        padding: const EdgeInsets.all(100),
-                        child: RegularText(
-                          text:
-                              'Tidak ada kartu yang bisa dikirim, kamu harus punya kartu di yang nilai nya baik yaitu di atas 9',
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          children: <Widget>[
+                            const Image(
+                              image: AssetImage('assets/images/character.png'),
+                              height: 120,
+                            ),
+                            RegularText(
+                              text: 'Tidak ada kartu yang bisa dikirim',
+                            ),
+                            const SizedBox(height: 20),
+                            RegularText(
+                              text: 'Untuk kirim kartu, syaratnya:',
+                            ),
+                            RegularText(
+                              text: 'nilai rata rata kartu tersebut di atas 90',
+                            ),
+                            const SizedBox(height: 20),
+                            RegularText(
+                              text: 'Kamu bisa lihat di profile kamu',
+                            ),
+                            const SizedBox(height: 10),
+                            MaterialButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        ProfileScreen(),
+                                  ),
+                                );
+                              },
+                              color: secondaryColor,
+                              padding: const EdgeInsets.all(15),
+                              shape: const CircleBorder(),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[Icon(Icons.arrow_forward)],
+                              ),
+                            )
+                          ],
                         ),
                       )
                     : const SizedBox(width: 0),
