@@ -17,7 +17,6 @@ class AdsScreen extends StatefulWidget {
     this.quiz,
     this.buttonShow = const Text('Ads Show'),
   });
-  static const String routeName = '/home';
   @override
   _AdsScreenState createState() => _AdsScreenState();
 }
@@ -32,8 +31,8 @@ class _AdsScreenState extends State<AdsScreen> {
     if (widget.adsMode == AdsMode.GlOBAL_SCORE) {
       RewardedVideoAd.instance
           .load(
-        adUnitId: '$APP_ID/$ADS_SCORE',
-        // adUnitId: RewardedVideoAd.testAdUnitId,
+        // adUnitId: '$APP_ID/$ADS_SCORE',
+        adUnitId: RewardedVideoAd.testAdUnitId,
         targetingInfo: targetingInfo,
       )
           .then((l) {
@@ -52,7 +51,6 @@ class _AdsScreenState extends State<AdsScreen> {
       )
           .then((l) {
         BlocProvider.of<AdmobBloc>(context).add(AdsLoaded());
-        // Logger.w('Loaaded', e: l);
       }).catchError((e) {
         Logger.e('error', e: e, s: StackTrace.current);
       });
@@ -69,7 +67,6 @@ class _AdsScreenState extends State<AdsScreen> {
       String rewardType,
       int rewardAmount,
     }) {
-      getLogger('Ads').e(event);
       if (event == RewardedVideoAdEvent.rewarded) {
         BlocProvider.of<AdmobBloc>(context).add(UserAdsrewards(
           adsMode: widget.adsMode,
@@ -87,6 +84,10 @@ class _AdsScreenState extends State<AdsScreen> {
       }
       if (event == RewardedVideoAdEvent.failedToLoad) {
         BlocProvider.of<AdmobBloc>(context).add(AdsFailedLoad());
+        // force to reward
+        if (widget.adsMode == AdsMode.HINT) {
+          widget.onReward();
+        }
       }
     };
     showAds();
@@ -95,7 +96,8 @@ class _AdsScreenState extends State<AdsScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<AdmobBloc, AdmobState>(builder: (context, snapshot) {
-      if (snapshot is AdmobState && snapshot.isRewardedLoaded) {
+      if (snapshot is AdmobState &&
+          snapshot.isRewardedLoaded) {
         return GestureDetector(
           onTap: () {
             RewardedVideoAd.instance.show();
