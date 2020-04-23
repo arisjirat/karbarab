@@ -31,9 +31,9 @@ class _BattleListViewState extends State<BattleListView> {
           if (state is HasBattleList &&
               state.quizBattle.isNotEmpty &&
               state.user == null) {
-            Future.delayed(const Duration(milliseconds: 100), () {
-              BlocProvider.of<BattleListBloc>(context).add(GetBattleList());
-            });
+            // Future.delayed(const Duration(milliseconds: 100), () {
+              // BlocProvider.of<BattleListBloc>(context).add(GetBattleList());
+            // });
           }
         },
         child: BlocBuilder<BattleListBloc, BattleListState>(
