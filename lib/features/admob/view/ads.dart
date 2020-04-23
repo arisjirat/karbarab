@@ -83,7 +83,7 @@ class _AdsScreenState extends State<AdsScreen> {
       if (event == RewardedVideoAdEvent.failedToLoad) {
         BlocProvider.of<AdmobBloc>(context).add(AdsFailedLoad());
         // force to reward
-        if (widget.adsMode == AdsMode.HINT) {
+        if (widget.adsMode == AdsMode.GlOBAL_SCORE) {
           widget.onReward();
         }
       }
