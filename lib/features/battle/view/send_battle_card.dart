@@ -128,7 +128,7 @@ class _SendBattleCardState extends State<SendBattleCard> {
             listener: (c, state) {
               if (state is SendCardState && state.isSuccess) {
                 BlocProvider.of<SendCardLimitBloc>(context)
-                    .add(DecreaseSendCardLimit());
+                    .add(GetSendCardLimit());
                 time = Timer(const Duration(seconds: 3), () {
                   BlocProvider.of<BattleBloc>(context)
                       .add(ResetSendCardState());

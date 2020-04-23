@@ -15,7 +15,6 @@ class SendCardLimitView extends StatefulWidget {
 }
 
 class _SendCardLimitViewState extends State<SendCardLimitView> {
-
   @override
   void initState() {
     super.initState();
@@ -30,51 +29,64 @@ class _SendCardLimitViewState extends State<SendCardLimitView> {
           return Column(
             children: <Widget>[
               state.isLoading
-                ? const SpinKitThreeBounce(color: greenColor,)
-                : state.limit < 1
-                ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    RegularText(text: 'Kesempatan kirim kartu habis',),
-                    RegularText(text: 'isi lagi yuk dengan tonton iklan',),
-                    const SizedBox(height: 20),
-                  AdsScreen(
-                adsMode: AdsMode.GlOBAL_SCORE,
-                onReward: () {
-                  BlocProvider.of<SendCardLimitBloc>(context).add(AddSendCardLimit());
-                },
-                buttonShow: Container(
-                    padding: const EdgeInsets.all(15.0),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
+                  ? const SpinKitThreeBounce(
                       color: greenColor,
-                      boxShadow: [
-                        BoxShadow(
-                          color: textColor.withOpacity(0.5),
-                          offset: const Offset(0.0, 0.0),
-                        ),
-                        BoxShadow(
-                          color: textColor.withOpacity(0.5),
-                          offset: const Offset(0.0, 0.1),
-                          spreadRadius: -2.0,
-                          blurRadius: 5.0,
-                        ),
-                      ],
-                    ),
-                    child: Icon(
-                      Icons.play_circle_outline,
-                      color: Colors.white,
-                      size: 35.0,
-                    ),
-                  ),
-              ),
-                ],)
-                : RegularText(text: 'Tersisa ${state.limit.toString()}x kesempatan mengirim',)
+                    )
+                  : state.limit < 1
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            RegularText(
+                              text: 'Kesempatan kirim kartu habis',
+                            ),
+                            RegularText(
+                              text: 'isi lagi yuk dengan tonton iklan',
+                            ),
+                            const SizedBox(height: 20),
+                            AdsScreen(
+                              adsMode: AdsMode.HINT,
+                              onReward: () {
+                                BlocProvider.of<SendCardLimitBloc>(context)
+                                    .add(AddSendCardLimit());
+                              },
+                              buttonShow: Container(
+                                padding: const EdgeInsets.all(15.0),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: greenColor,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: textColor.withOpacity(0.5),
+                                      offset: const Offset(0.0, 0.0),
+                                    ),
+                                    BoxShadow(
+                                      color: textColor.withOpacity(0.5),
+                                      offset: const Offset(0.0, 0.1),
+                                      spreadRadius: -2.0,
+                                      blurRadius: 5.0,
+                                    ),
+                                  ],
+                                ),
+                                child: Icon(
+                                  Icons.play_circle_outline,
+                                  color: Colors.white,
+                                  size: 35.0,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : RegularText(
+                          text:
+                              'Tersisa ${state.limit.toString()}x kesempatan mengirim',
+                        )
             ],
           );
         }
-        return const SizedBox(width: 0,);
+        return const SizedBox(
+          width: 0,
+        );
       },
     );
   }

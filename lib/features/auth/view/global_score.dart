@@ -75,7 +75,7 @@ class _GlobalScoreState extends State<GlobalScore> {
                   height: 20,
                 ),
                 AdsScreen(
-                  adsMode: AdsMode.HINT,
+                  adsMode: AdsMode.GlOBAL_SCORE,
                   onReward: _handleReward,
                   buttonShow: Container(
                     padding: const EdgeInsets.all(15.0),

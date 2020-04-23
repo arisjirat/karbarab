@@ -45,7 +45,6 @@ class BattleListBloc extends Bloc<BattleListEvent, BattleListState> {
     try {
       yield HasBattleList(isComplete: false, isLoading: true, quizBattle: []);
       final User user = await _userRepository.getUserMeta();
-      print(user.username);
       final List<Score> quizBattle = await _scoreRepository.getAllBattleCard(user.id);
       yield HasBattleList(
         isComplete: true,

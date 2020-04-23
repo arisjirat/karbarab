@@ -28,29 +28,8 @@ class SendCardLimitBloc extends Bloc<SendCardLimitEvent, SendCardLimitState> {
       yield* _mapGetLimitToState();
     } else if (event is AddSendCardLimit) {
       yield* _mapAddLimitToState();
-    } else if (event is DecreaseSendCardLimit) {
-      yield* _mapDecreseLimitToState();
     }
   }
-
-  Stream<SendCardLimitState> _mapDecreseLimitToState() async* {
-    final HasSendCardLimit currentState = state as HasSendCardLimit;
-    yield HasSendCardLimit(
-      isFailure: false,
-      isLoading: true,
-      isSuccess: false,
-      limit: currentState.limit,
-    );
-    final limit = await _userRepository.decreaseSendCardLimit();
-    print('called decres');
-    yield HasSendCardLimit(
-      isFailure: false,
-      isLoading: false,
-      isSuccess: true,
-      limit: limit,
-    );
-  }
-
   Stream<SendCardLimitState> _mapAddLimitToState() async* {
     final HasSendCardLimit currentState = state as HasSendCardLimit;
     yield HasSendCardLimit(
@@ -63,7 +42,7 @@ class SendCardLimitBloc extends Bloc<SendCardLimitEvent, SendCardLimitState> {
     yield HasSendCardLimit(
       isFailure: false,
       isLoading: false,
-      isSuccess: true,
+      isSuccess: false,
       limit: limit,
     );
   }

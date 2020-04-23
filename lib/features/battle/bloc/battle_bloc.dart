@@ -49,6 +49,7 @@ class BattleBloc extends Bloc<BattleEvent, BattleState> {
       final userSender = await _userRepository.getUserMeta();
       yield SendCardState(false, false, true);
       final scoreId =  await _scoreRepository.addBattleCard(userReciever, quiz, gameMode, userSender);
+      await _userRepository.decreaseSendCardLimit();
       await _notificationRepository.sendCardToUser(
         userReciever.tokenFCM,
         await _userRepository.getUserMeta(),
