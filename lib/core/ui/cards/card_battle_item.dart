@@ -35,40 +35,55 @@ class CardBattleItem extends StatelessWidget {
                 children: <Widget>[
                   Row(
                     children: <Widget>[
-                      isReciever ? 
-                      RegularText(
-                        text: 'Mode: ',
-                      ) : RegularText(
-                        text: 'Kartu: ',
-                      ) ,
-                      isReciever ? RegularText(
-                        text: GameModeHelper.stringOf(score.quizMode),
-                        bold: true,
-                      ) : RegularText(
-                        text: score.metaQuiz.bahasa,
-                        bold: true,
-                      ),
+                      isReciever
+                          ? RegularText(
+                              text: 'Mode: ',
+                            )
+                          : RegularText(
+                              text: 'Kartu: ',
+                            ),
+                      isReciever
+                          ? RegularText(
+                              text: GameModeHelper.stringOf(score.quizMode),
+                              bold: true,
+                            )
+                          : RegularText(
+                              text: score.metaQuiz.bahasa,
+                              bold: true,
+                            ),
                     ],
                   ),
                   const SizedBox(height: 5),
                   Row(
                     children: <Widget>[
-                      score.userAvatarSender != null
-                          ? CircleAvatar(
-                              backgroundImage: NetworkImage(
-                                !isReciever
-                                    ? score.metaUser.avatar
-                                    : score.userAvatarSender,
-                              ),
-                              radius: 20,
-                              backgroundColor: Colors.transparent,
-                            )
-                          : const CircleAvatar(
-                              radius: 20,
-                              backgroundColor: whiteColor,
-                              backgroundImage:
-                                  AssetImage('assets/images/character.png'),
-                            ),
+                      !isReciever
+                          ? score.metaUser.avatar != null
+                              ? CircleAvatar(
+                                  backgroundImage:
+                                      NetworkImage(score.metaUser.avatar),
+                                  radius: 20,
+                                  backgroundColor: Colors.transparent,
+                                )
+                              : const CircleAvatar(
+                                  radius: 20,
+                                  backgroundColor: whiteColor,
+                                  backgroundImage:
+                                      AssetImage('assets/images/character.png'),
+                                )
+                          : score.userAvatarSender != null
+                              ? CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                    score.userAvatarSender,
+                                  ),
+                                  radius: 20,
+                                  backgroundColor: Colors.transparent,
+                                )
+                              : const CircleAvatar(
+                                  radius: 20,
+                                  backgroundColor: whiteColor,
+                                  backgroundImage:
+                                      AssetImage('assets/images/character.png'),
+                                ),
                       const SizedBox(width: 10),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,15 +123,17 @@ class CardBattleItem extends StatelessWidget {
                     ),
                   )
                 : Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    color: score.isSolved && score.score < 0 ? greenColor : !score.isSolved ? secondaryColor : redColor,
-                    shape: BoxShape.circle,
-                  ),
-                  padding: EdgeInsets.all(score.isSolved ? 20: 30),
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: score.isSolved && score.score < 0
+                          ? greenColor
+                          : !score.isSolved ? secondaryColor : redColor,
+                      shape: BoxShape.circle,
+                    ),
+                    padding: EdgeInsets.all(score.isSolved ? 20 : 30),
                     child: score.isSolved
                         ? RegularText(
-                          color: whiteColor,
+                            color: whiteColor,
                             text: score.userSenderScore.toInt().toString(),
                           )
                         : SmallerText(
