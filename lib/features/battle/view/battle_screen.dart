@@ -61,7 +61,7 @@ class _BattleScreenState extends State<BattleScreen>
                   const SizedBox(height: 10),
                   SmallerText(
                     text:
-                        'Kirim Kartu terbaikmu ke lawan. Score 50 jika lawan menjawab tanpa salah, Score 200 jika lawan gagal menjawab dengan sempurna, sebalik nya untuk penerima kartu',
+                        'Kirim Kartu terbaikmu ke lawan. Minus 50 Score jika lawan menjawab tanpa salah, Score 100 jika lawan gagal menjawab dengan sempurna, sebalik nya untuk penerima kartu',
                     dark: true,
                   )
                 ],
