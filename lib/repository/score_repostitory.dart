@@ -238,7 +238,7 @@ class ScoreRepository {
     try {
       final QuerySnapshot scores = await scoreCollection
           .where(USER_ID, isEqualTo: id)
-          // .where(IS_BATTLE, isEqualTo: false)
+          .where(IS_SOLVED, isEqualTo: true)
           .limit(10000)
           .getDocuments();
       return scores.documents;
