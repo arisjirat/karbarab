@@ -41,16 +41,19 @@ class ScoreRepository {
   }
 
   static Score fromJson(Map<String, dynamic> json) {
+    print('here');
+    print(json[CREATED_AT]);
+    print(json[SCORE_ID]);
     return Score((s) => s
       ..scoreId = json[SCORE_ID]
       ..score = json[SCORE]
       ..quizId = json[QUIZ_ID]
       ..quizMode = GameModeHelper.valueOf(json[QUIZ_MODE])
-      ..createdAt = DateTime.fromMicrosecondsSinceEpoch(
-          (json[CREATED_AT] as Timestamp).seconds)
+      ..createdAt = DateTime.fromMillisecondsSinceEpoch(
+          (json[CREATED_AT] as Timestamp).seconds * 1000)
       ..updatedAt = json[UPDATED_AT] != null
-          ? DateTime.fromMicrosecondsSinceEpoch(
-              (json[UPDATED_AT] as Timestamp).seconds)
+          ? DateTime.fromMillisecondsSinceEpoch(
+              (json[UPDATED_AT] as Timestamp).seconds * 1000)
           : null
       ..targetScore = json[TARGET_SCORE]
       ..userId = json[USER_ID]
@@ -160,8 +163,7 @@ class ScoreRepository {
         USER_SENDER_SCORE: targetScore,
         UPDATED_AT: FieldValue.serverTimestamp(),
       });
-
-      return await _notificationRepository.answerNotification(battle, -(targetScore / 2));
+      return;
     } catch (e) {
       Logger.e('DirtyBattleCard', e: e, s: StackTrace.current);
     }
@@ -212,11 +214,13 @@ class ScoreRepository {
           .orderBy(CREATED_AT, descending: true)
           .getDocuments()).documents;
       getAllData.addAll(getAllDataSender);
+      // added.sort((a, b) => b.score.compareTo(a.score));
       final documents = getAllData;
       final List<Score> listData = documents.fold([], (a, c) {
         a.add(fromJson(c.data));
         return a;
       });
+      listData.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       return listData;
     } catch (e) {
       Logger.e('Get Battle caard', e: e, s: StackTrace.current);
@@ -351,6 +355,7 @@ class ScoreRepository {
     final QuerySnapshot scores = await scoreCollection
         .limit(10000)
         .where(IS_SOLVED, isEqualTo: true)
+        .orderBy(CREATED_AT,descending: true)
         .getDocuments();
 
     List<ScoreGlobalModel> reconstruct(List<ScoreGlobalModel> acc, cur) {
@@ -385,6 +390,11 @@ class ScoreRepository {
           .map((s) => s.data[USER_SENDER_SCORE])
           .toList()
           .fold(0, (acc, cur) => acc + cur);
+      final List<Score> filteredHistory = scores.documents
+          .where((s) => s.data[USER_ID_SENDER] == g.userId)
+          .map((s) => fromJson(s.data))
+          .toList();
+      g.scoreHistory.addAll(filteredHistory);
       return ScoreGlobalModel(
         metaUser: g.metaUser,
         scoreHistory: g.scoreHistory,
