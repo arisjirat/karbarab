@@ -7,7 +7,7 @@ import 'package:karbarab/core/config/score_value.dart';
 
 class Congrats extends StatefulWidget {
   final bool play;
-  final int point;
+  final double point;
 
   Congrats({@required this.play,@required this.point});
   @override

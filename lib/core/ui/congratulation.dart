@@ -7,7 +7,7 @@ import 'package:karbarab/core/ui/button.dart';
 class Congratulation extends StatelessWidget {
   final bool isCorrect;
   final Function onNewGame;
-  final int point;
+  final double point;
   final String nextWord;
   const Congratulation({
     @required this.isCorrect,
