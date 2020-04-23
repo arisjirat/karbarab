@@ -14,7 +14,7 @@ class NotificationRepository {
     'Content-type': 'application/json',
     'Accept': 'application/json',
     'Authorization':
-        'key=AAAA72yGgSk:APA91bFbT_oq4xCPNqcEru-OXSZpCzDmNI6wKQ8CRkU5HLoaYjv7Xa1v-12e6kAM2en_dGFXc0_6I2h3cM-2zhF0mU_c4EqPi5RZ7uJ1h-CZc-NyUOiiZIPXuoZFyw_HEnYz_GB94yP6',
+        'key=AAAA3XBgq14:APA91bHjH4lhwz1ZDqq8IFVQ0zJIl8qAg2AXxSp8Xm6PsoulMvamuyGsBsb_jie6gsuywlFAeEGHcfgRM27ruDX1ieptBQ4GwzpHOHIMq2X-xU8vbEHlj7DheDM4Sj_Es1xn1BcqVUo8',
   };
 
   Future<void> sendCardToUser(
@@ -68,7 +68,7 @@ class NotificationRepository {
           'contentAvailable': true,
           'data': {
             'type': 'ANSWER_BATTLE',
-            'message': scoreAnswer == score.targetScore ? '${score.metaUser.username} salah menjawab, kamu dapat tambahan score' : 'Namun ${score.metaUser.username} hebat kamu dapat minus score',
+            'message': scoreAnswer < score.targetScore ? '${score.metaUser.username} salah menjawab, kamu dapat tambahan score' : 'Namun ${score.metaUser.username} hebat kamu dapat minus score',
             SCORE_ID: score.scoreId,
             USERNAME_SENDER: score.metaUser.username,
             QUIZ_ID: score.quizId,

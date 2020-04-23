@@ -161,7 +161,7 @@ class _AppPushsState extends State<AppPushs> {
 
     final AndroidNotificationDetails platformChannelSpecificsAndroid =
         AndroidNotificationDetails(
-      'com.karbarab.pasdigital',
+      'com.pasdigital.karbarab',
       'Perang Kartu',
       'Pemberitahuan Kartu yang dikirim dari lawan',
       playSound: true,

@@ -58,7 +58,7 @@
             android:resource="@color/greenKarbarab" />
         <meta-data
           android:name="com.google.android.gms.ads.APPLICATION_ID"
-          android:value="ca-app-pub-8844883376001707~8468099801"/>
+          android:value="ca-app-pub-7945031394108607~2104533679"/>
         <!-- [START fcm_default_channel] -->
         <!-- <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
