@@ -37,7 +37,6 @@ class _GlobalScoreState extends State<GlobalScore> {
     final int lastWatch = prefs.getInt(LAST_TIME_WATCH_ADS);
     if (lastWatch != null && DateTime.fromMillisecondsSinceEpoch(lastWatch)
         .isAfter(DateTime.now())) {
-      print('is after');
       setState(() {
         _watched = true;
         _checking = false;

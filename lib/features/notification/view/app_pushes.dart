@@ -59,7 +59,6 @@ class _AppPushsState extends State<AppPushs> {
   }
 
   Future _onSelectNotification(String payload) async {
-    print(_flutterLocalNotificationsPlugin);
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
       selectNotificationSubject.add(payload);

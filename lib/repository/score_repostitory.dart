@@ -41,9 +41,6 @@ class ScoreRepository {
   }
 
   static Score fromJson(Map<String, dynamic> json) {
-    print('here');
-    print(json[CREATED_AT]);
-    print(json[SCORE_ID]);
     return Score((s) => s
       ..scoreId = json[SCORE_ID]
       ..score = json[SCORE]
@@ -214,7 +211,6 @@ class ScoreRepository {
           .orderBy(CREATED_AT, descending: true)
           .getDocuments()).documents;
       getAllData.addAll(getAllDataSender);
-      // added.sort((a, b) => b.score.compareTo(a.score));
       final documents = getAllData;
       final List<Score> listData = documents.fold([], (a, c) {
         a.add(fromJson(c.data));
