@@ -23,7 +23,7 @@ class SpeechRepository {
       },
       'voice': {
         'languageCode': 'ar-AR',
-        'ssmlGender': 'MALE',
+        'ssmlGender': 'FEMALE',
       },
       'audioConfig': {
         'audioEncoding': 'MP3',
