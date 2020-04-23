@@ -54,4 +54,36 @@ class NotificationRepository {
       }
     });
   }
+
+  Future<void> answerNotification(
+    Score score,
+    double scoreAnswer,
+  ) async {
+    await Future.delayed(const Duration(seconds: 1), () async {
+      try {
+        final body = convert.json.encode({
+          'to': score.userTokenSender,
+          'priority': 'high',
+          'collapse_key': 'type_a',
+          'contentAvailable': true,
+          'data': {
+            'type': 'ANSWER_BATTLE',
+            'message': scoreAnswer == score.targetScore ? '${score.metaUser.username} salah menjawab, kamu dapat tambahan score' : 'Namun ${score.metaUser.username} hebat kamu dapat minus score',
+            SCORE_ID: score.scoreId,
+            USERNAME_SENDER: score.metaUser.username,
+            QUIZ_ID: score.quizId,
+          }
+        });
+        final http.Response response = await _client.post(
+          URL,
+          headers: _headers,
+          body: body,
+        );
+        Logger.w('Send Notification Success', e: response.body);
+      } catch (e) {
+        Logger.w('Send Notification Error', e: e);
+        throw Exception();
+      }
+    });
+  }
 }
