@@ -231,6 +231,7 @@ class UserRepository {
 
   Future<void> signOut() async {
     final SharedPreferences prefs = await _prefs;
+    await _firebaseMessaging.deleteInstanceID();
     await prefs.remove(USER_ID_PREFERENCES);
     await prefs.remove(USER_FCMTOKEN_PREFERENCES);
     await prefs.remove(USER_NAME_PREFERENCES);
