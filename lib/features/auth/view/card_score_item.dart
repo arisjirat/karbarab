@@ -25,7 +25,7 @@ class CardScoreItem extends StatelessWidget {
     }
   }
 
-  void onClickScore(BuildContext context) {
+  void onClickScore(BuildContext context, User user) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -52,6 +52,36 @@ class CardScoreItem extends StatelessWidget {
               itemCount: score.scoreHistory.length,
               itemBuilder: (context, position) {
                 final DateTime date = score.scoreHistory[position].createdAt;
+                final String addWord = score.scoreHistory[position].isBattle ? 'kartu kiriman | ' : ''; 
+                if (user.id != score.scoreHistory[position].userId) {
+                  return Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            RegularText(
+                              text: score.scoreHistory[position].metaQuiz.bahasa,
+                              dark: true,
+                            ),
+                            TinyText(
+                              text: 'mengirim | ${date.day}-${date.month}-${date.year}, ${date.hour}:${date.minute} ',
+                              dark: true,
+                            )
+                          ],
+                        ),
+                        BoldRegularText(
+                          text: score.scoreHistory[position].userSenderScore.toString(),
+                          color: score.scoreHistory[position].userSenderScore > 0 ? greenColor : redColor,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+                }
                 return Card(
                   child: Padding(
                     padding: const EdgeInsets.all(10),
@@ -66,14 +96,14 @@ class CardScoreItem extends StatelessWidget {
                               dark: true,
                             ),
                             TinyText(
-                              text: '${date.day}-${date.month}-${date.year}',
+                              text: '$addWord${date.day}-${date.month}-${date.year}, ${date.hour}:${date.minute}',
                               dark: true,
                             )
                           ],
                         ),
                         BoldRegularText(
                           text: score.scoreHistory[position].score.toString(),
-                          color: greenColor,
+                          color: score.scoreHistory[position].score >= 0 ? greenColor : redColor
                         ),
                       ],
                     ),
@@ -90,8 +120,8 @@ class CardScoreItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onDoubleTap: () => onClickScore(context),
-      onTap: () => onClickScore(context),
+      onDoubleTap: () => onClickScore(context, score.metaUser),
+      onTap: () => onClickScore(context, score.metaUser),
       child: Card(
         child: Container(
           padding: const EdgeInsets.all(20),
