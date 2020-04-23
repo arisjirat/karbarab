@@ -145,7 +145,7 @@ class _AppPushsState extends State<AppPushs> {
         pushText = '${nodeData['message']}';
       } else {
         pushTitle = 'Hai kamu dapat kartu!';
-        pushText = 'Coba jawab kartu dari $usernameSender}';
+        pushText = 'Coba jawab kartu dari $usernameSender';
       }
     } else {
       type = message['type'];
@@ -156,7 +156,7 @@ class _AppPushsState extends State<AppPushs> {
         pushText = '${message['message']}';
       } else {
         pushTitle = 'Hai kamu dapat kartu!';
-        pushText = 'Coba jawab kartu dari $usernameSender}';
+        pushText = 'Coba jawab kartu dari $usernameSender';
       }
     }
 
