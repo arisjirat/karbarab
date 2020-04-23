@@ -323,7 +323,7 @@ class _GameQuizState extends State<GameQuiz> {
                       nextWord: 'Kata Selanjutnya',
                       isCorrect: _isCorrect,
                       onNewGame: _getQuiz,
-                      point: _currentPoint.round(),
+                      point: _currentPoint,
                     )
                   : buildQuiz(widget.deviceHeight, widget.list)
             ],
