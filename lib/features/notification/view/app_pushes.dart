@@ -98,7 +98,7 @@ class _AppPushsState extends State<AppPushs> {
         _showNotification(message);
         return;
       },
-      onBackgroundMessage: Platform.isIOS ? null : backgroundMessageHandler,
+      // onBackgroundMessage: Platform.isIOS ? null : backgroundMessageHandler,
       onResume: (Map<String, dynamic> message) {
         print('AppPushs onResume : $message');
         if (Platform.isIOS) {

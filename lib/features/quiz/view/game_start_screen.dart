@@ -289,38 +289,45 @@ class _GameQuizState extends State<GameQuiz> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            CardQuiz(
-              confirmClose: () {
-                Navigator.of(context).pushNamed(HomeScreen.routeName);
-              },
-              currentPoint: _currentPoint,
-              isCorrect: _isCorrect,
-              loading: _loading,
-              deviceHeight: widget.deviceHeight,
-              quiz: widget.correct,
-              mode: widget.mode,
-              adsHint: AdsScreen(
-                adsMode: AdsMode.HINT,
-                onReward: _handleRewardedHint,
-                buttonShow: const ButtonAdsHint(),
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context).pushNamed(HomeScreen.routeName);
+        return false;
+      },
+      child: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CardQuiz(
+                confirmClose: () {
+                  Navigator.of(context).pushNamed(HomeScreen.routeName);
+                },
+                currentPoint: _currentPoint,
+                isCorrect: _isCorrect,
+                loading: _loading,
+                deviceHeight: widget.deviceHeight,
+                quiz: widget.correct,
+                mode: widget.mode,
+                adsHint: AdsScreen(
+                  adsMode: AdsMode.HINT,
+                  onReward: _handleRewardedHint,
+                  buttonShow: const ButtonAdsHint(),
+                ),
+                giveFeedback: _giveFeedback,
+                speech:
+                    Speech(id: widget.correct.id, arab: widget.correct.arab),
               ),
-              giveFeedback: _giveFeedback,
-              speech: Speech(id: widget.correct.id, arab: widget.correct.arab),
-            ),
-            _isCorrect
-                ? Congratulation(
-                    nextWord: 'Kata Selanjutnya',
-                    isCorrect: _isCorrect,
-                    onNewGame: _getQuiz,
-                    point: _currentPoint.round(),
-                  )
-                : buildQuiz(widget.deviceHeight, widget.list)
-          ],
+              _isCorrect
+                  ? Congratulation(
+                      nextWord: 'Kata Selanjutnya',
+                      isCorrect: _isCorrect,
+                      onNewGame: _getQuiz,
+                      point: _currentPoint.round(),
+                    )
+                  : buildQuiz(widget.deviceHeight, widget.list)
+            ],
+          ),
         ),
       ),
     );

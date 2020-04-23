@@ -13,6 +13,7 @@ class LogoText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      textScaleFactor: 1.0,
       style: TextStyle(
         fontFamily: 'FTF-Ahlan',
         color: color == null ? dark ? textColor : whiteColor : color,
@@ -34,6 +35,7 @@ class LogoTextSmaller extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      textScaleFactor: 1.0,
       style: TextStyle(
         fontFamily: 'FTF-Ahlan',
         color: color == null ? dark ? textColor : whiteColor : color,
@@ -54,6 +56,7 @@ class ArabicText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      textScaleFactor: 1.0,
       style: TextStyle(
         fontFamily: 'Geeza',
         color: dark ? textColor : whiteColor,
@@ -73,6 +76,7 @@ class BiggerArabicText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      textScaleFactor: 1.0,
       style: TextStyle(
         fontFamily: 'Geeza',
         color: dark ? textColor : whiteColor,
@@ -95,6 +99,7 @@ class RegularText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      textScaleFactor: 1.0,
       style: TextStyle(
         color: color == null ? dark ? textColor : whiteColor : color,
         fontWeight: bold ? FontWeight.bold : FontWeight.normal,
@@ -114,6 +119,7 @@ class SmallerText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      textScaleFactor: 1.0,
       style: TextStyle(
         color: dark ? textColor : whiteColor,
         // fontSize: 15.0,
@@ -133,6 +139,7 @@ class TinyText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      textScaleFactor: 1.0,
       style: TextStyle(
         color: dark ? textColor : whiteColor,
         // fontSize: 15.0,
@@ -152,6 +159,7 @@ class BoldRegularText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      textScaleFactor: 1.0,
       style: TextStyle(
         color: color != null ? color : dark ? textColor : whiteColor,
         fontWeight: FontWeight.bold,
@@ -170,6 +178,7 @@ class LargerText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      textScaleFactor: 1.0,
       style: TextStyle(
         color: dark ? textColor : whiteColor,
         fontWeight: bold ? FontWeight.bold : FontWeight.normal,
@@ -189,6 +198,7 @@ class BiggerText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      textScaleFactor: 1.0,
       style: TextStyle(
         color: color != null ? color : dark ? textColor : whiteColor,
         fontWeight: bold ? FontWeight.bold : FontWeight.normal,
@@ -208,6 +218,7 @@ class BiggerTextItalic extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
+      textScaleFactor: 1.0,
       style: TextStyle(
         color: color != null ? color : dark ? textColor : whiteColor,
         fontWeight: bold ? FontWeight.bold : FontWeight.normal,

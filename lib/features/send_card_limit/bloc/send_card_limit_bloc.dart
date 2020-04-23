@@ -42,6 +42,7 @@ class SendCardLimitBloc extends Bloc<SendCardLimitEvent, SendCardLimitState> {
       limit: currentState.limit,
     );
     final limit = await _userRepository.decreaseSendCardLimit();
+    print('called decres');
     yield HasSendCardLimit(
       isFailure: false,
       isLoading: false,
@@ -79,7 +80,7 @@ class SendCardLimitBloc extends Bloc<SendCardLimitEvent, SendCardLimitState> {
     yield HasSendCardLimit(
       isFailure: false,
       isLoading: false,
-      isSuccess: true,
+      isSuccess: false,
       limit: limit,
     );
   }
