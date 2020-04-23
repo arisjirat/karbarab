@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -31,8 +32,7 @@ class _AdsScreenState extends State<AdsScreen> {
     if (widget.adsMode == AdsMode.GlOBAL_SCORE) {
       RewardedVideoAd.instance
           .load(
-        // adUnitId: '$APP_ID/$ADS_SCORE',
-        adUnitId: RewardedVideoAd.testAdUnitId,
+        adUnitId: kReleaseMode ? '$APP_ID/$ADS_SCORE' : RewardedVideoAd.testAdUnitId,
         targetingInfo: targetingInfo,
       )
           .then((l) {
@@ -45,8 +45,7 @@ class _AdsScreenState extends State<AdsScreen> {
     if (widget.adsMode == AdsMode.HINT) {
       RewardedVideoAd.instance
           .load(
-        // adUnitId: '$APP_ID/$ADS_HINT',
-        adUnitId: RewardedVideoAd.testAdUnitId,
+        adUnitId: kReleaseMode ? '$APP_ID/$ADS_HINT' : RewardedVideoAd.testAdUnitId,
         targetingInfo: targetingInfo,
       )
           .then((l) {
@@ -60,8 +59,7 @@ class _AdsScreenState extends State<AdsScreen> {
   @override
   void initState() {
     super.initState();
-    // FirebaseAdMob.instance.initialize(appId: APP_ID);
-    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
+    FirebaseAdMob.instance.initialize(appId: kReleaseMode ? APP_ID : FirebaseAdMob.testAppId);
     RewardedVideoAd.instance.listener = (
       RewardedVideoAdEvent event, {
       String rewardType,

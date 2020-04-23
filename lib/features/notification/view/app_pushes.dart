@@ -80,25 +80,43 @@ class _AppPushsState extends State<AppPushs> {
   }
 
   void _initFirebaseMessaging() {
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) {
-        print('AppPushs onMessage : $message');
-        _showNotification(message);
-        return;
-      },
-      // onBackgroundMessage: Platform.isIOS ? null : backgroundMessageHandler,
-      onResume: (Map<String, dynamic> message) {
-        print('AppPushs onResume : $message');
-        if (Platform.isIOS) {
+    if (!kReleaseMode) {
+      _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) {
+          print('AppPushs onMessage : $message');
           _showNotification(message);
-        }
-        return;
-      },
-      onLaunch: (Map<String, dynamic> message) {
-        print('AppPushs onLaunch : $message');
-        return;
-      },
-    );
+          return;
+        },
+        onResume: (Map<String, dynamic> message) {
+          print('AppPushs onResume : $message');
+          if (Platform.isIOS) {
+            _showNotification(message);
+          }
+          return;
+        },
+        onLaunch: (Map<String, dynamic> message) {
+          print('AppPushs onLaunch : $message');
+          return;
+        },
+      );
+    } else {  
+      _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) {
+          _showNotification(message);
+          return;
+        },
+        onBackgroundMessage: Platform.isIOS ? null : backgroundMessageHandler,
+        onResume: (Map<String, dynamic> message) {
+          if (Platform.isIOS) {
+            _showNotification(message);
+          }
+          return;
+        },
+        onLaunch: (Map<String, dynamic> message) {
+          return;
+        },
+      );
+    }
     _firebaseMessaging.requestNotificationPermissions(
         const IosNotificationSettings(sound: true, badge: true, alert: true));
   }
