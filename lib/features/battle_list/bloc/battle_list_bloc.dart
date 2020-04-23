@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:karbarab/model/score.dart';
+import 'package:karbarab/model/user.dart';
 import 'package:karbarab/repository/score_repostitory.dart';
 import 'package:karbarab/repository/user_repository.dart';
 import 'package:karbarab/utils/logger.dart';
@@ -43,12 +44,14 @@ class BattleListBloc extends Bloc<BattleListEvent, BattleListState> {
   Stream<BattleListState> _mapGetBattleList() async* {
     try {
       yield HasBattleList(isComplete: false, isLoading: true, quizBattle: []);
-      final String userId = await _userRepository.getUserId();
-      final List<Score> quizBattle = await _scoreRepository.getAllBattleCard(userId);
+      final User user = await _userRepository.getUserMeta();
+      print(user.username);
+      final List<Score> quizBattle = await _scoreRepository.getAllBattleCard(user.id);
       yield HasBattleList(
         isComplete: true,
         isLoading: false,
         quizBattle: quizBattle,
+        user: user,
       );
     } catch (e) {
       Logger.e('Get score batte list Failed', e: e, s: StackTrace.current);

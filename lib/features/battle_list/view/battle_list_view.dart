@@ -39,6 +39,7 @@ class _BattleListViewState extends State<BattleListView> {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
                   child: CardBattleItem(
+                    user: state.user,
                     onAnswer: () {
                       Navigator.push(
                         ctx,
