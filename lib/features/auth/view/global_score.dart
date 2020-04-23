@@ -35,7 +35,7 @@ class _GlobalScoreState extends State<GlobalScore> {
   void _isNeedToWatchAgain() async {
     final SharedPreferences prefs = await _prefs;
     final int lastWatch = prefs.getInt(LAST_TIME_WATCH_ADS);
-    if (DateTime.fromMillisecondsSinceEpoch(lastWatch)
+    if (lastWatch != null && DateTime.fromMillisecondsSinceEpoch(lastWatch)
         .isAfter(DateTime.now())) {
       print('is after');
       setState(() {
