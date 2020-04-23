@@ -4,6 +4,7 @@ import 'package:karbarab/features/score/bloc/score_bloc.dart';
 import 'package:karbarab/model/quiz.dart';
 import 'package:karbarab/model/score.dart';
 import 'package:karbarab/model/user.dart';
+import 'package:karbarab/repository/notification_repository.dart';
 import 'package:karbarab/repository/quiz_repository.dart';
 import 'package:karbarab/repository/user_repository.dart';
 
@@ -14,6 +15,7 @@ import 'package:uuid/uuid.dart';
 class ScoreRepository {
   final CollectionReference scoreCollection =
       Firestore.instance.collection('scores');
+  final NotificationRepository _notificationRepository = NotificationRepository();
 
   static Score fromDoc(DocumentSnapshot document) {
     return Score(
@@ -148,36 +150,35 @@ class ScoreRepository {
     }
   }
 
-  Future dirtyBattleCard(String scoreId) async {
+  Future dirtyBattleCard(Score battle) async {
     try {
-      final updateData = scoreCollection.document(scoreId).updateData;
-      final DocumentSnapshot currentData =
-          await scoreCollection.document(scoreId).get();
-      final targetScore = currentData.data[TARGET_SCORE];
-      return await updateData({
+      final updateData = scoreCollection.document(battle.scoreId).updateData;
+      final targetScore = battle.targetScore;
+      await updateData({
         IS_SOLVED: true,
-        SCORE: 0.toDouble(),
-        USER_SENDER_SCORE: targetScore * 2,
+        SCORE: -(targetScore / 2),
+        USER_SENDER_SCORE: targetScore,
         UPDATED_AT: FieldValue.serverTimestamp(),
       });
+
+      return await _notificationRepository.answerNotification(battle, -(targetScore / 2));
     } catch (e) {
       Logger.e('DirtyBattleCard', e: e, s: StackTrace.current);
     }
   }
 
-  Future updateBattleCard(String scoreId, score) async {
+  Future updateBattleCard(Score battle, double score) async {
     try {
-      final updateData = scoreCollection.document(scoreId).updateData;
-      final DocumentSnapshot currentData =
-          await scoreCollection.document(scoreId).get();
-      final targetScore = currentData.data[TARGET_SCORE];
-      return await updateData({
+      final updateData = scoreCollection.document(battle.scoreId).updateData;
+      await updateData({
         IS_SOLVED: true,
-        SCORE: targetScore == score ? targetScore * 2 : targetScore / 2,
+        SCORE: battle.targetScore == score ? battle.targetScore : -(battle.targetScore / 2),
         USER_SENDER_SCORE:
-            targetScore == score ? targetScore / 2 : targetScore * 2,
+            battle.targetScore == score ? -(battle.targetScore / 2) : battle.targetScore,
         UPDATED_AT: FieldValue.serverTimestamp(),
+
       });
+      return await _notificationRepository.answerNotification(battle, score);
     } catch (e) {
       Logger.e('UpdateBattleCard', e: e, s: StackTrace.current);
     }
@@ -195,14 +196,23 @@ class ScoreRepository {
 
   Future<List<Score>> getAllBattleCard(String userId) async {
     try {
-      final getAllData = await scoreCollection
+      final getAllData = (await scoreCollection
+          // .where(USER_ID_SENDER, isEqualTo: userId)
           .where(USER_ID, isEqualTo: userId)
           .where(IS_BATTLE, isEqualTo: true)
           // .where(IS_SOLVED, isEqualTo: false)
           .limit(10000)
           .orderBy(CREATED_AT, descending: true)
-          .getDocuments();
-      final documents = getAllData.documents;
+          .getDocuments()).documents;
+      final getAllDataSender = (await scoreCollection
+          .where(USER_ID_SENDER, isEqualTo: userId)
+          .where(IS_BATTLE, isEqualTo: true)
+          // .where(IS_SOLVED, isEqualTo: false)
+          .limit(10000)
+          .orderBy(CREATED_AT, descending: true)
+          .getDocuments()).documents;
+      getAllData.addAll(getAllDataSender);
+      final documents = getAllData;
       final List<Score> listData = documents.fold([], (a, c) {
         a.add(fromJson(c.data));
         return a;
@@ -326,9 +336,9 @@ class ScoreRepository {
       );
 
       final List<ScoreQuiz> badQuiz =
-          summaryQuiz.where((e) => e.averageScore <= 0.9).toList();
+          summaryQuiz.where((e) => e.averageScore <= 0.75).toList();
       final List<ScoreQuiz> goodQuiz =
-          summaryQuiz.where((e) => e.averageScore > 0.9).toList();
+          summaryQuiz.where((e) => e.averageScore > 0.75).toList();
 
       return [badQuiz, goodQuiz];
     } catch (e) {
