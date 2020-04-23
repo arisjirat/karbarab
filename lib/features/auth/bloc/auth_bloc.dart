@@ -45,9 +45,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final isGoogleAuth = await _userRepository.isUserGoogleAuth();
         final userId = await _userRepository.getUserId();
         final scores = await _scoreRepository.getUserScore(userId) ?? [];
-        final scoresSender = await _scoreRepository.getUserScoreSender(userId) ?? [];
+        final scoresSender =
+            await _scoreRepository.getUserScoreSender(userId) ?? [];
         final double totalScore = await scores.fold(0, (t, e) => e[SCORE] + t);
-        final double totalScoreSender = await scoresSender.fold(0, (t, e) => e[USER_SENDER_SCORE] + t);
+        final double totalScoreSender =
+            await scoresSender.fold(0, (t, e) => e[USER_SENDER_SCORE] + t);
         final tokenFCM = await _userRepository.getUserTokenFCM();
 
         yield Authenticated(
@@ -56,7 +58,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           fullname: fullname,
           totalPoints: totalScore + totalScoreSender,
           isGoogleAuth: isGoogleAuth,
-          tokenFCM: tokenFCM
+          tokenFCM: tokenFCM,
         );
       } else {
         yield Unauthenticated();
@@ -72,10 +74,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final fullname = await _userRepository.getUserFullname();
     final userId = await _userRepository.getUserId();
     final isGoogleAuth = await _userRepository.isUserGoogleAuth();
-    final scores = await _scoreRepository.getUserScore(userId);
-    final scoresSender = await _scoreRepository.getUserScoreSender(userId);
+    final scores = await _scoreRepository.getUserScore(userId) ?? [];
+    final scoresSender =
+        await _scoreRepository.getUserScoreSender(userId) ?? [];
     final double totalScore = await scores.fold(0, (t, e) => e[SCORE] + t);
-    final double totalScoreSender = await scoresSender.fold(0, (t, e) => e[USER_SENDER_SCORE] + t);
+    final double totalScoreSender =
+        await scoresSender.fold(0, (t, e) => e[USER_SENDER_SCORE] + t);
     final tokenFCM = await _userRepository.getUserTokenFCM();
     final limit = await _userRepository.getUserSendCardLimit();
 
@@ -88,12 +92,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     _userRepository.updateToLimitLocal(limit);
 
     yield Authenticated(
-        displayName: name,
-        avatar: avatar,
-        isGoogleAuth: isGoogleAuth,
-        fullname: fullname,
-        tokenFCM: newToken != tokenFCM ? newToken : tokenFCM,
-        totalPoints: totalScore + totalScoreSender);
+      displayName: name,
+      avatar: avatar,
+      isGoogleAuth: isGoogleAuth,
+      fullname: fullname,
+      tokenFCM: newToken != tokenFCM ? newToken : tokenFCM,
+      totalPoints: totalScore + totalScoreSender,
+    );
   }
 
   Stream<AuthState> _mapLoggedOutToState() async* {

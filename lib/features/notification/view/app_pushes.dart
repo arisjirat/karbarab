@@ -4,37 +4,24 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:karbarab/features/battle/view/battle_screen.dart';
 import 'package:rxdart/subjects.dart';
+// import 'package:karbarab/features/home/view/home_screen.dart';
 
 final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
-
-final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
-    BehaviorSubject<ReceivedNotification>();
 
 final BehaviorSubject<String> selectNotificationSubject =
     BehaviorSubject<String>();
 
 NotificationAppLaunchDetails notificationAppLaunchDetails;
 
-class ReceivedNotification {
-  final int id;
-  final String title;
-  final String body;
-  final String payload;
-
-  ReceivedNotification({
-    @required this.id,
-    @required this.title,
-    @required this.body,
-    @required this.payload,
-  });
-}
 
 class AppPushs extends StatefulWidget {
   final Widget child;
+  final GlobalKey<NavigatorState> navigatorKey;
 
-  AppPushs({@required this.child});
+  AppPushs({@required this.child, @required this.navigatorKey});
 
   @override
   _AppPushsState createState() => _AppPushsState();
@@ -71,6 +58,7 @@ class _AppPushsState extends State<AppPushs> {
   }
 
   Future _onSelectNotification(String payload) async {
+    print(_flutterLocalNotificationsPlugin);
     if (payload != null) {
       debugPrint('notification payload: ' + payload);
       selectNotificationSubject.add(payload);
@@ -80,13 +68,13 @@ class _AppPushsState extends State<AppPushs> {
 
   void _configureSelectNotificationSubject() {
     selectNotificationSubject.stream.listen((String payload) async {
-      // widget.navigatorKey.currentState.pushNamed(BattleScreen.routeName);
+      widget.navigatorKey.currentState.pushNamed(BattleScreen.routeName);
+      // widget.navigatorKey.currentState.pushNamed(HomeScreen.routeName);
     });
   }
 
   @override
   void dispose() {
-    didReceiveLocalNotificationSubject.close();
     selectNotificationSubject.close();
     super.dispose();
   }
@@ -140,13 +128,10 @@ class _AppPushsState extends State<AppPushs> {
       pushText = 'Coba jawab kaartu dari ${message['usernameSender']}';
       type = message['type'];
     }
-    print('AppPushs pushTitle : $pushTitle');
-    print('AppPushs pushText : $pushText');
-    print('AppPushs pushType : $type');
 
     final AndroidNotificationDetails platformChannelSpecificsAndroid =
         AndroidNotificationDetails(
-      'karabarabChannelId',
+      'com.karbarab.pasdigital',
       'Perang Kartu',
       'Pemberitahuan Kartu yang dikirim dari lawan',
       playSound: true,
@@ -160,14 +145,12 @@ class _AppPushsState extends State<AppPushs> {
     final platformChannelSpecifics = NotificationDetails(
         platformChannelSpecificsAndroid, platformChannelSpecificsIos);
 
-    Future.delayed(Duration.zero, () {
-      _flutterLocalNotificationsPlugin.show(
-        0,
-        pushTitle,
-        pushText,
-        platformChannelSpecifics,
-        payload: payloadQuizId,
-      );
-    });
+    await _flutterLocalNotificationsPlugin.show(
+      0,
+      pushTitle,
+      pushText,
+      platformChannelSpecifics,
+      payload: payloadQuizId,
+    );
   }
 }

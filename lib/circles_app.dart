@@ -85,15 +85,24 @@ class CirclesApp extends StatelessWidget {
   }
 }
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   final UserRepository userRepository;
   const App({@required this.userRepository});
 
   @override
+  _AppState createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
   Widget build(BuildContext context) {
     return AppPushs(
+      navigatorKey: _navigatorKey,
       child: MaterialApp(
         title: 'Karbarab',
+        navigatorKey: _navigatorKey,
         theme: ThemeData(
           primaryColor: primaryColor,
           secondaryHeaderColor: secondaryColor,
@@ -102,7 +111,7 @@ class App extends StatelessWidget {
         home: BlocBuilder<AuthBloc, AuthState>(
           builder: (BuildContext context, AuthState state) {
             if (state is Unauthenticated) {
-              return LoginScreen(userRepository: userRepository);
+              return LoginScreen(userRepository: widget.userRepository);
             }
             if (state is Authenticated) {
               return HomeScreen();
@@ -114,7 +123,7 @@ class App extends StatelessWidget {
           },
         ),
         routes: {
-          LoginScreen.routeName: (_) => LoginScreen(userRepository: userRepository),
+          LoginScreen.routeName: (_) => LoginScreen(userRepository: widget.userRepository),
           HomeScreen.routeName: (_) => HomeScreen(),
           ProfileScreen.routeName: (_) => ProfileScreen(),
           BattleScreen.routeName: (_) => const BattleScreen(),
