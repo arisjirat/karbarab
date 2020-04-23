@@ -133,7 +133,7 @@ class _GameQuizState extends State<GameQuiz> {
       popup(
         context,
         text: 'Kesempatan hanya 1 kali',
-        confirmLabel: 'Kamu dapat score ${widget.battle.targetScore / 2}',
+        confirmLabel: 'Kamu dapat score -${widget.battle.targetScore / 2}',
         cancel: () {
           Navigator.of(context).pop();
         },
@@ -280,7 +280,7 @@ class _GameQuizState extends State<GameQuiz> {
                   ),
                 );
               },
-              currentPoint: _currentPoint,
+              currentPoint: _currentPoint == widget.battle.targetScore ? _currentPoint : -widget.battle.targetScore,
               isCorrect: _isCorrect,
               loading: widget.list.isEmpty,
               deviceHeight: widget.deviceHeight,
@@ -301,7 +301,7 @@ class _GameQuizState extends State<GameQuiz> {
                         ),
                       );
                     },
-                    point: _currentPoint.round(),
+                    point: _currentPoint == widget.battle.targetScore ? _currentPoint : -widget.battle.targetScore,
                   )
                 : buildQuiz(widget.deviceHeight, widget.list)
           ],
