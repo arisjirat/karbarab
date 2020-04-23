@@ -292,6 +292,7 @@ class _GameQuizState extends State<GameQuiz> {
             _isCorrect
                 ? Congratulation(
                     nextWord: 'Kembali ke perang kartu',
+                    targetScore: widget.battle.targetScore,
                     isCorrect: _isCorrect,
                     onNewGame: () {
                       Navigator.push(
