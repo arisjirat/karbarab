@@ -105,7 +105,7 @@ class _LoginFieldState extends State<LoginField> {
                       return 'Isi dengan username';
                     }
                     if (value.length < 3) {
-                      return 'Minimal 4 Huruf';
+                      return 'Minimal 3 Huruf';
                     }
                     return null;
                   },
