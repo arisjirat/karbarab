@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:karbarab/features/battle/view/battle_screen.dart';
+import 'package:karbarab/model/score.dart';
 import 'package:rxdart/subjects.dart';
 // import 'package:karbarab/features/home/view/home_screen.dart';
 
@@ -136,15 +137,27 @@ class _AppPushsState extends State<AppPushs> {
 
     if (Platform.isAndroid) {
       final nodeData = message['data'];
+      type = nodeData['type'];
       payloadQuizId = nodeData['quizId'];
-      pushTitle = 'Hai kamu dapat kartu!';
-      pushText = 'Coba jawab kaartu dari ${nodeData['usernameSender']}';
-      type = nodeData['action'];
+      final usernameSender = nodeData[USERNAME_SENDER];
+      if (type == 'ANSWER_BATTLE') {
+        pushTitle = 'Hai $usernameSender sudah menjawab!';
+        pushText = '${nodeData['message']}';
+      } else {
+        pushTitle = 'Hai kamu dapat kartu!';
+        pushText = 'Coba jawab kartu dari $usernameSender}';
+      }
     } else {
-      payloadQuizId = message['quizId'];
-      pushTitle = 'Hai kamu dapat kartu!';
-      pushText = 'Coba jawab kaartu dari ${message['usernameSender']}';
       type = message['type'];
+      payloadQuizId = message['quizId'];
+      final usernameSender = message[USERNAME_SENDER];
+      if (type == 'ANSWER_BATTLE') {
+        pushTitle = 'Hai $usernameSender sudah menjawab!';
+        pushText = '${message['message']}';
+      } else {
+        pushTitle = 'Hai kamu dapat kartu!';
+        pushText = 'Coba jawab kartu dari $usernameSender}';
+      }
     }
 
     final AndroidNotificationDetails platformChannelSpecificsAndroid =
