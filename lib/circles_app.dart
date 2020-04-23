@@ -74,7 +74,7 @@ class CirclesApp extends StatelessWidget {
           create: (BuildContext context) => VoicesBloc(),
         ),
         BlocProvider(
-          create: (BuildContext context) => BattleListBloc(),
+          create: (BuildContext context) => BattleListBloc(userRepository: userRepository,),
         ),
         BlocProvider(
           create: (BuildContext context) => SendCardLimitBloc(),

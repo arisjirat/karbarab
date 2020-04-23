@@ -14,8 +14,14 @@ part 'battle_list_state.dart';
 
 
 class BattleListBloc extends Bloc<BattleListEvent, BattleListState> {
-  final UserRepository _userRepository = UserRepository();
+  final UserRepository _userRepository;
   final ScoreRepository _scoreRepository = ScoreRepository();
+
+  BattleListBloc({
+    @required UserRepository userRepository,
+  })  : assert(userRepository != null),
+        _userRepository = userRepository;
+
   @override
   BattleListState get initialState => HasBattleList(
         isComplete: false,
