@@ -114,14 +114,15 @@ class SmallerText extends StatelessWidget {
   final String text;
   final bool dark;
   final bool bold;
-  SmallerText({@required this.text, this.dark, this.bold = false});
+  final Color color;
+  SmallerText({@required this.text, this.dark = true, this.color, this.bold = false});
   @override
   Widget build(BuildContext context) {
     return Text(
       text,
       textScaleFactor: 1.0,
       style: TextStyle(
-        color: dark ? textColor : whiteColor,
+        color: color == null ? dark ? textColor : whiteColor : color,
         // fontSize: 15.0,
         fontWeight: bold ? FontWeight.bold : FontWeight.normal,
         fontSize: scaleCalculator(15, context),
