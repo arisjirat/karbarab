@@ -95,7 +95,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
   ) async* {
     try {
       yield SolvedBattleState(true, false);
-      await _scoreRepository.updateBattleCard(scoreBattle.scoreId, score);
+      await _scoreRepository.updateBattleCard(scoreBattle, score);
       yield SolvedBattleState(false, true);
     } catch (e) {
       Logger.e('AddUserScore', e: e, s: StackTrace.current);
@@ -104,7 +104,7 @@ class ScoreBloc extends Bloc<ScoreEvent, ScoreState> {
   }
 
   Stream<ScoreState> _mapDirtyScore(Score score) async* {
-    await _scoreRepository.dirtyBattleCard(score.scoreId);
+    await _scoreRepository.dirtyBattleCard(score);
   }
 
   Stream<ScoreState> _mapGetSummaryUserQuizScore() async* {
