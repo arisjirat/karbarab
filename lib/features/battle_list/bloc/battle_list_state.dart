@@ -8,22 +8,26 @@ class HasBattleList extends BattleListState {
   final bool isLoading;
   final bool isComplete;
   final List<Score> quizBattle;
+  final User user;
 
   HasBattleList({
     @required this.quizBattle,
     @required this.isComplete,
     @required this.isLoading,
+    this.user,
   });
 
   HasBattleList copyWith({
     List<Score> quizBattle,
     bool isLoading,
     bool isComplete,
+    User user,
   }) {
     return HasBattleList(
       isLoading: isLoading ?? this.isLoading,
       isComplete: isComplete ?? this.isComplete,
       quizBattle: quizBattle ?? this.quizBattle,
+      user: user ?? this.user,
     );
   }
 
@@ -32,8 +36,9 @@ class HasBattleList extends BattleListState {
     quizBattle,
     isLoading,
     isComplete,
+    user,
   ];
 
   @override
-  String toString() => 'HasBattleList { $quizBattle, $isLoading, $isComplete }';
+  String toString() => 'HasBattleList { $quizBattle, $isLoading, $isComplete, $user }';
 }
