@@ -157,7 +157,7 @@ class UserRepository {
         ..avatar = avatar
         ..email = email
         ..fullname = displayName
-        ..isGoogleAuth = true
+        ..isGoogleAuth = isGoogleAuth
         ..tokenFCM = tokenFCM
         ..sendCardLimit = SEND_CARD_LIMIT_DEFAULT
         ..username = username);
@@ -166,7 +166,7 @@ class UserRepository {
     }
     final User userData = User((u) => u
       ..id = id
-      ..isGoogleAuth = true
+      ..isGoogleAuth = isGoogleAuth
       ..tokenFCM = tokenFCM
       ..sendCardLimit = SEND_CARD_LIMIT_DEFAULT
       ..username = username);
