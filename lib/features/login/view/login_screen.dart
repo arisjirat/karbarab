@@ -204,6 +204,7 @@ class _LoginState extends State<Login> with SingleTickerProviderStateMixin {
                       BlocBuilder<LoginBloc, LoginState>(
                         builder: (context, state) {
                           return LoginField(
+                            signup: true,
                             animation: _curvedAnimation.value,
                             loading: state is LoginState && state.isLoading,
                             next: _actionSingup,

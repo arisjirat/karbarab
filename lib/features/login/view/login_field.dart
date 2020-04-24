@@ -1,10 +1,10 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:karbarab/core/config/colors.dart';
 
 class LoginField extends StatefulWidget {
+  final bool signup;
   final Function next;
   final bool dark;
   final bool loading;
@@ -13,6 +13,7 @@ class LoginField extends StatefulWidget {
       {Key key,
       @required this.next,
       this.dark = false,
+      this.signup = false,
       @required this.loading,
       @required this.animation})
       : super(key: key);
@@ -31,7 +32,7 @@ class _LoginFieldState extends State<LoginField> {
   Widget build(BuildContext context) {
     return Container(
       child: Container(
-        height: 110,
+        height: 90,
         width: 300,
         child: Form(
           key: _formKey,
@@ -60,7 +61,7 @@ class _LoginFieldState extends State<LoginField> {
                   },
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.fromLTRB(20, 20, 75, 20),
-                    labelText: 'Username',
+                    labelText: widget.signup ? 'Username Baru' : 'Username',
                     labelStyle: TextStyle(
                       color: widget.dark ? greenColor : whiteColor,
                     ),
