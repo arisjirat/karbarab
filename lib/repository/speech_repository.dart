@@ -1,17 +1,18 @@
 import 'dart:convert' as convert;
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:karbarab/utils/logger.dart';
 import 'package:path_provider/path_provider.dart';
 
-const KEY = 'AIzaSyDCHHs-nQ2pNZw2j9Lgx2x1Y0zDOUqfmm4';
 const BASE_URL = 'https://texttospeech.googleapis.com';
-const URL = '$BASE_URL/v1/text:synthesize?key=$KEY';
 
 
 class SpeechRepository {
   final client = http.Client();
+  static final String key = DotEnv().env['ADMOB_ADS_SCORE'];
+  static final url = '$BASE_URL/v1/text:synthesize?key=$key';
   Future<String> textToSpeech(id, arab) async {
     final Map<String, String> headers = {
       'Content-type': 'application/json',
@@ -31,7 +32,7 @@ class SpeechRepository {
     });
     try {
       final http.Response response = await client.post(
-        URL,
+        url,
         headers: headers,
         body: body,
       );

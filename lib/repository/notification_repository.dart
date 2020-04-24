@@ -1,4 +1,5 @@
 import 'dart:convert' as convert;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 import 'package:karbarab/model/score.dart';
 
@@ -6,15 +7,14 @@ import 'package:karbarab/model/user.dart';
 import 'package:karbarab/utils/logger.dart';
 
 const BASE_URL = 'https://fcm.googleapis.com/fcm/send';
-const URL = '$BASE_URL';
 
 class NotificationRepository {
+  static final String key = DotEnv().env['ADMOB_ADS_SCORE'];
   final _client = http.Client();
   final Map<String, String> _headers = {
     'Content-type': 'application/json',
     'Accept': 'application/json',
-    'Authorization':
-        'key=AAAA3XBgq14:APA91bHjH4lhwz1ZDqq8IFVQ0zJIl8qAg2AXxSp8Xm6PsoulMvamuyGsBsb_jie6gsuywlFAeEGHcfgRM27ruDX1ieptBQ4GwzpHOHIMq2X-xU8vbEHlj7DheDM4Sj_Es1xn1BcqVUo8',
+    'Authorization': 'key=$key',
   };
 
   Future<void> sendCardToUser(
@@ -43,7 +43,7 @@ class NotificationRepository {
           }
         });
         final http.Response response = await _client.post(
-          URL,
+          BASE_URL,
           headers: _headers,
           body: body,
         );
@@ -75,7 +75,7 @@ class NotificationRepository {
           }
         });
         final http.Response response = await _client.post(
-          URL,
+          BASE_URL,
           headers: _headers,
           body: body,
         );
