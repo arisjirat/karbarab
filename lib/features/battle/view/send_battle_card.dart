@@ -155,12 +155,12 @@ class _SendBattleCardState extends State<SendBattleCard> {
               }
               if (s is SendCardState && s.isFailure) {
                 stateWidget = RegularText(
-                  text: 'Gagal',
+                  text: 'Gagal mengirim kartu',
                 );
               }
               if (s is SendCardState && s.isSuccess) {
                 stateWidget = RegularText(
-                  text: 'Berhasil mengirim kartu',
+                  text: 'Berhasil kirim kartu',
                 );
               }
               return BlocBuilder<SendCardLimitBloc, SendCardLimitState>(

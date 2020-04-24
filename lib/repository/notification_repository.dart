@@ -7,14 +7,12 @@ import 'package:karbarab/model/user.dart';
 import 'package:karbarab/utils/logger.dart';
 
 const BASE_URL = 'https://fcm.googleapis.com/fcm/send';
-
 class NotificationRepository {
-  static final String key = DotEnv().env['ADMOB_ADS_SCORE'];
+  final String key = DotEnv().env['FIREBASE'];
   final _client = http.Client();
   final Map<String, String> _headers = {
     'Content-type': 'application/json',
     'Accept': 'application/json',
-    'Authorization': 'key=$key',
   };
 
   Future<void> sendCardToUser(
@@ -42,12 +40,17 @@ class NotificationRepository {
             QUIZ_MODE: GameModeHelper.stringOf(gameMode),
           }
         });
+        _headers['Authorization'] = 'key=$key';
         final http.Response response = await _client.post(
           BASE_URL,
           headers: _headers,
           body: body,
         );
+        if (response.statusCode != 200) {
+          return throw Error();
+        }
         Logger.w('Send Notification Success', e: response.body);
+        return;
       } catch (e) {
         Logger.w('Send Notification Error', e: e);
         throw Exception();
@@ -74,14 +77,18 @@ class NotificationRepository {
             QUIZ_ID: score.quizId,
           }
         });
+        _headers['Authorization'] = 'key=$key';
         final http.Response response = await _client.post(
           BASE_URL,
           headers: _headers,
           body: body,
         );
-        Logger.w('Send Notification Success', e: response.body);
+        if (response.statusCode != 200) {
+          return throw Error();
+        }
+        Logger.w('Answer Notification Success', e: response.body);
       } catch (e) {
-        Logger.w('Send Notification Error', e: e);
+        Logger.w('Answer Notification Error', e: e);
         throw Exception();
       }
     });

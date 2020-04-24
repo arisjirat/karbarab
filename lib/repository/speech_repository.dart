@@ -11,9 +11,10 @@ const BASE_URL = 'https://texttospeech.googleapis.com';
 
 class SpeechRepository {
   final client = http.Client();
-  static final String key = DotEnv().env['ADMOB_ADS_SCORE'];
-  static final url = '$BASE_URL/v1/text:synthesize?key=$key';
-  Future<String> textToSpeech(id, arab) async {
+  static final url = '$BASE_URL/v1/text:synthesize?key=';
+  Future<String> textToSpeech(String id, String arab) async {
+    print(DotEnv().env);
+    final String apiKey = DotEnv().env['GCP_API_KEY'];
     final Map<String, String> headers = {
       'Content-type': 'application/json',
       'Accept': 'application/json',
@@ -32,11 +33,10 @@ class SpeechRepository {
     });
     try {
       final http.Response response = await client.post(
-        url,
+        url + apiKey,
         headers: headers,
         body: body,
       );
-
       if (response.statusCode == 200) {
         final jsonResponse = convert.jsonDecode(response.body);
         final audioContent = jsonResponse['audioContent'];
@@ -52,7 +52,7 @@ class SpeechRepository {
     } on VoiceException {
       return throw Error();
     } catch (e) {
-      Logger.w('Get Voice', e: e);
+      Logger.w('Get Voice', e: e, s: StackTrace.current);
       return throw Error();
     }
   }
