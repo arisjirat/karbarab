@@ -2,9 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_admob/firebase_admob.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:karbarab/core/config/ads.dart';
 import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
 import 'package:karbarab/model/quiz.dart';
+import 'package:karbarab/utils/flavors.dart';
 import 'package:karbarab/utils/logger.dart';
 
 class AdsScreen extends StatefulWidget {
@@ -23,16 +25,19 @@ class AdsScreen extends StatefulWidget {
 }
 
 class _AdsScreenState extends State<AdsScreen> {
+  final String adMobScoreId = FlavorConfig.isProduction() ? DotEnv().env['ADMOB_ADS_SCORE'] : RewardedVideoAd.testAdUnitId;
+  final String adMobHintId = FlavorConfig.isProduction() ? DotEnv().env['ADMOB_ADS_HINT'] : RewardedVideoAd.testAdUnitId;
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-    testDevices: APP_ID != null ? <String>[APP_ID] : null,
-    keywords: <String>['Games', 'Kartu', 'Arab'],
+    testDevices: ADMOB_APP_ID != null ? <String>[ADMOB_APP_ID] : null,
+    keywords: ADMOB_KEYWORDS,
   );
 
   void showAds() {
+
     if (widget.adsMode == AdsMode.GlOBAL_SCORE) {
       RewardedVideoAd.instance
           .load(
-        adUnitId: kReleaseMode ? '$APP_ID/$ADS_SCORE' : RewardedVideoAd.testAdUnitId,
+        adUnitId: FlavorConfig.isProduction() ? '$ADMOB_APP_ID/$adMobScoreId' : RewardedVideoAd.testAdUnitId,
         targetingInfo: targetingInfo,
       )
           .then((l) {
@@ -45,7 +50,7 @@ class _AdsScreenState extends State<AdsScreen> {
     if (widget.adsMode == AdsMode.HINT) {
       RewardedVideoAd.instance
           .load(
-        adUnitId: kReleaseMode ? '$APP_ID/$ADS_HINT' : RewardedVideoAd.testAdUnitId,
+        adUnitId: FlavorConfig.isProduction() ? '$ADMOB_APP_ID/$adMobHintId' : RewardedVideoAd.testAdUnitId,
         targetingInfo: targetingInfo,
       )
           .then((l) {
@@ -59,7 +64,7 @@ class _AdsScreenState extends State<AdsScreen> {
   @override
   void initState() {
     super.initState();
-    FirebaseAdMob.instance.initialize(appId: kReleaseMode ? APP_ID : FirebaseAdMob.testAppId);
+    FirebaseAdMob.instance.initialize(appId: FlavorConfig.isProduction() ? ADMOB_APP_ID : FirebaseAdMob.testAppId);
     RewardedVideoAd.instance.listener = (
       RewardedVideoAdEvent event, {
       String rewardType,
