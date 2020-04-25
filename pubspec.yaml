@@ -37,8 +37,8 @@ dependencies:
     sdk: flutter
 
 dev_dependencies:
-  flutter_launcher_icons: "^0.7.0" # $ flutter pub run flutter_launcher_icons:main >> generate icons CLI
-  build_runner: ^1.5.2 # $ flutter pub run build_runner watch >> generate model runner CLI
+  flutter_launcher_icons: "^0.7.0"
+  build_runner: ^1.5.2
   built_value_generator: ^6.6.0
   flutter_test:
     sdk: flutter
