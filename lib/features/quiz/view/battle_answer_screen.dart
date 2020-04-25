@@ -34,8 +34,9 @@ class _BattleAnswerScreenState extends State<BattleAnswerScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<QuizBloc>(context)
-        .add(GetBattleQuiz(battleQuiz: widget.battle));
+    BlocProvider.of<QuizBloc>(context).add(
+      GetBattleQuiz(battleQuiz: widget.battle),
+    );
     BlocProvider.of<ScoreBloc>(context).add(DirtyBattle(score: widget.battle));
   }
 
@@ -125,15 +126,19 @@ class _GameQuizState extends State<GameQuiz> {
       setState(() {
         _isCorrect = true;
       });
-      widget.scoreBloc
-          .add(SolvedBattle(score: _currentPoint, battleQuiz: widget.battle));
-    } else if (_recentAnswers.isNotEmpty) {
-      widget.scoreBloc
-          .add(SolvedBattle(score: _currentPoint, battleQuiz: widget.battle));
+      widget.scoreBloc.add(SolvedBattle(
+        score: _currentPoint,
+        battleQuiz: widget.battle,
+      ));
+    } else {
+      widget.scoreBloc.add(SolvedBattle(
+        score: widget.battle.targetScore / 2,
+        battleQuiz: widget.battle,
+      ));
       popup(
         context,
-        text: 'Kesempatan hanya 1 kali',
-        confirmLabel: 'Kamu dapat score -${widget.battle.targetScore / 2}',
+        text: 'Sayang sekali kamu salah',
+        confirmLabel: 'Kamu minus score, -${widget.battle.targetScore / 2}',
         cancel: () {
           Navigator.of(context).pop();
         },
@@ -148,13 +153,6 @@ class _GameQuizState extends State<GameQuiz> {
         confirmColor: greenColor,
         cancelAble: false,
       );
-    } else {
-      setState(() {
-        _recentAnswers.add(_currentAnswer);
-        _currentPoint =
-            _currentPoint - (widget.battle.targetScore / 2);
-        _currentAnswer = '';
-      });
     }
   }
 
@@ -280,7 +278,9 @@ class _GameQuizState extends State<GameQuiz> {
                   ),
                 );
               },
-              currentPoint: _currentPoint == widget.battle.targetScore ? _currentPoint : -widget.battle.targetScore,
+              currentPoint: _currentPoint == widget.battle.targetScore
+                  ? _currentPoint
+                  : -widget.battle.targetScore,
               isCorrect: _isCorrect,
               loading: widget.list.isEmpty,
               deviceHeight: widget.deviceHeight,
@@ -302,7 +302,9 @@ class _GameQuizState extends State<GameQuiz> {
                         ),
                       );
                     },
-                    point: _currentPoint == widget.battle.targetScore ? _currentPoint : -widget.battle.targetScore,
+                    point: _currentPoint == widget.battle.targetScore
+                        ? _currentPoint
+                        : -widget.battle.targetScore,
                   )
                 : buildQuiz(widget.deviceHeight, widget.list)
           ],

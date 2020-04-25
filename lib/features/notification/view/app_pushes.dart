@@ -63,7 +63,7 @@ class _AppPushsState extends State<AppPushs> {
       debugPrint('notification payload: ' + payload);
       selectNotificationSubject.add(payload);
     }
-    _flutterLocalNotificationsPlugin.cancelAll();
+    _flutterLocalNotificationsPlugin.cancel(0);
   }
 
   void _configureSelectNotificationSubject() {

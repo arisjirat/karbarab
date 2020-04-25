@@ -51,14 +51,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final double totalScoreSender =
             await scoresSender.fold(0, (t, e) => e[USER_SENDER_SCORE] + t);
         final tokenFCM = await _userRepository.getUserTokenFCM();
-
+        final newToken = await _firebaseMessaging.getToken();
+        if (newToken != tokenFCM) {
+          _userRepository.updateUserTokenFCM(name, newToken);
+        }
         yield Authenticated(
           displayName: name,
           avatar: avatar,
           fullname: fullname,
           totalPoints: totalScore + totalScoreSender,
           isGoogleAuth: isGoogleAuth,
-          tokenFCM: tokenFCM,
+          tokenFCM: newToken != tokenFCM ? newToken : tokenFCM,
         );
       } else {
         yield Unauthenticated();

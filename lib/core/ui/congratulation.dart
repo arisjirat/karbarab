@@ -24,6 +24,7 @@ class Congratulation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final gotWord = point > 0 ? 'dapat' : 'minus score';
     final double padding = MediaQuery.of(context).padding.top - 25;
     final double _deviceHeight = MediaQuery.of(context).size.height - padding;
     return Container(
@@ -34,7 +35,7 @@ class Congratulation extends StatelessWidget {
           Congrats(play: isCorrect, point: point, targetScore: targetScore,),
           Container(height: scaleCalculator(20.0, context)),
           BoldRegularText(
-            text: 'Kamu dapat ${point.toString()} points!',
+            text: 'Kamu $gotWord: ${point.toInt()} score!',
             dark: true,
           ),
           Container(height: scaleCalculator(20.0, context)),
