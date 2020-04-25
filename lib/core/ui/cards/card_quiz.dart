@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
-import 'package:karbarab/core/config/game_mode.dart';
-import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/core/ui/cards/card_game.dart';
 import 'package:karbarab/core/ui/cards/card_plain.dart';
+import 'package:karbarab/model/quiz.dart';
+import 'package:karbarab/model/score.dart';
 
 class CardQuiz extends StatelessWidget {
   final bool isCorrect;
   final double currentPoint;
   final bool loading;
   final double deviceHeight;
-  final QuizModel quiz;
+  final Quiz quiz;
   final GameMode mode;
-  final Function getHint;
-  final bool adsLoaded;
+  final Widget adsHint;
   final Function giveFeedback;
   final Widget speech;
+  final Function confirmClose;
 
   CardQuiz({
     @required this.currentPoint,
@@ -24,10 +24,10 @@ class CardQuiz extends StatelessWidget {
     @required this.deviceHeight,
     @required this.quiz,
     @required this.mode,
-    @required this.getHint,
-    @required this.adsLoaded,
     @required this.giveFeedback,
     @required this.speech,
+    @required this.confirmClose,
+    this.adsHint,
   });
 
   @override
@@ -44,6 +44,7 @@ class CardQuiz extends StatelessWidget {
                 height: _cardPlainHeight,
                 color: isCorrect ? greenColor : greyColor,
                 backColor: isCorrect ? greenColorLight : softGreyColor,
+                confirmClose: confirmClose,
               ),
               CardGame(
                 point: currentPoint.round(),
@@ -52,8 +53,7 @@ class CardQuiz extends StatelessWidget {
                 loading: loading,
                 quiz: quiz,
                 mode: mode,
-                getHint: getHint,
-                adsLoaded: adsLoaded,
+                adsHint: adsHint,
                 giveFeedback: giveFeedback,
                 speech: speech,
               ),

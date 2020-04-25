@@ -1,22 +1,22 @@
 import 'package:bloc/bloc.dart';
-import 'package:karbarab/core/helper/log_printer.dart';
+import 'package:karbarab/utils/logger.dart';
 
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onEvent(Bloc bloc, Object event) {
     super.onEvent(bloc, event);
-    getLogger('PostService').d(event);
+    Logger.w('Event:', e: event.toString());
   }
 
   @override
   void onError(Bloc bloc, Object error, StackTrace stacktrace) {
     super.onError(bloc, error, stacktrace);
-    getLogger('PostService').e(error);
+    Logger.e('Error Bloc', e: error, s: stacktrace);
   }
 
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    getLogger('PostService').w(transition);
+    Logger.d('Trans');
   }
 }

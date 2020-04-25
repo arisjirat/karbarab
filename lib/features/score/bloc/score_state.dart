@@ -8,11 +8,22 @@ abstract class ScoreState extends Equatable {
   List<Object> get props => [];
 }
 
+class SolvedBattleState extends ScoreState {
+  final bool isLoading;
+  final bool isSuccess;
+  SolvedBattleState(this.isLoading, this.isSuccess);
+  @override
+  List<Object> get props => [
+    isSuccess,
+    isLoading,
+  ];
+}
+
 class ScoreAdded extends ScoreState {}
 
 class SummaryUserScore extends ScoreState {
-  final List<ScoreQuizModel> badQuiz;
-  final List<ScoreQuizModel> goodQuiz;
+  final List<ScoreQuiz> badQuiz;
+  final List<ScoreQuiz> goodQuiz;
   SummaryUserScore({ @required this.badQuiz, @required this.goodQuiz, });
 }
 

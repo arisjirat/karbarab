@@ -5,11 +5,15 @@ class LoginState {
   final bool isSuccess;
   final bool isFailure;
   final bool isLoading;
+  final bool needUsername;
+  final bool isUserExist;
 
   LoginState({
     @required this.isSuccess,
     @required this.isFailure,
     @required this.isLoading,
+    this.needUsername,
+    this.isUserExist,
   });
 
   factory LoginState.empty() {
@@ -17,6 +21,8 @@ class LoginState {
       isSuccess: false,
       isFailure: false,
       isLoading: false,
+      needUsername: false,
+      isUserExist: false,
     );
   }
 
@@ -25,6 +31,8 @@ class LoginState {
       isSuccess: false,
       isFailure: false,
       isLoading: true,
+      needUsername: false,
+      isUserExist: false,
     );
   }
 
@@ -33,6 +41,28 @@ class LoginState {
       isSuccess: false,
       isFailure: true,
       isLoading: false,
+      needUsername: false,
+      isUserExist: false,
+    );
+  }
+
+  factory LoginState.failureUserExist() {
+    return LoginState(
+      isSuccess: false,
+      isFailure: false,
+      isLoading: false,
+      needUsername: false,
+      isUserExist: true,
+    );
+  }
+
+  factory LoginState.successNeedUsername() {
+    return LoginState(
+      isSuccess: false,
+      isFailure: false,
+      isLoading: false,
+      needUsername: true,
+      isUserExist: false,
     );
   }
 
@@ -41,6 +71,8 @@ class LoginState {
       isSuccess: true,
       isFailure: false,
       isLoading: false,
+      needUsername: false,
+      isUserExist: false,
     );
   }
 
@@ -58,11 +90,13 @@ class LoginState {
     bool isSuccess,
     bool isFailure,
     bool isLoading,
+    bool isUserExist,
   }) {
     return LoginState(
       isSuccess: isSuccess ?? this.isSuccess,
       isFailure: isFailure ?? this.isFailure,
       isLoading: isLoading ?? this.isLoading,
+      isUserExist: isUserExist ?? this.isUserExist,
     );
   }
 
@@ -72,6 +106,8 @@ class LoginState {
       isSuccess: $isSuccess,
       isFailure: $isFailure,
       isLoading: $isLoading,
+      needUsername: $needUsername,
+      isUserExist: $isUserExist,
     }''';
   }
 }

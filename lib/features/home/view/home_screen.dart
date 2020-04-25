@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,10 +9,12 @@ import 'package:karbarab/core/helper/greetings.dart';
 import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/features/auth/view/profile_screen.dart';
 import 'package:karbarab/core/ui/cards/card_play.dart';
-import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/helper/scale_calculator.dart';
+import 'package:karbarab/features/battle/view/battle_screen.dart';
+import 'package:karbarab/features/battle/view/count_battle.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
+import 'package:karbarab/model/score.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/home';
@@ -27,75 +31,128 @@ class _HomeScreenState extends State<HomeScreen> {
     BlocProvider.of<ScoreBloc>(context).add(GetScoreUserByMode());
   }
 
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  DateTime currentBackPressTime;
+
+  Future<bool> onWillPop() {
+    SnackBar(
+      content: RegularText(
+        text: 'Tekan 2 kali untuk keluar',
+      ),
+    );
+    final DateTime now = DateTime.now();
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > const Duration(seconds: 2)) {
+      currentBackPressTime = now;
+      _scaffoldKey.currentState.showSnackBar(SnackBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        duration: const Duration(milliseconds: 3000),
+        content: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 35),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(20)),
+                  color: whiteColor.withOpacity(0.8),
+                ),
+                padding: const EdgeInsets.all(10),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: SmallerText(
+                    dark: true,
+                    text: 'Tekan 2 kali untuk keluar',
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ));
+      return Future.value(false);
+    }
+    exit(0);
+    return Future.value(false);
+  }
+
   @override
   Widget build(BuildContext context) {
     final double padding = MediaQuery.of(context).padding.top +
         MediaQuery.of(context).padding.bottom;
     final double _deviceHeight = MediaQuery.of(context).size.height - padding;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
-              if (state is Authenticated) {
+    return WillPopScope(
+      onWillPop: onWillPop,
+      child: Scaffold(
+        key: _scaffoldKey,
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
+                if (state is Authenticated) {
+                  return Hero(
+                    deviceHeight: _deviceHeight,
+                    displayName: state.displayName,
+                  );
+                }
                 return Hero(
-                  deviceHeight: _deviceHeight,
-                  displayName: state.displayName,
-                );
-              }
-              return Hero(
                   deviceHeight: _deviceHeight,
                   displayName: '',
                 );
-            }),
-            BlocBuilder<ScoreBloc, ScoreState>(builder: (context, state) {
-              return Container(
-                height: 0.7 * _deviceHeight,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CardPlay(
-                      color: greenColor,
-                      secondaryColor: greenColorLight,
-                      title: 'Gambar Dalam Bahasa Arab',
-                      loadScore: state is HasScore && state.loadScore,
-                      score: state is HasScore ? state.scoreGambarArab : 0,
-                      mode: GameMode.GambarArab,
-                    ),
-                    Container(height: scaleCalculator(20.0, context)),
-                    CardPlay(
-                      color: blueColor,
-                      secondaryColor: blueColorLight,
-                      title: 'Bahasa Arab Dalam Gambar',
-                      loadScore: state is HasScore && state.loadScore,
-                      score: state is HasScore ? state.scoreArabGambar : 0,
-                      mode: GameMode.ArabGambar,
-                    ),
-                    Container(height: scaleCalculator(20.0, context)),
-                    CardPlay(
-                      color: redColor,
-                      secondaryColor: redColorLight,
-                      title: 'Kata Dalam Bahasa Arab',
-                      loadScore: state is HasScore && state.loadScore,
-                      score: state is HasScore ? state.scoreKataArab : 0,
-                      mode: GameMode.KataArab,
-                    ),
-                    Container(height: scaleCalculator(20.0, context)),
-                    CardPlay(
-                      color: yellowColor,
-                      secondaryColor: yellowColorDark,
-                      title: 'Bahasa Arab dalam kata',
-                      loadScore: state is HasScore && state.loadScore,
-                      score: state is HasScore ? state.scoreArabKata : 0,
-                      mode: GameMode.ArabKata,
-                    ),
-                  ],
-                ),
-              );
-            }),
-          ],
+              }),
+              BlocBuilder<ScoreBloc, ScoreState>(builder: (context, state) {
+                return Container(
+                  height: 0.7 * _deviceHeight,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CardPlay(
+                        color: greenColor,
+                        secondaryColor: greenColorLight,
+                        title: 'Gambar Dalam Bahasa Arab',
+                        loadScore: state is HasScore && state.loadScore,
+                        score: state is HasScore ? state.scoreGambarArab : 0,
+                        mode: GameMode.GambarArab,
+                      ),
+                      Container(height: scaleCalculator(20.0, context)),
+                      CardPlay(
+                        color: blueColor,
+                        secondaryColor: blueColorLight,
+                        title: 'Bahasa Arab Dalam Gambar',
+                        loadScore: state is HasScore && state.loadScore,
+                        score: state is HasScore ? state.scoreArabGambar : 0,
+                        mode: GameMode.ArabGambar,
+                      ),
+                      Container(height: scaleCalculator(20.0, context)),
+                      CardPlay(
+                        color: redColor,
+                        secondaryColor: redColorLight,
+                        title: 'Kata Dalam Bahasa Arab',
+                        loadScore: state is HasScore && state.loadScore,
+                        score: state is HasScore ? state.scoreKataArab : 0,
+                        mode: GameMode.KataArab,
+                      ),
+                      Container(height: scaleCalculator(20.0, context)),
+                      CardPlay(
+                        color: yellowColor,
+                        secondaryColor: yellowColorDark,
+                        title: 'Bahasa Arab dalam kata',
+                        loadScore: state is HasScore && state.loadScore,
+                        score: state is HasScore ? state.scoreArabKata : 0,
+                        mode: GameMode.ArabKata,
+                      ),
+                    ],
+                  ),
+                );
+              }),
+            ],
+          ),
         ),
       ),
     );
@@ -141,11 +198,53 @@ class Hero extends StatelessWidget {
                       height: deviceHeight / 10,
                     ),
                     LogoText(text: 'Karbarab', dark: true),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RegularText(
+                          text: 'Hai ', //$displayName
+                          dark: true,
+                        ),
+                        RegularText(
+                          text: '$displayName,', //$displayName
+                          dark: true,
+                          bold: true,
+                        ),
+                      ],
+                    ),
                     RegularText(
-                        text: 'Hai, Selamat ${greeting()} $displayName',
-                        dark: true),
-                    ArabicText(text: 'مرحبا مساء الخير', dark: true),
+                      text: 'Selamat ${greeting()} ', //$displayName
+                      dark: true,
+                    ),
+                    ArabicText(text: 'كَيْفَ حَالُك؟   ', dark: true),
                   ],
+                ),
+              ),
+              Positioned(
+                top: 15,
+                left: 8,
+                child: MaterialButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(BattleScreen.routeName);
+                  },
+                  padding: const EdgeInsets.all(10),
+                  shape: const CircleBorder(),
+                  minWidth: 0,
+                  child: Stack(
+                    overflow: Overflow.visible,
+                    children: <Widget>[
+                      Icon(
+                        Icons.flash_on,
+                        size: 35,
+                        color: yellowColor,
+                      ),
+                      const Positioned(
+                        top: -15,
+                        right: -15,
+                        child: CountBattle(),
+                      )
+                    ],
+                  ),
                 ),
               ),
               Positioned(
@@ -159,10 +258,13 @@ class Hero extends StatelessWidget {
               Positioned(
                 top: 15.0,
                 right: 15.0,
-                child: IconButton(
-                  icon: Icon(
+                child: MaterialButton(
+                  padding: const EdgeInsets.all(10),
+                  shape: const CircleBorder(),
+                  minWidth: 0,
+                  child: Icon(
                     Icons.person_outline,
-                    color: greyColor,
+                    color: greenColor,
                     size: 40.0,
                   ),
                   onPressed: () {

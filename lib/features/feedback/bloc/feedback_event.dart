@@ -14,7 +14,7 @@ class AddFeedbackQuiz extends FeedbackEvent {
   final String shouldBe;
   final String notes;
   final GameMode quizMode;
-  final QuizModel metaQuiz;
+  final Quiz metaQuiz;
   AddFeedbackQuiz({
     @required this.quizId,
     @required this.shouldBe,

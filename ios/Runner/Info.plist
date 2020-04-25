@@ -18,6 +18,8 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-8844883376001707~8468099801</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -25,7 +27,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.948949509296-fl369ps83oqobn0e64igcu6fqind9tkg</string>
+				<string>com.googleusercontent.apps.951073155934-0q36mmhaqebspmr49isrba0ktcktmeo5</string>
 			</array>
 		</dict>
 	</array>

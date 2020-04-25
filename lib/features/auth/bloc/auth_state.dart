@@ -13,15 +13,25 @@ class Authenticated extends AuthState {
   final String displayName;
   final String avatar;
   final String fullname;
-  final int totalPoints;
+  final bool isGoogleAuth;
+  final double totalPoints;
+  final String tokenFCM;
 
-  const Authenticated({@required this.displayName, @required this.avatar, @required this.fullname, @required this.totalPoints, });
+  const Authenticated({
+    @required this.displayName,
+    @required this.avatar,
+    @required this.isGoogleAuth,
+    @required this.fullname,
+    @required this.totalPoints,
+    this.tokenFCM,
+  });
 
   @override
-  List<Object> get props => [displayName, avatar, fullname, totalPoints];
+  List<Object> get props => [displayName, avatar, fullname, totalPoints, tokenFCM];
 
   @override
-  String toString() => 'Authenticated { displayName: $displayName, avatar: $avatar }';
+  String toString() =>
+      'Authenticated { displayName: $displayName, avatar: $avatar }';
 }
 
 class Unauthenticated extends AuthState {}

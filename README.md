@@ -15,3 +15,9 @@ Todo:
 ## About
 
 This project is a starting with Flutter.
+
+## Run with flavor
+
+flutter run --flavor development -t lib/main_dev.dart
+flutter run --flavor staging -t lib/stag.dart
+flutter run --flavor production -t lib/prod.dart

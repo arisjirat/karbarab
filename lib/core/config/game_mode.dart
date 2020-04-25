@@ -1,12 +1,12 @@
 
-enum GameMode {
-  GambarArab,
-  ArabGambar,
-  KataArab,
-  ArabKata,
-}
+// enum GameMode {
+//   GambarArab,
+//   ArabGambar,
+//   KataArab,
+//   ArabKata,
+// }
 
-enum CardAnswerMode {
-  Arab,
-  Latin,
-}
+// enum CardAnswerMode {
+//   Arab,
+//   Latin,
+// }

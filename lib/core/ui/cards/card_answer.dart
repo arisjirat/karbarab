@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/helper/dashed_rect.dart';
-import 'package:karbarab/features/quiz/model/quiz.dart';
 import 'package:karbarab/core/ui/typography.dart';
-import 'package:karbarab/core/config/game_mode.dart';
+import 'package:karbarab/model/quiz.dart';
+import 'package:karbarab/model/score.dart';
 
 class CardAnswer extends StatelessWidget {
-  final QuizModel item;
+  final Quiz item;
   final String answerId;
   final bool currentAnswer;
   final GameMode answerMode;
