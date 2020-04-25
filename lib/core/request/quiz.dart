@@ -461,7 +461,7 @@ List<Quiz> getQuizData() {
       ..id = '45'
     ),
     Quiz((u) => u
-      ..arab = 'لَمْبَة'
+      ..arab = 'الأضواء'
       ..bahasa = 'Lampu'
       ..image = 'lampu.jpg'
       ..date = DateTime.now()
