@@ -53,7 +53,7 @@ class KarbarabScreen extends StatelessWidget {
                         ),
                         RowContainer(
                           label: 'Versi',
-                          value: 'v1.0.0+2',
+                          value: 'v1.0.0+3',
                         ),
                         RowContainer(
                           label: 'Credits',
