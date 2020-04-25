@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:karbarab/features/battle/view/battle_screen.dart';
 import 'package:karbarab/model/score.dart';
 import 'package:rxdart/subjects.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 // import 'package:karbarab/features/home/view/home_screen.dart';
 
 final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
@@ -17,6 +18,9 @@ final BehaviorSubject<String> selectNotificationSubject =
 
 NotificationAppLaunchDetails notificationAppLaunchDetails;
 
+
+final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+const COUNT_NOTIF = 'count_notif';
 
 class AppPushs extends StatefulWidget {
   final Widget child;
@@ -63,7 +67,10 @@ class _AppPushsState extends State<AppPushs> {
       debugPrint('notification payload: ' + payload);
       selectNotificationSubject.add(payload);
     }
-    _flutterLocalNotificationsPlugin.cancel(0);
+    final SharedPreferences prefs = await _prefs;
+    final int countNot = prefs.getInt(COUNT_NOTIF);
+    await prefs.setInt(COUNT_NOTIF, countNot - 1);
+    _flutterLocalNotificationsPlugin.cancel(countNot);
   }
 
   void _configureSelectNotificationSubject() {
@@ -174,9 +181,12 @@ class _AppPushsState extends State<AppPushs> {
         IOSNotificationDetails(presentSound: false);
     final platformChannelSpecifics = NotificationDetails(
         platformChannelSpecificsAndroid, platformChannelSpecificsIos);
-
+    
+    final SharedPreferences prefs = await _prefs;
+    final int countNot = prefs.getInt(COUNT_NOTIF) ?? 0;
+    await prefs.setInt(COUNT_NOTIF, countNot + 1);
     await _flutterLocalNotificationsPlugin.show(
-      0,
+      countNot,
       pushTitle,
       pushText,
       platformChannelSpecifics,

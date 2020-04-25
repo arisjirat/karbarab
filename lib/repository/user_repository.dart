@@ -131,7 +131,7 @@ class UserRepository {
 
   Future<void> updateToLimitLocal(limit) async {
     final SharedPreferences prefs = await _prefs;
-    await prefs.setInt(SEND_CARD_LIMIT, limit);
+    await prefs.setInt(SEND_CARD_LIMIT_PREFERRENCE, limit);
   }
 
   Future<void> updateUserTokenFCM(username, newToken) async {
