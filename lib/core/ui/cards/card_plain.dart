@@ -3,14 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/ui/popup.dart';
-import 'package:karbarab/features/home/view/home_screen.dart';
 import 'package:flutter/widgets.dart';
 
 class CardPlain extends StatelessWidget {
+  final Function confirmClose;
   final double height;
   final Color color;
   final Color backColor;
   CardPlain({
+    @required this.confirmClose,
     this.height = 200,
     this.color = greyColor,
     this.backColor = softGreyColor,
@@ -49,7 +50,7 @@ class CardPlain extends StatelessWidget {
                         Navigator.of(context).pop();
                       },
                       confirm: () {
-                        Navigator.of(context).pushNamed(HomeScreen.routeName);
+                        confirmClose();
                       },
                       cancelAble: true,
                       cancelLabel: 'Jangan!',

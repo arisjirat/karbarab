@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:karbarab/core/config/colors.dart';
-import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:karbarab/features/voices/bloc/voices_bloc.dart';
 
 class Speech extends StatefulWidget {
@@ -26,7 +25,6 @@ class _SpeechState extends State<Speech> {
   @override
   void initState() {
     audioPlugin.onPlayerCompletion.listen((event) {
-      getLogger('Audio').w('complete');
       BlocProvider.of<VoicesBloc>(context).add(StopSpeech());
     });
     super.initState();

@@ -18,28 +18,19 @@ class GlobalHasScores extends GlobalScoresState {
 }
 
 class ScoreGlobalModel {
-  final int score;
+  final double score;
   final String userId;
-  final UserModel metaUser;
-  final List<ScoreItem> scoreHistory;
+  final User metaUser;
+  final List<Score> scoreHistory;
+  final String userIdSender;
+  final double targetScore;
 
   ScoreGlobalModel({
     @required this.userId,
     @required this.score,
     @required this.metaUser,
     @required this.scoreHistory,
-  });
-}
-
-class ScoreItem {
-  final GameMode mode;
-  final int score;
-  final String bahasa;
-  final DateTime date;
-  ScoreItem({
-    @required this.mode,
-    @required this.score,
-    @required this.bahasa,
-    @required this.date,
+    this.userIdSender,
+    this.targetScore,
   });
 }

@@ -9,10 +9,12 @@ import 'package:karbarab/core/helper/greetings.dart';
 import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/features/auth/view/profile_screen.dart';
 import 'package:karbarab/core/ui/cards/card_play.dart';
-import 'package:karbarab/core/config/game_mode.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/core/helper/scale_calculator.dart';
+import 'package:karbarab/features/battle/view/battle_screen.dart';
+import 'package:karbarab/features/battle/view/count_battle.dart';
 import 'package:karbarab/features/score/bloc/score_bloc.dart';
+import 'package:karbarab/model/score.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = '/home';
@@ -40,10 +42,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
     final DateTime now = DateTime.now();
-    if (
-      currentBackPressTime == null
-      || now.difference(currentBackPressTime) > const Duration(seconds: 2)) 
-    {
+    if (currentBackPressTime == null ||
+        now.difference(currentBackPressTime) > const Duration(seconds: 2)) {
       currentBackPressTime = now;
       _scaffoldKey.currentState.showSnackBar(SnackBar(
         backgroundColor: Colors.transparent,
@@ -198,11 +198,53 @@ class Hero extends StatelessWidget {
                       height: deviceHeight / 10,
                     ),
                     LogoText(text: 'Karbarab', dark: true),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RegularText(
+                          text: 'Hai ', //$displayName
+                          dark: true,
+                        ),
+                        RegularText(
+                          text: '$displayName,', //$displayName
+                          dark: true,
+                          bold: true,
+                        ),
+                      ],
+                    ),
                     RegularText(
-                        text: 'Hai, Selamat ${greeting()} $displayName',
-                        dark: true),
-                    ArabicText(text: 'مرحبا مساء الخير', dark: true),
+                      text: 'Selamat ${greeting()} ', //$displayName
+                      dark: true,
+                    ),
+                    ArabicText(text: 'كَيْفَ حَالُك؟   ', dark: true),
                   ],
+                ),
+              ),
+              Positioned(
+                top: 15,
+                left: 8,
+                child: MaterialButton(
+                  onPressed: () {
+                    Navigator.of(context).pushNamed(BattleScreen.routeName);
+                  },
+                  padding: const EdgeInsets.all(10),
+                  shape: const CircleBorder(),
+                  minWidth: 0,
+                  child: Stack(
+                    overflow: Overflow.visible,
+                    children: <Widget>[
+                      Icon(
+                        Icons.flash_on,
+                        size: 35,
+                        color: yellowColor,
+                      ),
+                      const Positioned(
+                        top: -15,
+                        right: -15,
+                        child: CountBattle(),
+                      )
+                    ],
+                  ),
                 ),
               ),
               Positioned(
@@ -216,10 +258,13 @@ class Hero extends StatelessWidget {
               Positioned(
                 top: 15.0,
                 right: 15.0,
-                child: IconButton(
-                  icon: Icon(
+                child: MaterialButton(
+                  padding: const EdgeInsets.all(10),
+                  shape: const CircleBorder(),
+                  minWidth: 0,
+                  child: Icon(
                     Icons.person_outline,
-                    color: greyColor,
+                    color: greenColor,
                     size: 40.0,
                   ),
                   onPressed: () {

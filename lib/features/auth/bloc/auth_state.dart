@@ -14,7 +14,8 @@ class Authenticated extends AuthState {
   final String avatar;
   final String fullname;
   final bool isGoogleAuth;
-  final int totalPoints;
+  final double totalPoints;
+  final String tokenFCM;
 
   const Authenticated({
     @required this.displayName,
@@ -22,10 +23,11 @@ class Authenticated extends AuthState {
     @required this.isGoogleAuth,
     @required this.fullname,
     @required this.totalPoints,
+    this.tokenFCM,
   });
 
   @override
-  List<Object> get props => [displayName, avatar, fullname, totalPoints];
+  List<Object> get props => [displayName, avatar, fullname, totalPoints, tokenFCM];
 
   @override
   String toString() =>

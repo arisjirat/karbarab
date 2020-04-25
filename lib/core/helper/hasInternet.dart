@@ -2,18 +2,18 @@ import 'dart:io';
 
 import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
-import 'package:karbarab/core/helper/log_printer.dart';
 import 'package:karbarab/core/ui/popup.dart';
+import 'package:karbarab/utils/logger.dart';
 
 void checkConnectionFirst(Function callback, BuildContext context) async {
     try {
       final result = await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
-        getLogger('InternetService').w('internet ada');
+        Logger.w('internet ada');
         callback();
       }
     } on SocketException catch (_) {
-      getLogger('InternetService').e('ga ada internet');
+      Logger.e('ga ada internet', s: StackTrace.current);
       popup(
         context,
         text: 'Internet kamu mati ya?',
@@ -36,6 +36,6 @@ void checkConnectionFirst(Function callback, BuildContext context) async {
         confirmLabel: 'Hidupkan',
       );
     } catch (e) {
-      getLogger('InternetService').e('another catch');
+      Logger.e('another catch', s: StackTrace.current, e: e);
     }
   }

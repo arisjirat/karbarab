@@ -1,184 +1,114 @@
-// Copyright 2017 The Chromium Authors. All rights reserved.
-// Use of this source code is governed by a BSD-style license that can be
-// found in the LICENSE file.
-
-// ignore_for_file: public_member_api_docs
-
-import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_admob/firebase_admob.dart';
-
-// You can also test with your own ad unit IDs by registering your device as a
-// test device. Check the logs for your device's ID value.
-const APP_ID = 'ca-app-pub-8844883376001707~8468099801';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:karbarab/core/config/ads.dart';
+import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
+import 'package:karbarab/model/quiz.dart';
+import 'package:karbarab/utils/flavors.dart';
+import 'package:karbarab/utils/logger.dart';
 
 class AdsScreen extends StatefulWidget {
-  static const String routeName = '/home';
+  final AdsMode adsMode;
+  final Function onReward;
+  final Quiz quiz;
+  final Widget buttonShow;
+  AdsScreen({
+    @required this.adsMode,
+    @required this.onReward,
+    this.quiz,
+    this.buttonShow = const Text('Ads Show'),
+  });
   @override
   _AdsScreenState createState() => _AdsScreenState();
 }
 
 class _AdsScreenState extends State<AdsScreen> {
+  final String adMobScoreId = FlavorConfig.isProduction() ? DotEnv().env['ADMOB_ADS_SCORE'] : RewardedVideoAd.testAdUnitId;
+  final String adMobHintId = FlavorConfig.isProduction() ? DotEnv().env['ADMOB_ADS_HINT'] : RewardedVideoAd.testAdUnitId;
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-    testDevices: APP_ID != null ? <String>[APP_ID] : null,
-    keywords: <String>['Games', 'Kartu', 'Arab'],
+    testDevices: ADMOB_APP_ID != null ? <String>[ADMOB_APP_ID] : null,
+    keywords: ADMOB_KEYWORDS,
   );
 
-  BannerAd _bannerAd;
-  NativeAd _nativeAd;
-  InterstitialAd _interstitialAd;
-  int _coins = 0;
+  void showAds() {
 
-  BannerAd createBannerAd() {
-    return BannerAd(
-      adUnitId: BannerAd.testAdUnitId,
-      size: AdSize.banner,
-      targetingInfo: targetingInfo,
-      listener: (MobileAdEvent event) {
-        print('BannerAd event $event');
-      },
-    );
-  }
+    if (widget.adsMode == AdsMode.GlOBAL_SCORE) {
+      RewardedVideoAd.instance
+          .load(
+        adUnitId: FlavorConfig.isProduction() ? '$ADMOB_APP_ID/$adMobScoreId' : RewardedVideoAd.testAdUnitId,
+        targetingInfo: targetingInfo,
+      )
+          .then((l) {
+        BlocProvider.of<AdmobBloc>(context).add(AdsLoaded());
+      }).catchError((e) {
+        Logger.e('error', e: e, s: StackTrace.current);
+      });
+    }
 
-  InterstitialAd createInterstitialAd() {
-    return InterstitialAd(
-      adUnitId: InterstitialAd.testAdUnitId,
-      targetingInfo: targetingInfo,
-      listener: (MobileAdEvent event) {
-        print('InterstitialAd event $event');
-      },
-    );
-  }
-
-  NativeAd createNativeAd() {
-    return NativeAd(
-      adUnitId: NativeAd.testAdUnitId,
-      factoryId: 'adFactoryExample',
-      targetingInfo: targetingInfo,
-      listener: (MobileAdEvent event) {
-        print('$NativeAd event $event');
-      },
-    );
+    if (widget.adsMode == AdsMode.HINT) {
+      RewardedVideoAd.instance
+          .load(
+        adUnitId: FlavorConfig.isProduction() ? '$ADMOB_APP_ID/$adMobHintId' : RewardedVideoAd.testAdUnitId,
+        targetingInfo: targetingInfo,
+      )
+          .then((l) {
+        BlocProvider.of<AdmobBloc>(context).add(AdsLoaded());
+      }).catchError((e) {
+        Logger.e('error', e: e, s: StackTrace.current);
+      });
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    FirebaseAdMob.instance.initialize(appId: FirebaseAdMob.testAppId);
-    _bannerAd = createBannerAd()..load();
-    RewardedVideoAd.instance.listener =
-        (RewardedVideoAdEvent event, {String rewardType, int rewardAmount}) {
-      print('RewardedVideoAd event $event');
+    FirebaseAdMob.instance.initialize(appId: FlavorConfig.isProduction() ? ADMOB_APP_ID : FirebaseAdMob.testAppId);
+    RewardedVideoAd.instance.listener = (
+      RewardedVideoAdEvent event, {
+      String rewardType,
+      int rewardAmount,
+    }) {
       if (event == RewardedVideoAdEvent.rewarded) {
-        setState(() {
-          _coins += rewardAmount;
-        });
+        BlocProvider.of<AdmobBloc>(context).add(UserAdsrewards(
+          adsMode: widget.adsMode,
+          coin: rewardAmount,
+          quizId: widget.quiz != null ? widget.quiz.id : '',
+        ));
+        widget.onReward();
+      }
+      if (event == RewardedVideoAdEvent.loaded) {
+        BlocProvider.of<AdmobBloc>(context).add(AdsLoaded());
+      }
+      if (event == RewardedVideoAdEvent.closed) {
+        BlocProvider.of<AdmobBloc>(context).add(AdsClosed());
+        showAds();
+      }
+      if (event == RewardedVideoAdEvent.failedToLoad) {
+        BlocProvider.of<AdmobBloc>(context).add(AdsFailedLoad());
+        // force to reward
+        if (widget.adsMode == AdsMode.GlOBAL_SCORE) {
+          widget.onReward();
+        }
       }
     };
-  }
-
-  @override
-  void dispose() {
-    _bannerAd?.dispose();
-    _nativeAd?.dispose();
-    _interstitialAd?.dispose();
-    super.dispose();
+    showAds();
   }
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('AdMob Plugin example app'),
-        ),
-        body: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                RaisedButton(
-                    child: const Text('SHOW BANNER'),
-                    onPressed: () {
-                      _bannerAd ??= createBannerAd();
-                      _bannerAd
-                        ..load()
-                        ..show();
-                    }),
-                RaisedButton(
-                    child: const Text('SHOW BANNER WITH OFFSET'),
-                    onPressed: () {
-                      _bannerAd ??= createBannerAd();
-                      _bannerAd
-                        ..load()
-                        ..show(horizontalCenterOffset: -50, anchorOffset: 100);
-                    }),
-                RaisedButton(
-                    child: const Text('REMOVE BANNER'),
-                    onPressed: () {
-                      _bannerAd?.dispose();
-                      _bannerAd = null;
-                    }),
-                RaisedButton(
-                  child: const Text('LOAD INTERSTITIAL'),
-                  onPressed: () {
-                    _interstitialAd?.dispose();
-                    _interstitialAd = createInterstitialAd()..load();
-                  },
-                ),
-                RaisedButton(
-                  child: const Text('SHOW INTERSTITIAL'),
-                  onPressed: () {
-                    _interstitialAd?.show();
-                  },
-                ),
-                RaisedButton(
-                  child: const Text('SHOW NATIVE'),
-                  onPressed: () {
-                    _nativeAd ??= createNativeAd();
-                    _nativeAd
-                      ..load()
-                      ..show(
-                        anchorType: Platform.isAndroid
-                            ? AnchorType.bottom
-                            : AnchorType.top,
-                      );
-                  },
-                ),
-                RaisedButton(
-                  child: const Text('REMOVE NATIVE'),
-                  onPressed: () {
-                    _nativeAd?.dispose();
-                    _nativeAd = null;
-                  },
-                ),
-                RaisedButton(
-                  child: const Text('LOAD REWARDED VIDEO'),
-                  onPressed: () {
-                    RewardedVideoAd.instance.load(
-                        adUnitId: RewardedVideoAd.testAdUnitId,
-                        targetingInfo: targetingInfo);
-                  },
-                ),
-                RaisedButton(
-                  child: const Text('SHOW REWARDED VIDEO'),
-                  onPressed: () {
-                    RewardedVideoAd.instance.show();
-                  },
-                ),
-                Text('You have $_coins coins.'),
-              ].map((Widget button) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  child: button,
-                );
-              }).toList(),
-            ),
-          ),
-        ),
-      ),
-    );
+    return BlocBuilder<AdmobBloc, AdmobState>(builder: (context, snapshot) {
+      if (snapshot is AdmobState &&
+          snapshot.isRewardedLoaded) {
+        return GestureDetector(
+          onTap: () {
+            RewardedVideoAd.instance.show();
+          },
+          child: widget.buttonShow,
+        );
+      }
+      return const SizedBox(width: 0);
+    });
   }
 }

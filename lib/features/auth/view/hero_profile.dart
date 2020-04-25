@@ -194,7 +194,7 @@ class HeroProfile extends StatelessWidget {
                   children: <Widget>[
                     RegularText(text: state.displayName, dark: true),
                     BoldRegularText(
-                        text: state.totalPoints.toString(), dark: true),
+                        text: state.totalPoints.toInt().toString(), dark: true),
                     Row(
                       children: <Widget>[
                         state.isGoogleAuth
@@ -277,7 +277,7 @@ class HeroProfile extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(2.0),
                             child: SmallerText(
-                              text: 'v0.0.1',
+                              text: '1.0.0+3',
                               dark: true,
                             ),
                           ),

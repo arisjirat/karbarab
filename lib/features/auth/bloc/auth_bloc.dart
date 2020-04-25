@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:karbarab/model/score.dart';
 import 'package:karbarab/repository/score_repostitory.dart';
 import 'package:meta/meta.dart';
 import 'package:karbarab/repository/user_repository.dart';
@@ -9,6 +11,7 @@ part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final UserRepository _userRepository;
   final ScoreRepository _scoreRepository = ScoreRepository();
 
@@ -41,15 +44,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         final fullname = await _userRepository.getUserFullname();
         final isGoogleAuth = await _userRepository.isUserGoogleAuth();
         final userId = await _userRepository.getUserId();
-        final scores = await _scoreRepository.getUserScore(userId);
-        final totalScore = await scores.fold(0, (t, e) => e['score'] + t);
-
+        final scores = await _scoreRepository.getUserScore(userId) ?? [];
+        final scoresSender =
+            await _scoreRepository.getUserScoreSender(userId) ?? [];
+        final double totalScore = await scores.fold(0, (t, e) => e[SCORE] + t);
+        final double totalScoreSender =
+            await scoresSender.fold(0, (t, e) => e[USER_SENDER_SCORE] + t);
+        final tokenFCM = await _userRepository.getUserTokenFCM();
+        final newToken = await _firebaseMessaging.getToken();
+        if (newToken != tokenFCM) {
+          _userRepository.updateUserTokenFCM(name, newToken);
+        }
         yield Authenticated(
           displayName: name,
           avatar: avatar,
           fullname: fullname,
-          totalPoints: totalScore,
+          totalPoints: totalScore + totalScoreSender,
           isGoogleAuth: isGoogleAuth,
+          tokenFCM: newToken != tokenFCM ? newToken : tokenFCM,
         );
       } else {
         yield Unauthenticated();
@@ -65,14 +77,31 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     final fullname = await _userRepository.getUserFullname();
     final userId = await _userRepository.getUserId();
     final isGoogleAuth = await _userRepository.isUserGoogleAuth();
-    final scores = await _scoreRepository.getUserScore(userId);
-    final totalScore = await scores.fold(0, (t, e) => e['score'] + t);
+    final scores = await _scoreRepository.getUserScore(userId) ?? [];
+    final scoresSender =
+        await _scoreRepository.getUserScoreSender(userId) ?? [];
+    final double totalScore = await scores.fold(0, (t, e) => e[SCORE] + t);
+    final double totalScoreSender =
+        await scoresSender.fold(0, (t, e) => e[USER_SENDER_SCORE] + t);
+    final tokenFCM = await _userRepository.getUserTokenFCM();
+    final limit = await _userRepository.getUserSendCardLimit();
+
+    final newToken = await _firebaseMessaging.getToken();
+
+    if (newToken != tokenFCM) {
+      _userRepository.updateUserTokenFCM(name, newToken);
+    }
+
+    _userRepository.updateToLimitLocal(limit);
+
     yield Authenticated(
-        displayName: name,
-        avatar: avatar,
-        isGoogleAuth: isGoogleAuth,
-        fullname: fullname,
-        totalPoints: totalScore);
+      displayName: name,
+      avatar: avatar,
+      isGoogleAuth: isGoogleAuth,
+      fullname: fullname,
+      tokenFCM: newToken != tokenFCM ? newToken : tokenFCM,
+      totalPoints: totalScore + totalScoreSender,
+    );
   }
 
   Stream<AuthState> _mapLoggedOutToState() async* {

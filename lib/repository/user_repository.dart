@@ -2,21 +2,72 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:karbarab/core/helper/log_printer.dart';
-import 'package:karbarab/features/auth/model/user_model.dart';
+import 'package:karbarab/core/config/score_value.dart';
+import 'package:karbarab/model/user.dart';
+import 'package:karbarab/utils/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
-const USER_ID_PREFERENCES = 'users_id';
-const USER_FCMTOKEN_PREFERENCES = 'users_fcmtoken';
-const USER_NAME_PREFERENCES = 'username';
-const USER_AVATAR_PREFERENCES = 'user_avatar_fcmtoken';
+const USER_ID_PREFERENCES = 'user_id';
+const USER_FCMTOKEN_PREFERENCES = 'user_fcmtoken';
+const USER_NAME_PREFERENCES = 'user_username';
+const USER_AVATAR_PREFERENCES = 'user_avatar';
 const USER_IS_GOOGLEAUTH = 'user_is_googleauth';
-const USER_MAIL_PREFERENCES = 'user_mail_preferences';
-const USER_FULLNAME_PREFERENCES = 'user_fullname_preferences';
+const USER_MAIL_PREFERENCES = 'user_email';
+const USER_FULLNAME_PREFERENCES = 'user_fullname';
+const SEND_CARD_LIMIT_PREFERRENCE = 'send_card_limit';
 
 class UserRepository {
+  static const ID = 'id';
+  static const AVATAR = 'avatar';
+  static const EMAIL = 'email';
+  static const FULLNAME = 'fullname';
+  static const IS_GOOGLE_AUTH = 'isGoogleAuth';
+  static const PASSWORD = 'password';
+  static const TOKEN_FCM = 'tokenFCM';
+  static const USERNAME = 'username';
+  static const SEND_CARD_LIMIT = 'sendCardLimit';
+
+  static User fromDoc(DocumentSnapshot document) {
+    return User(
+      (u) => u
+        ..id = document[ID]
+        ..avatar = document[AVATAR]
+        ..email = document[EMAIL]
+        ..fullname = document[FULLNAME]
+        ..isGoogleAuth = document[IS_GOOGLE_AUTH]
+        ..tokenFCM = document[TOKEN_FCM]
+        ..sendCardLimit = document[SEND_CARD_LIMIT]
+        ..username = document[USERNAME],
+    );
+  }
+
+  static User fromJson(Map<String, dynamic> json) {
+    return User((u) => u
+      ..id = json[ID]
+      ..avatar = json[AVATAR]
+      ..email = json[EMAIL]
+      ..fullname = json[FULLNAME]
+      ..isGoogleAuth = json[IS_GOOGLE_AUTH]
+      ..tokenFCM = json[TOKEN_FCM]
+      ..sendCardLimit = json[SEND_CARD_LIMIT]
+      ..username = json[USERNAME]);
+  }
+
+  static Map<String, dynamic> toMap(User user) {
+    return {
+      ID: user.id,
+      AVATAR: user.avatar,
+      EMAIL: user.email,
+      FULLNAME: user.fullname,
+      IS_GOOGLE_AUTH: user.isGoogleAuth,
+      TOKEN_FCM: user.tokenFCM,
+      USERNAME: user.username,
+      SEND_CARD_LIMIT: user.sendCardLimit,
+    };
+  }
+
   final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
   final FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
@@ -28,7 +79,7 @@ class UserRepository {
       : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
         _googleSignIn = googleSignin ?? GoogleSignIn();
 
-  Future<void> saveUserToLocal(UserModel user) async {
+  Future<void> saveUserToLocal(User user) async {
     final SharedPreferences prefs = await _prefs;
     await prefs.setString(USER_ID_PREFERENCES, user.id);
     await prefs.setString(USER_FCMTOKEN_PREFERENCES, user.tokenFCM);
@@ -37,38 +88,57 @@ class UserRepository {
     await prefs.setBool(USER_IS_GOOGLEAUTH, user.isGoogleAuth);
     await prefs.setString(USER_MAIL_PREFERENCES, user.email);
     await prefs.setString(USER_FULLNAME_PREFERENCES, user.fullname);
+    await prefs.setInt(SEND_CARD_LIMIT_PREFERRENCE, user.sendCardLimit);
   }
 
   Future<FirebaseUser> signInWithGoogle() async {
-    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    await _firebaseAuth.signInWithCredential(credential);
-    return _firebaseAuth.currentUser();
+    try {
+      final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.getCredential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+      await _firebaseAuth.signInWithCredential(credential);
+      return _firebaseAuth.currentUser();
+    } catch (e) {
+      Logger.e('Sign in With Google', e: e, s: StackTrace.current);
+      throw Exception;
+    }
   }
 
-  Future<UserModel> updateUserWithGoogle(String username) async {
+  Future<User> updateUserWithGoogle(String username) async {
     final updateData = _usersCollection.document(username).updateData;
     final email = await getEmailFirebase();
     final avatar = await getAvatarFirebase();
     final displayName = (await _firebaseAuth.currentUser()).displayName;
     final id = await getUserId();
-    final tokenFCM = await getUserTokenFCM();
-    final UserModel userData = UserModel(
-      id: id,
-      username: username,
-      isGoogleAuth: true,
-      tokenFCM: tokenFCM,
-      avatar: avatar,
-      email: email,
-      fullname: displayName,
-    );
-    await updateData(userData.toJson());
+    final tokenFCM = await _firebaseMessaging.getToken();
+    final User userData = User((u) => u
+      ..id = id
+      ..avatar = avatar
+      ..email = email
+      ..fullname = displayName
+      ..isGoogleAuth = true
+      ..tokenFCM = tokenFCM
+      ..sendCardLimit = SEND_CARD_LIMIT_DEFAULT
+      ..username = username);
+
+    await updateData(toMap(userData));
     return userData;
+  }
+
+  Future<void> updateToLimitLocal(limit) async {
+    final SharedPreferences prefs = await _prefs;
+    await prefs.setInt(SEND_CARD_LIMIT_PREFERRENCE, limit);
+  }
+
+  Future<void> updateUserTokenFCM(username, newToken) async {
+    final updateData = _usersCollection.document(username).updateData;
+    final SharedPreferences prefs = await _prefs;
+    await prefs.setString(USER_FCMTOKEN_PREFERENCES, newToken);
+    return await updateData({'tokenFCM': newToken});
   }
 
   Future<void> saveUser({
@@ -82,30 +152,58 @@ class UserRepository {
       final email = await getEmailFirebase();
       final avatar = await getAvatarFirebase();
       final displayName = (await _firebaseAuth.currentUser()).displayName;
-      final UserModel userData = UserModel(
-        id: id,
-        username: username,
-        isGoogleAuth: isGoogleAuth,
-        tokenFCM: tokenFCM,
-        avatar: avatar,
-        email: email,
-        fullname: displayName,
-      );
-      await save(userData.toJson());
+      final User userData = User((u) => u
+        ..id = id
+        ..avatar = avatar
+        ..email = email
+        ..fullname = displayName
+        ..isGoogleAuth = isGoogleAuth
+        ..tokenFCM = tokenFCM
+        ..sendCardLimit = SEND_CARD_LIMIT_DEFAULT
+        ..username = username);
+      await save(toMap(userData));
       return saveUserToLocal(userData);
     }
-    final UserModel userData = UserModel(
-      id: id,
-      username: username,
-      isGoogleAuth: isGoogleAuth,
-      tokenFCM: tokenFCM,
-    );
-    await save(userData.toJson());
-    return saveUserToLocal(userData);
+    final User userData = User((u) => u
+      ..id = id
+      ..isGoogleAuth = isGoogleAuth
+      ..tokenFCM = tokenFCM
+      ..sendCardLimit = SEND_CARD_LIMIT_DEFAULT
+      ..username = username);
+    await save(toMap(userData));
+    return await saveUserToLocal(userData);
+  }
+
+  Future<List<DocumentSnapshot>> getAllUsers() async {
+    return (await _usersCollection.limit(10000).getDocuments()).documents;
   }
 
   Future<DocumentSnapshot> getUserFromUsername(username) {
     return _usersCollection.document(username).get();
+  }
+
+  Future<int> getUserSendCardLimit() async {
+    final username = await getUser();
+    final data = await _usersCollection.document(username).get();
+    return data.data[SEND_CARD_LIMIT];
+  }
+
+  Future<int> addSendCardLimit() async {
+    final username = await getUser();
+    final data = await _usersCollection.document(username).get();
+    final oldLimit = data.data[SEND_CARD_LIMIT];
+    final update = _usersCollection.document(username).updateData;
+    await update({ SEND_CARD_LIMIT: oldLimit + SEND_CARD_LIMIT_DEFAULT });
+    return oldLimit + SEND_CARD_LIMIT_DEFAULT;
+  }
+
+  Future<int> decreaseSendCardLimit() async {
+    final username = await getUser();
+    final data = await _usersCollection.document(username).get();
+    final oldLimit = data.data[SEND_CARD_LIMIT];
+    final update = _usersCollection.document(username).updateData;
+    await update({ SEND_CARD_LIMIT: oldLimit - 1 });
+    return oldLimit - 1 ;
   }
 
   Future<Iterable<DocumentSnapshot>> getUserFromEmail(String email) async {
@@ -133,6 +231,7 @@ class UserRepository {
 
   Future<void> signOut() async {
     final SharedPreferences prefs = await _prefs;
+    await _firebaseMessaging.deleteInstanceID();
     await prefs.remove(USER_ID_PREFERENCES);
     await prefs.remove(USER_FCMTOKEN_PREFERENCES);
     await prefs.remove(USER_NAME_PREFERENCES);
@@ -202,7 +301,7 @@ class UserRepository {
     return email;
   }
 
-  Future<UserModel> getUserMeta() async {
+  Future<User> getUserMeta() async {
     final SharedPreferences prefs = await _prefs;
     final String id = prefs.getString(USER_ID_PREFERENCES);
     final String fcmtoken = prefs.getString(USER_FCMTOKEN_PREFERENCES);
@@ -211,15 +310,16 @@ class UserRepository {
     final bool isGoogleAuth = prefs.getBool(USER_IS_GOOGLEAUTH);
     final String email = prefs.getString(USER_MAIL_PREFERENCES);
     final String fullname = prefs.getString(USER_FULLNAME_PREFERENCES);
-    return UserModel(
-      id: id,
-      username: username,
-      tokenFCM: fcmtoken,
-      isGoogleAuth: isGoogleAuth,
-      email: email,
-      fullname: fullname,
-      avatar: avatar,
-    );
+    final int sendCardLimit = prefs.getInt(SEND_CARD_LIMIT_PREFERRENCE);
+    return User((u) => u
+      ..id = id
+      ..avatar = avatar
+      ..email = email
+      ..fullname = fullname
+      ..sendCardLimit = sendCardLimit
+      ..isGoogleAuth = isGoogleAuth
+      ..tokenFCM = fcmtoken
+      ..username = username);
   }
 
   // firebase account data
