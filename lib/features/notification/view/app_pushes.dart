@@ -20,7 +20,7 @@ NotificationAppLaunchDetails notificationAppLaunchDetails;
 
 
 final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
-const COUNT_NOTIF = 'count_notif';
+const NOTIFICATION_QUEUE_PREFERENCE = 'notification_queue';
 
 class AppPushs extends StatefulWidget {
   final Widget child;
@@ -68,9 +68,10 @@ class _AppPushsState extends State<AppPushs> {
       selectNotificationSubject.add(payload);
     }
     final SharedPreferences prefs = await _prefs;
-    final int countNot = prefs.getInt(COUNT_NOTIF);
-    await prefs.setInt(COUNT_NOTIF, countNot - 1);
-    _flutterLocalNotificationsPlugin.cancel(countNot);
+    final List<String> notificationsQueue = prefs.getStringList(NOTIFICATION_QUEUE_PREFERENCE) ?? [];
+    notificationsQueue.removeWhere((n) => n == payload);
+    await prefs.setStringList(NOTIFICATION_QUEUE_PREFERENCE, notificationsQueue);
+    _flutterLocalNotificationsPlugin.cancel(payload != null ? int.parse(payload) : 0);
   }
 
   void _configureSelectNotificationSubject() {
@@ -183,14 +184,16 @@ class _AppPushsState extends State<AppPushs> {
         platformChannelSpecificsAndroid, platformChannelSpecificsIos);
     
     final SharedPreferences prefs = await _prefs;
-    final int countNot = prefs.getInt(COUNT_NOTIF) ?? 0;
-    await prefs.setInt(COUNT_NOTIF, countNot + 1);
+    final List<String> notificationsQueue = prefs.getStringList(NOTIFICATION_QUEUE_PREFERENCE) ?? [];
+    final int notificationIdMicrosecond = DateTime.now().microsecondsSinceEpoch;
+    notificationsQueue.add(notificationIdMicrosecond.toString());
+    await prefs.setStringList(NOTIFICATION_QUEUE_PREFERENCE, notificationsQueue);
     await _flutterLocalNotificationsPlugin.show(
-      countNot,
+      notificationIdMicrosecond,
       pushTitle,
       pushText,
       platformChannelSpecifics,
-      payload: payloadQuizId,
+      payload: notificationIdMicrosecond.toString(),
     );
   }
 }
