@@ -198,10 +198,25 @@ class Hero extends StatelessWidget {
                       height: deviceHeight / 10,
                     ),
                     LogoText(text: 'Karbarab', dark: true),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        RegularText(
+                          text: 'Hai ', //$displayName
+                          dark: true,
+                        ),
+                        RegularText(
+                          text: '$displayName,', //$displayName
+                          dark: true,
+                          bold: true,
+                        ),
+                      ],
+                    ),
                     RegularText(
-                        text: 'Hai, Selamat ${greeting()} ', //$displayName
-                        dark: true),
-                    // ArabicText(text: 'مرحبا مساء الخير', dark: true),
+                      text: 'Selamat ${greeting()} ', //$displayName
+                      dark: true,
+                    ),
+                    ArabicText(text: 'كَيْفَ حَالُك؟   ', dark: true),
                   ],
                 ),
               ),
@@ -226,7 +241,8 @@ class Hero extends StatelessWidget {
                       const Positioned(
                         top: -15,
                         right: -15,
-                        child: CountBattle(),)
+                        child: CountBattle(),
+                      )
                     ],
                   ),
                 ),
