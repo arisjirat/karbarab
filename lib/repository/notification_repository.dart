@@ -68,8 +68,8 @@ class NotificationRepository {
       ..quizId = quizId
       ..targetScore = targetScore
       ..usernameSender = userSender.username
-      ..title = 'Hai kamu dapat kartu!'
-      ..message = 'Coba jawab kartu dari ${userSender.username}'
+      ..title = 'Hai kamu dapat kartu dari ${userSender.username}'
+      ..message = 'Jawab kartu dari ${userSender.username}. kalo kamu menjawab tanpa kesalahan, kamu dapat score tambahan 100, dan untuk ${userSender.username} jadi minus score 50'
     );
     await Future.delayed(const Duration(seconds: 1), () async {
       try {
@@ -102,18 +102,22 @@ class NotificationRepository {
     Score score,
     double scoreAnswer,
   ) async {
+    final title = 'Hai ${score.metaUser.username} sudah menjawab kartu mu!';
+    final message = scoreAnswer < score.targetScore
+        ? '${score.metaUser.username} salah menjawab kartu: ${score.metaQuiz.bahasa}, kamu dapat tambahan score'
+        : 'Namun ${score.metaUser.username} hebat, dia berhasil menjawab kartu: ${score.metaQuiz.bahasa}. kamu dapat minus score';
     final NotificationQueue data = NotificationQueue(
       (n) => n
-      ..scoreId = score.scoreId
-      ..actionNotificationType = ActionTypeNotification.AnswerBattleCard
-      ..timeMicro = DateTime.now().microsecondsSinceEpoch
-      ..id = Uuid().v4()
-      ..userIdSender = score.userIdSender
-      ..quizId = score.quizId
-      ..targetScore = score.targetScore
-      ..usernameSender = score.usernameSender
-      ..title = '${score.metaUser.username} salah menjawab, kamu dapat tambahan score'
-      ..message = 'Namun ${score.metaUser.username} hebat kamu dapat minus score'
+        ..scoreId = score.scoreId
+        ..actionNotificationType = ActionTypeNotification.AnswerBattleCard
+        ..timeMicro = DateTime.now().microsecondsSinceEpoch
+        ..id = Uuid().v4()
+        ..userIdSender = score.userIdSender
+        ..quizId = score.quizId
+        ..targetScore = score.targetScore
+        ..usernameSender = score.usernameSender
+        ..title = title
+        ..message = message,
     );
     await Future.delayed(const Duration(seconds: 1), () async {
       try {
