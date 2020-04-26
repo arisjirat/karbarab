@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -5,10 +6,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:karbarab/features/battle/view/battle_screen.dart';
-import 'package:karbarab/model/score.dart';
+import 'package:karbarab/model/notification_queue.dart';
+import 'package:karbarab/repository/notification_repository.dart';
+import 'package:karbarab/utils/logger.dart';
 import 'package:rxdart/subjects.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:karbarab/features/home/view/home_screen.dart';
 
 final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -17,7 +19,6 @@ final BehaviorSubject<String> selectNotificationSubject =
     BehaviorSubject<String>();
 
 NotificationAppLaunchDetails notificationAppLaunchDetails;
-
 
 final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
 const NOTIFICATION_QUEUE_PREFERENCE = 'notification_queue';
@@ -63,21 +64,43 @@ class _AppPushsState extends State<AppPushs> {
   }
 
   Future _onSelectNotification(String payload) async {
-    if (payload != null) {
-      debugPrint('notification payload: ' + payload);
-      selectNotificationSubject.add(payload);
-    }
     final SharedPreferences prefs = await _prefs;
-    final List<String> notificationsQueue = prefs.getStringList(NOTIFICATION_QUEUE_PREFERENCE) ?? [];
-    notificationsQueue.removeWhere((n) => n == payload);
-    await prefs.setStringList(NOTIFICATION_QUEUE_PREFERENCE, notificationsQueue);
-    _flutterLocalNotificationsPlugin.cancel(payload != null ? int.parse(payload) : 0);
+    try {
+      final NotificationQueue payloadQueue = NotificationRepository.fromJson(
+        jsonDecode(payload),
+      );
+      final List<String> listQueue = prefs.getStringList(
+            NOTIFICATION_QUEUE_PREFERENCE,
+          ) ??
+          [];
+      if (listQueue.isEmpty) {
+        return;
+      }
+      final int indexOfPayload = listQueue.indexWhere((q) {
+        final NotificationQueue notificationQueue =
+            NotificationRepository.fromJson(jsonDecode(q));
+        return notificationQueue.id == payloadQueue.id;
+      });
+      listQueue.removeWhere((q) {
+        final NotificationQueue notificationQueue =
+            NotificationRepository.fromJson(jsonDecode(q));
+        return notificationQueue.id == payloadQueue.id;
+      });
+      if (payload != null) {
+        debugPrint('notification payload: ' + payload);
+        selectNotificationSubject.add(payload);
+      }
+      await prefs.setStringList(NOTIFICATION_QUEUE_PREFERENCE, listQueue);
+      _flutterLocalNotificationsPlugin.cancel(indexOfPayload);
+    } catch (e) {
+      await prefs.setStringList(NOTIFICATION_QUEUE_PREFERENCE, []);
+      Logger.e('Failed notification select', s: StackTrace.current, e: e);
+    }
   }
 
   void _configureSelectNotificationSubject() {
     selectNotificationSubject.stream.listen((String payload) async {
       widget.navigatorKey.currentState.pushNamed(BattleScreen.routeName);
-      // widget.navigatorKey.currentState.pushNamed(HomeScreen.routeName);
     });
   }
 
@@ -107,7 +130,7 @@ class _AppPushsState extends State<AppPushs> {
           return;
         },
       );
-    } else {  
+    } else {
       _firebaseMessaging.configure(
         onMessage: (Map<String, dynamic> message) {
           _showNotification(message);
@@ -137,35 +160,18 @@ class _AppPushsState extends State<AppPushs> {
   }
 
   static Future _showNotification(Map<String, dynamic> message) async {
-    String pushTitle;
-    String pushText;
-    String type;
-    String payloadQuizId;
-
+    Map<String, dynamic> payload;
     if (Platform.isAndroid) {
-      final nodeData = message['data'];
-      type = nodeData['type'];
-      payloadQuizId = nodeData['quizId'];
-      final usernameSender = nodeData[USERNAME_SENDER];
-      if (type == 'ANSWER_BATTLE') {
-        pushTitle = 'Hai $usernameSender sudah menjawab!';
-        pushText = '${nodeData['message']}';
-      } else {
-        pushTitle = 'Hai kamu dapat kartu!';
-        pushText = 'Coba jawab kartu dari $usernameSender';
-      }
+      payload = Map<String, dynamic>.from(message['data']);
     } else {
-      type = message['type'];
-      payloadQuizId = message['quizId'];
-      final usernameSender = message[USERNAME_SENDER];
-      if (type == 'ANSWER_BATTLE') {
-        pushTitle = 'Hai $usernameSender sudah menjawab!';
-        pushText = '${message['message']}';
-      } else {
-        pushTitle = 'Hai kamu dapat kartu!';
-        pushText = 'Coba jawab kartu dari $usernameSender';
-      }
+      payload = Map<String, dynamic>.from(message);
     }
+    final NotificationQueue notificationQueue =
+        NotificationRepository.fromJson(payload);
+
+    // ActionTypeNotification type;
+    final String pushTitle = notificationQueue.title;
+    final String pushText = notificationQueue.message;
 
     final AndroidNotificationDetails platformChannelSpecificsAndroid =
         AndroidNotificationDetails(
@@ -178,22 +184,31 @@ class _AppPushsState extends State<AppPushs> {
       priority: Priority.High,
     );
 
-    const platformChannelSpecificsIos =
-        IOSNotificationDetails(presentSound: false);
+    const platformChannelSpecificsIos = IOSNotificationDetails(
+      presentSound: false,
+    );
     final platformChannelSpecifics = NotificationDetails(
-        platformChannelSpecificsAndroid, platformChannelSpecificsIos);
-    
+      platformChannelSpecificsAndroid,
+      platformChannelSpecificsIos,
+    );
+
     final SharedPreferences prefs = await _prefs;
-    final List<String> notificationsQueue = prefs.getStringList(NOTIFICATION_QUEUE_PREFERENCE) ?? [];
-    final int notificationIdMicrosecond = DateTime.now().microsecondsSinceEpoch;
-    notificationsQueue.add(notificationIdMicrosecond.toString());
-    await prefs.setStringList(NOTIFICATION_QUEUE_PREFERENCE, notificationsQueue);
+    final List<String> listQueue = prefs.getStringList(
+          NOTIFICATION_QUEUE_PREFERENCE,
+        ) ??
+        [];
+
+    listQueue.add(jsonEncode(NotificationRepository.toMap(notificationQueue)));
+    await prefs.setStringList(
+      NOTIFICATION_QUEUE_PREFERENCE,
+      listQueue,
+    );
     await _flutterLocalNotificationsPlugin.show(
-      notificationIdMicrosecond,
+      listQueue.length,
       pushTitle,
       pushText,
       platformChannelSpecifics,
-      payload: notificationIdMicrosecond.toString(),
+      payload: jsonEncode(NotificationRepository.toMap(notificationQueue)),
     );
   }
 }
