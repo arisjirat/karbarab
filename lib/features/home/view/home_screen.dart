@@ -216,7 +216,7 @@ class Hero extends StatelessWidget {
                       text: 'Selamat ${greeting()} ', //$displayName
                       dark: true,
                     ),
-                    ArabicText(text: 'كَيْفَ حَالُك؟   ', dark: true),
+                    // ArabicText(text: 'كَيْفَ حَالُك؟   ', dark: true),
                   ],
                 ),
               ),
