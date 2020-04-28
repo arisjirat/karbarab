@@ -105,23 +105,48 @@ class CardBattleItem extends StatelessWidget {
               ),
             ),
             isReciever
-                ? MaterialButton(
-                    onPressed: () {
-                      if (!score.isSolved) {
-                        onAnswer();
-                        return;
-                      }
-                    },
-                    height: 90,
-                    elevation: score.isSolved ? 0 : 2,
-                    color: score.isSolved ? greyColor : greenColor,
-                    child: RegularText(
-                      text: score.isSolved
-                          ? score.score.toInt().toString()
-                          : 'Jawab',
-                      dark: false,
-                    ),
-                  )
+                ? score.isSolved
+                    ? Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: score.isSolved && score.score > 0
+                              ? greenColor
+                              : !score.isSolved ? secondaryColor : redColor,
+                          shape: BoxShape.circle,
+                        ),
+                        padding: EdgeInsets.all(score.isSolved ? 20 : 30),
+                        child: RegularText(
+                          text: score.score.toInt().toString(),
+                          dark: false,
+                        ),
+                      )
+                    : RawMaterialButton(
+                        onPressed: () {
+                          if (!score.isSolved) {
+                            onAnswer();
+                            return;
+                          }
+                        },
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        // height: 90,
+                        elevation: score.isSolved ? 0 : 2,
+                        fillColor: score.isSolved ? greyColor : greenColor,
+                        child: Row(
+                          children: <Widget>[
+                            RegularText(
+                              text: score.isSolved
+                                  ? score.score.toInt().toString()
+                                  : 'Jawab',
+                              dark: false,
+                            ),
+                            Icon(
+                              Icons.arrow_forward,
+                              color: whiteColor,
+                            ),
+                          ],
+                        ),
+                      )
                 : Container(
                     margin: const EdgeInsets.symmetric(horizontal: 10),
                     decoration: BoxDecoration(

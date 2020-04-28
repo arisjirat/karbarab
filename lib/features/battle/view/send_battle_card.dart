@@ -333,7 +333,7 @@ class _SendBattleCardState extends State<SendBattleCard> {
                     RaisedButton(
                       elevation: 0,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 90, vertical: 15),
+                          horizontal: 30, vertical: 15),
                       onPressed: (s is SendCardState &&
                               !s.isLoading &&
                               _isCompleteField)
@@ -347,10 +347,20 @@ class _SendBattleCardState extends State<SendBattleCard> {
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
-                      child: RegularText(
-                        text: 'Kirim Sekarang!',
-                        bold: true,
-                        dark: false,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          RegularText(
+                            text: 'Kirim Sekarang',
+                            bold: true,
+                            dark: false,
+                          ),
+                          const SizedBox(width: 10,),
+                          Icon(
+                            Icons.send,
+                            color: whiteColor,
+                          ),
+                        ],
                       ),
                     ),
                   ]);

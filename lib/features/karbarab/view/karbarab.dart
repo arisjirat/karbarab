@@ -47,21 +47,31 @@ class KarbarabScreen extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     child: Column(
                       children: [
-                        RowContainer(
-                          label: 'Author',
-                          value: 'arisjiratkurniawan@gmail.com',
-                        ),
-                        RowContainer(
-                          label: 'Versi',
-                          value: 'v1.0.0+4',
-                        ),
-                        RowContainer(
-                          label: 'Credits',
-                          value: 'Aris Jirat Kurniawan',
-                        ),
-                        RowContainer(
-                          label: '',
-                          value: '-',
+                        Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.all(Radius.circular(20)),
+                            child: Column(
+                              children: [
+                                RowContainer(
+                                  label: 'Author',
+                                  value: 'arisjiratkurniawan@gmail.com',
+                                ),
+                                RowContainer(
+                                  label: 'Versi',
+                                  value: 'v1.0.0+4',
+                                ),
+                                RowContainer(
+                                  label: 'Credits',
+                                  value: 'Aris Jirat Kurniawan',
+                                ),
+                                RowContainer(
+                                  label: '',
+                                  value: '-',
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                         const SizedBox(
                           height: 20,
@@ -70,7 +80,9 @@ class KarbarabScreen extends StatelessWidget {
                         //   text: '@ 2020',
                         //   dark: true,
                         // ),
-                        const SizedBox(height: 20,),
+                        const SizedBox(
+                          height: 20,
+                        ),
                         RaisedButton(
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
@@ -78,7 +90,8 @@ class KarbarabScreen extends StatelessWidget {
                             ),
                           ),
                           onPressed: () {
-                            Navigator.of(context).pushNamed(ProfileScreen.routeName);
+                            Navigator.of(context)
+                                .pushNamed(ProfileScreen.routeName);
                           },
                           color: secondaryColor,
                           child: Padding(
@@ -111,7 +124,7 @@ class RowContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
+      // padding: const EdgeInsets.symmetric(horizontal: 20),
       height: 50,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -119,7 +132,7 @@ class RowContainer extends StatelessWidget {
         children: <Widget>[
           Container(
             color: greyColor,
-            width: (0.2 * MediaQuery.of(context).size.width) - 20,
+            width: (0.23 * MediaQuery.of(context).size.width) - 20,
             padding: const EdgeInsets.all(5),
             child: Align(
               alignment: Alignment.centerLeft,
@@ -131,7 +144,7 @@ class RowContainer extends StatelessWidget {
           ),
           Container(
             color: greyColorLight,
-            width: (0.8 * MediaQuery.of(context).size.width) - 20,
+            width: (0.77 * MediaQuery.of(context).size.width) - 20,
             padding: const EdgeInsets.all(5),
             child: Align(
               alignment: Alignment.centerLeft,
