@@ -277,7 +277,7 @@ class HeroProfile extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.all(2.0),
                             child: SmallerText(
-                              text: '1.0.0+5',
+                              text: '1.0.0+6',
                               dark: true,
                             ),
                           ),
