@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:karbarab/core/config/colors.dart';
+import 'package:karbarab/core/ui/ads.dart';
+import 'package:karbarab/core/ui/goin.dart';
 import 'package:karbarab/features/admob/bloc/admob_bloc.dart';
 import 'package:karbarab/features/auth/bloc/auth_bloc.dart';
 import 'package:karbarab/features/auth/view/profile_screen.dart';
@@ -125,6 +127,8 @@ class _AppState extends State<App> {
         routes: {
           LoginScreen.routeName: (_) => LoginScreen(userRepository: widget.userRepository),
           HomeScreen.routeName: (_) => HomeScreen(),
+          AdsBanner.routeName: (_) => AdsBanner(),
+          Goin.routeName: (_) => Goin(),
           ProfileScreen.routeName: (_) => ProfileScreen(),
           BattleScreen.routeName: (_) => const BattleScreen(),
           GameStartScreen.routeName: (_) => GameStartScreen(mode: GameMode.GambarArab),

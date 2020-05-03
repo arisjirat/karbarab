@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:karbarab/core/config/colors.dart';
 import 'package:karbarab/core/helper/device_height.dart';
+import 'package:karbarab/core/ui/ads.dart';
 import 'package:karbarab/core/ui/typography.dart';
 import 'package:karbarab/features/auth/view/profile_screen.dart';
 
@@ -98,6 +99,26 @@ class KarbarabScreen extends StatelessWidget {
                             padding: const EdgeInsets.all(8.0),
                             child: SmallerText(
                               text: 'Kembali',
+                              dark: true,
+                            ),
+                          ),
+                          elevation: 5,
+                        ),
+                        RaisedButton(
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(AdsBanner.routeName);
+                          },
+                          color: secondaryColor,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: SmallerText(
+                              text: 'Go',
                               dark: true,
                             ),
                           ),
