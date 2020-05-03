@@ -1,30 +1,30 @@
 # Karbarab
 
 is a guessing arab card game for 🇮🇩 people. this project is a starting with Flutter. IOS not ready for now,
-I don't when I will paid to apple $99 💰
+I don't know when this project will launch at IOS, still will paid to apple $99 💰
 
 ### Feature: 🥳🥳🥳🥳
-- Google Signin
-- Guess Signin
-- Sync with google after signup
-- Choose card game mode
-- Answer, there is 4 options and 1 is right answer. for initial you have 30 points, and decrease when you choose the wrong answer. then if you get right answer you will get that points.
-- Hint with ads admob rewards video
-- Save score on account
-- Send card to they friend or unknown user, and answer the question, if they friend get wrong answer, you will have points. initial user have 15 chance.
-- Notification when send card, and answer quiz
-- Global Score (Watch ads first)
-- Admob For Hint, Global Score 15minutes, Request Limit send card (15 chance)
+* [x] Google Signin
+* [x] Guess Signin without credentials
+* [x] Sync with google after signup
+* [x] Choose card game mode
+* [x] Answer, there is 4 options and 1 is right answer. for initial you have 30 points, and decrease when you choose the wrong answer. then if you get right answer you will get that points.
+* [x] Hint with ads admob rewards video
+* [x] Save score on account
+* [x] Send card to they friend or unknown user, and answer the question, if they friend get wrong answer, you will have points. initial user have 15 chance.
+* [x] Notification when send card, and answer quiz
+* [x] Global Score (Watch ads first)
+* [x] Admob For Hint, Global Score 15minutes, Request Limit send card (15 chance)
 
 ##### Next Feature: 😎
-- Quiz Sentence
-- Nearby
+* [ ] Quiz Sentence
+* [ ] Nearby
 
 ##### Todo: 👻👻
-- Add quiz
-- IOS sync 😴😴
-- Cleaning! 👻👻
-- Request from api with firebase function
+* [ ] Add quiz
+* [ ] IOS sync 😴😴
+* [ ] Cleaning! 👻👻
+* [ ] Request from api with firebase function
 
 ### Run with flavor
 Run develop with flavor
