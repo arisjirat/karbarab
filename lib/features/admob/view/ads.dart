@@ -25,19 +25,18 @@ class AdsScreen extends StatefulWidget {
 }
 
 class _AdsScreenState extends State<AdsScreen> {
-  final String adMobScoreId = FlavorConfig.isProduction() ? DotEnv().env['ADMOB_ADS_SCORE'] : RewardedVideoAd.testAdUnitId;
-  final String adMobHintId = FlavorConfig.isProduction() ? DotEnv().env['ADMOB_ADS_HINT'] : RewardedVideoAd.testAdUnitId;
   static const MobileAdTargetingInfo targetingInfo = MobileAdTargetingInfo(
-    testDevices: ADMOB_APP_ID != null ? <String>[ADMOB_APP_ID] : null,
+    testDevices: ADMOB_PUBLISHER_ID != null ? <String>[ADMOB_PUBLISHER_ID] : null,
     keywords: ADMOB_KEYWORDS,
   );
 
   void showAds() {
 
     if (widget.adsMode == AdsMode.GlOBAL_SCORE) {
+      print('$ADMOB_APP_ID/${DotEnv().env['ADMOB_ADS_SCORE']}');
       RewardedVideoAd.instance
           .load(
-        adUnitId: FlavorConfig.isProduction() ? '$ADMOB_APP_ID/$adMobScoreId' : RewardedVideoAd.testAdUnitId,
+        adUnitId: FlavorConfig.isProduction() ? '$ADMOB_APP_ID/${DotEnv().env['ADMOB_ADS_SCORE']}' : RewardedVideoAd.testAdUnitId,
         targetingInfo: targetingInfo,
       )
           .then((l) {
@@ -50,7 +49,7 @@ class _AdsScreenState extends State<AdsScreen> {
     if (widget.adsMode == AdsMode.HINT) {
       RewardedVideoAd.instance
           .load(
-        adUnitId: FlavorConfig.isProduction() ? '$ADMOB_APP_ID/$adMobHintId' : RewardedVideoAd.testAdUnitId,
+        adUnitId: FlavorConfig.isProduction() ? '$ADMOB_APP_ID/${DotEnv().env['ADMOB_ADS_HINT']}' : RewardedVideoAd.testAdUnitId,
         targetingInfo: targetingInfo,
       )
           .then((l) {
@@ -64,7 +63,7 @@ class _AdsScreenState extends State<AdsScreen> {
   @override
   void initState() {
     super.initState();
-    FirebaseAdMob.instance.initialize(appId: FlavorConfig.isProduction() ? ADMOB_APP_ID : FirebaseAdMob.testAppId);
+    FirebaseAdMob.instance.initialize(appId: FlavorConfig.isProduction() ? ADMOB_PUBLISHER_ID : FirebaseAdMob.testAppId);
     RewardedVideoAd.instance.listener = (
       RewardedVideoAdEvent event, {
       String rewardType,

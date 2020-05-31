@@ -29,17 +29,17 @@ is a guessing arab card game for 🇮🇩 people. this project is a starting wit
 Run develop with flavor
 ```flutter run --flavor development -t lib/main_dev.dart```
 
-```flutter run --flavor staging -t lib/stag.dart```
+```flutter run --flavor staging -t lib/main_stag.dart```
 
-```flutter run --flavor production -t lib/prod.dart```
+```flutter run --flavor production -t lib/main_prod.dart```
 
 ### Release with flavor
 Run develop with flavor
 ```flutter run --release --flavor development -t lib/main_dev.dart```
 
-```flutter run --release --flavor staging -t lib/stag.dart```
+```flutter run --release --flavor staging -t lib/main_stag.dart```
 
-```flutter run --release --flavor production -t lib/prod.dart```
+```flutter run --release --flavor production -t lib/main_prod.dart```
 
 ### Release app bundle with flavor 🤘
 🤘 don't forget to update version 🤘
