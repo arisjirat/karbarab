@@ -24,7 +24,7 @@ class Congratulation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final gotWord = point > 0 ? 'dapat' : 'minus score';
+    final gotWord = point >= 0 ? 'dapat' : 'minus score';
     final double padding = MediaQuery.of(context).padding.top - 25;
     final double _deviceHeight = MediaQuery.of(context).size.height - padding;
     return Container(
