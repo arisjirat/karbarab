@@ -1,7 +1,6 @@
 # Karbarab
 
-is a guessing arab card game for 🇮🇩 people. this project is a starting with Flutter. IOS not ready for now,
-I don't when I will paid to apple $99 💰
+is a guessing arab card game for 🇮🇩 people. this project is a starting with Flutter. IOS not published yet
 
 ### Feature: 🥳🥳🥳🥳
 - Google Signin
