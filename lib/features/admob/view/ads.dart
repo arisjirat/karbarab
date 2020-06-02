@@ -40,7 +40,7 @@ class _AdsScreenState extends State<AdsScreen> {
         targetingInfo: targetingInfo,
       )
           .then((l) {
-        BlocProvider.of<AdmobBloc>(context).add(AdsLoaded());
+        // BlocProvider.of<AdmobBloc>(context).add(AdsLoaded());
       }).catchError((e) {
         Logger.e('error', e: e, s: StackTrace.current);
       });
@@ -92,7 +92,9 @@ class _AdsScreenState extends State<AdsScreen> {
         }
       }
     };
-    showAds();
+    Future.delayed(const Duration(seconds: 1), () {
+      showAds();
+    });
   }
 
   @override
